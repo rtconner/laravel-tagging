@@ -11,15 +11,12 @@
             "email": "rtconner@gmail.com"
 		}
 	],
-  "require": {
-      "php": ">=5.4.0"
-  },
-  "require-dev": {
-      "mockery/mockery": dev-master"
-  },
-  "autoload": {
-      "psr-0": {
-            "Rtconner\\": "src/"
-      }
-  },
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"autoload": {
+		"psr-0": {
+			"Rtconner\\": "src/"
+		}
+	}
 }
