@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 class CreateTaggedTable extends Migration {
 
 	public function up() {
-		Schema::create('tagged', function(Blueprint $table) {
+		Schema::create('tagging_tagged', function(Blueprint $table) {
 			$table->increments('id');
 			$table->morphs('taggable');
 			$table->string('tag_name', 60);
@@ -15,6 +15,6 @@ class CreateTaggedTable extends Migration {
 	}
 
 	public function down() {
-		Schema::drop('tagged');
+		Schema::drop('tagging_tagged');
 	}
 }

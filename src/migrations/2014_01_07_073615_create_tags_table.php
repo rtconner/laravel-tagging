@@ -7,7 +7,7 @@ class CreateTagsTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('tags', function(Blueprint $table) {
+		Schema::create('tagging_tags', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('slug', 60)->index();
 			$table->string('name', 60);
@@ -18,6 +18,6 @@ class CreateTagsTable extends Migration {
 
 	public function down()
 	{
-		Schema::drop('tags');
+		Schema::drop('tagging_tags');
 	}
 }

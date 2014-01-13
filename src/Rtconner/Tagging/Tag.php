@@ -4,7 +4,7 @@ use Illuminate\Support\Str;
 
 class Tag extends \Eloquent {
 
-	protected $table = 'tags';
+	protected $table = 'tagging_tags';
 	public $timestamps = false;
 	protected $softDelete = false;
 	public $fillable = ['name'];
