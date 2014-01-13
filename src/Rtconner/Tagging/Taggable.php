@@ -67,4 +67,17 @@ trait Taggable {
 		Tag::decrementCount($tagString, $tagSlug, $count);
 	}
 	
+	/**
+	 * Filter model to subset with the given tag
+	 * 
+	 * @param unknown $tagString
+	 */
+	public static function withTag($tagString) {
+		$tagSlug = Str::slug($tagString);
+		
+		return static::whereHas('tagged', function($q) use($tagSlug) {
+			$q->where('tag_slug', '=', $tagSlug);
+		});
+	}
+	
 }
