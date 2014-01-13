@@ -16,64 +16,64 @@ trait Taggable {
 	/**
 	 * Perform the action of tagging the model with the given string
 	 * 
-	 * @param $tagString string
+	 * @param $tagName string
 	 */
-	public function tag($tagString) {
-		$tagString = trim($tagString);
-		if(!strlen($tagString)) { return; }
+	public function tag($tagName) {
+		$tagName = trim($tagName);
+		if(!strlen($tagName)) { return; }
 
-		$tagSlug = Str::slug($tagString);
+		$tagSlug = Str::slug($tagName);
 		
 		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
 		if($previousCount >= 1) { return; }
 		
 		$tagged = new Tagged(array(
-			'tag_string'=>Str::title($tagString),
+			'tag_name'=>Str::title($tagName),
 			'tag_slug'=>$tagSlug,
 		));
 		
 		$this->tagged()->save($tagged);
 
-		Tag::incrementCount($tagString, $tagSlug, 1);
+		Tag::incrementCount($tagName, $tagSlug, 1);
 	}
 	
 	/**
-	 * Return array of the tag strings related to the models
+	 * Return array of the tag names related to the current model
 	 * 
 	 * @return array
 	 */
-	public function tagStrings() {
-		$tagStrings = array();
-		$taggedIterator = $this->tagged()->select(array('tag_string'));
+	public function tagNames() {
+		$tagNames = array();
+		$taggedIterator = $this->tagged()->select(array('tag_name'));
 
 		foreach($taggedIterator->get() as $tagged) {
-			$tagStrings[] = $tagged->tag_string;
+			$tagNames[] = $tagged->tag_name;
 		}
 		
-		return $tagStrings;
+		return $tagNames;
 	}
 	
 	/**
 	 * Remove the tag from this model
 	 * 
-	 * @param $tagString string
+	 * @param $tagName string
 	 */
-	public function untag($tagString) {
-		$tagString = trim($tagString);
-		$tagSlug = Str::slug($tagString);
+	public function untag($tagName) {
+		$tagName = trim($tagName);
+		$tagSlug = Str::slug($tagName);
 		
 		$count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete();
 		
-		Tag::decrementCount($tagString, $tagSlug, $count);
+		Tag::decrementCount($tagName, $tagSlug, $count);
 	}
 	
 	/**
 	 * Filter model to subset with the given tag
 	 * 
-	 * @param unknown $tagString
+	 * @param unknown $tagName
 	 */
-	public static function withTag($tagString) {
-		$tagSlug = Str::slug($tagString);
+	public static function withTag($tagName) {
+		$tagSlug = Str::slug($tagName);
 		
 		return static::whereHas('tagged', function($q) use($tagSlug) {
 			$q->where('tag_slug', '=', $tagSlug);

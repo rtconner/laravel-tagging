@@ -9,7 +9,7 @@ class CreateTaggedTable extends Migration {
 		Schema::create('tagged', function(Blueprint $table) {
 			$table->increments('id');
 			$table->morphs('taggable');
-			$table->string('tag_string', 60)->index();
+			$table->string('tag_name', 60);
 			$table->string('tag_slug', 60)->index();
 		});
 	}

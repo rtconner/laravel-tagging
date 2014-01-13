@@ -9,8 +9,8 @@ class CreateTagsTable extends Migration {
 	{
 		Schema::create('tags', function(Blueprint $table) {
 			$table->increments('id');
-			$table->string('slug', 36);
-			$table->string('name', 36);
+			$table->string('slug', 60)->index();
+			$table->string('name', 60);
 			$table->boolean('suggest')->default(false);
 			$table->integer('count')->unsigned()->default(0); // count of how many times this tag was used
 		});
