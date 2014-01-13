@@ -5,7 +5,7 @@ This library puts no real limits on what characters can be used in a tag. It use
 
 #### Run the migrations
 
-	php artisan migrate --package=rtconner/laravel-tagging --env=local
+	php artisan migrate --package=rtconner/laravel-tagging
 	
 #### Setup your models
 
@@ -23,6 +23,6 @@ This library puts no real limits on what characters can be used in a tag. It use
     
     $article->tagNames(); // get array of related tag names	
     
-    Article::withTag('Gardening'); // fetch all articles tag
+    Article::withTag('Gardening')->get(); // fetch all articles with tag
     
     Rtconner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
