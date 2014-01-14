@@ -7,10 +7,8 @@ There are no real limits on what characters can be used in a tag. It uses Str::s
 
 #### Composer Install
 
-Versions will match laravel releases that they are compatible with
-
     "require": {
-        "rtconner/laravel-tagging": "4.1"
+        "rtconner/laravel-tagging": "dev-master"
     }
 
 #### Run the migrations
