@@ -1,4 +1,4 @@
-<?php namespace Rtconner\Tagging;
+<?php namespace Conner\Tagging;
 
 class Tagged extends \Eloquent {
 

@@ -1,4 +1,4 @@
-<?php namespace Rtconner\Tagging\Tests;
+<?php namespace Conner\Tagging\Tests;
 
 class TagTest extends TestCase {
 

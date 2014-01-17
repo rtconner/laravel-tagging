@@ -1,4 +1,4 @@
-<?php namespace Rtconner\Tagging;
+<?php namespace Conner\Tagging;
 
 use Illuminate\Support\Str;
 
@@ -10,7 +10,7 @@ trait Taggable {
 	 * @return Illuminate\Database\Eloquent\Collection
 	 */
 	public function tagged() {
-		return $this->morphMany('Rtconner\Tagging\Tagged', 'taggable');
+		return $this->morphMany('Conner\Tagging\Tagged', 'taggable');
 	}
 	
 	/**

@@ -16,7 +16,7 @@
 	},
 	"autoload": {
 		"psr-0": {
-			"Rtconner\\": "src/"
+			"Conner\\Tagging\\": "src/"
 		}
 	}
 }

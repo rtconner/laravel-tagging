@@ -1,4 +1,4 @@
-<?php namespace Rtconner\Tagging\Tests;
+<?php namespace Conner\Tagging\Tests;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
@@ -20,7 +20,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 	}
 	
 	private function createStub() {
-		return new \Rtconner\Tagging\Tests\Stub;
+		return new Conner\Tagging\Tests\TaggingStub;
 	}
 	
 }

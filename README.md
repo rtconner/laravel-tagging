@@ -18,7 +18,7 @@ There are no real limits on what characters can be used in a tag. It uses Str::s
 #### Setup your models
 
     class Article extends \Eloquent {
-        use Rtconner\Tagging\Taggable;
+        use Conner\Tagging\Taggable;
     }
 
 #### Sample Usage
@@ -33,4 +33,4 @@ There are no real limits on what characters can be used in a tag. It uses Str::s
     
     Article::withTag('Gardening')->get(); // fetch all articles with tag
     
-    Rtconner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
+    Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
