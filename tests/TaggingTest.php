@@ -55,7 +55,7 @@ class TaggingTest extends \TestCase {
 	public function testInternational() {
 		$stub = $this->randomStub();
 		
-		$tagStrings = array('First Tag', '2nd Tag', 'Tag #3', 'TagX', 'TagY', 'TagZ');
+		$tagStrings = array('«ταБЬℓσ»');
 	
 		foreach($tagStrings as $tagString) {
 			$stub->tag($tagString);
