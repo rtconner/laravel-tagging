@@ -55,13 +55,27 @@ class TaggingTest extends \TestCase {
 	public function testInternational() {
 		$stub = $this->randomStub();
 		
-		$tagStrings = array('«ταБЬℓσ»');
+		$tagStrings = array('«ταБЬℓσ»', 'Пиши', 'Целую', 'ПЧяЦщ');
 	
 		foreach($tagStrings as $tagString) {
 			$stub->tag($tagString);
 		}
+		
+		$this->assertNotEquals($stub->tagNames(), $tagStrings); // ok i have no clue how to test these properly
+		foreach($stub->tagNames() as $tag) {
+			$this->assertNotEmpty($tag);
+		}
+	}
 	
-		dd($stub->tagNames());
+	public function testSlugs() {
+		$str = 'ПЧяЦщ';
+		$this->assertNotEquals(Tag::slug($str), $str);
+
+		$str = 'quiénsí';
+		$this->assertNotEquals(Tag::slug($str), $str);
+
+		$str = 'ČĢ';
+		$this->assertNotEquals(Tag::slug($str), $str);
 	}
 	
 	private function randomStub() {

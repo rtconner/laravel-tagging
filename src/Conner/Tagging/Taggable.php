@@ -22,7 +22,7 @@ trait Taggable {
 		$tagName = trim($tagName);
 		if(!strlen($tagName)) { return; }
 
-		$tagSlug = Str::slug($tagName);
+		$tagSlug = Tag::slug($tagName);
 		
 		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
 		if($previousCount >= 1) { return; }
@@ -60,7 +60,7 @@ trait Taggable {
 	 */
 	public function untag($tagName) {
 		$tagName = trim($tagName);
-		$tagSlug = Str::slug($tagName);
+		$tagSlug = Tag::slug($tagName);
 		
 		$count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete();
 		
@@ -73,7 +73,7 @@ trait Taggable {
 	 * @param unknown $tagName
 	 */
 	public static function withTag($tagName) {
-		$tagSlug = Str::slug($tagName);
+		$tagSlug = Tag::slug($tagName);
 		
 		return static::whereHas('tagged', function($q) use($tagSlug) {
 			$q->where('tag_slug', '=', $tagSlug);
