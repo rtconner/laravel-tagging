@@ -76,6 +76,9 @@ class TaggingTest extends \TestCase {
 
 		$str = 'ČĢ';
 		$this->assertNotEquals(Tag::slug($str), $str);
+
+		$str = 'same-slug';
+		$this->assertEquals(Tag::slug($str), $str);
 	}
 	
 	private function randomStub() {
