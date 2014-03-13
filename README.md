@@ -33,4 +33,8 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     
     Article::withTag('Gardening')->get(); // fetch all articles with tag
     
+    Article::withTags('Gardening, Cooking')->get() // fetch all articles with given tags
+    
+    Article::withTags(['Gardening','Cooking'])->get() // fetch all articles with given tags
+    
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
