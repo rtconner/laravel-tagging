@@ -80,4 +80,24 @@ trait Taggable {
 		});
 	}
 	
+	/**
+	 * Filter model to subset with the given tags
+	 * 
+	 * @param $tagNames array|string
+	 */
+	public static function withTags($tagNames) {
+		if(gettype($tagNames) == 'array' && count($tagNames) > 0)
+			$tagSlugs = $tagNames;
+		elseif(gettype($tagNames) == 'string')
+			$tagSlugs = explode(',', $tagNames);
+		else
+			$tagSlugs = [null];
+
+		for($i = 0; $i < count($tagSlugs); $i++)
+			$tagSlugs[$i] = Tag::slug($tagSlugs[$i]);
+
+		return static::whereHas('tagged', function($q) use($tagSlugs) {
+			$q->whereIn('tag_slug', $tagSlugs);
+		});
+	}
 }
