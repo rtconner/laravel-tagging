@@ -2,7 +2,7 @@
 	"name": "rtconner/laravel-tagging",
 	"description": "Use PHP traits to extend Eloquent Models to allow Tags. Models can be marked as Taggable.",
 	"license": "MIT",
-	"homepage": "https://github.com/rtconner/laravel-tagging",
+	"homepage": "https://smartersoftware.net/packages/laravel-tagging-taggable",
 	"keywords": ["tag", "tags", "tagging", "laravel", "taggable", "tagged"],
 	"authors": [
 		{
