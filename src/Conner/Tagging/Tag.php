@@ -25,6 +25,13 @@ class Tag extends \Eloquent {
 	}
 	
 	/**
+	 * Get suggested tags
+	 */
+	public function scopeSuggested($query) {
+		return $query->where('suggest', true);
+	}
+	
+	/**
 	 * Name auto-mutator
 	 */
 	public function setNameAttribute($value) {
