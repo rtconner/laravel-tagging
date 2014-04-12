@@ -88,18 +88,18 @@ class Tag extends \Eloquent {
 	 * @param string $str
 	 * @return string
 	 */
-	public static function slug($str, $options = array()) {
+	public static function slug($str) {
 		
 		// Make sure string is in UTF-8 and strip invalid UTF-8 characters
 		$str = mb_convert_encoding((string)$str, 'UTF-8', mb_list_encodings());
 
-		$options = array_merge(array(
+		$options = array(
 			'delimiter' => '-',
 			'limit' => null,
 			'lowercase' => true,
 			'replacements' => array(),
 			'transliterate' => true,
-		), $options);
+		);
 		
 		$char_map = array(
 			// Latin

@@ -16,25 +16,35 @@ trait Taggable {
 	/**
 	 * Perform the action of tagging the model with the given string
 	 * 
-	 * @param $tagName string
+	 * @param $tagName string or array
 	 */
-	public function tag($tagName) {
-		$tagName = trim($tagName);
-		if(!strlen($tagName)) { return; }
+	public function tag($tagNames) {
 
-		$tagSlug = Tag::slug($tagName);
+		if(is_array($tagNames)) {
+			
+		} elseif(is_string($tagNames)) {
+			$tagNames = explode(',', $tagNames);
+		} else {
+			$tagNames = array(null);
+		}
 		
-		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
-		if($previousCount >= 1) { return; }
-		
-		$tagged = new Tagged(array(
-			'tag_name'=>Str::title($tagName),
-			'tag_slug'=>$tagSlug,
-		));
-		
-		$this->tagged()->save($tagged);
-
-		Tag::incrementCount($tagName, $tagSlug, 1);
+		foreach($tagNames as $tagName) {
+			$tagName = trim($tagName);
+	
+			$tagSlug = Tag::slug($tagName);
+			
+			$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
+			if($previousCount >= 1) { continue; }
+			
+			$tagged = new Tagged(array(
+				'tag_name'=>Str::title($tagName),
+				'tag_slug'=>$tagSlug,
+			));
+			
+			$this->tagged()->save($tagged);
+	
+			Tag::incrementCount($tagName, $tagSlug, 1);
+		}
 	}
 	
 	/**
@@ -56,28 +66,25 @@ trait Taggable {
 	/**
 	 * Remove the tag from this model
 	 * 
-	 * @param $tagName string
+	 * @param $tagName string or array
 	 */
-	public function untag($tagName) {
-		$tagName = trim($tagName);
-		$tagSlug = Tag::slug($tagName);
+	public function untag($tagNames) {
+		if(is_array($tagNames)) {
+				
+		} elseif(is_string($tagNames)) {
+			$tagNames = explode(',', $tagNames);
+		} else {
+			$tagNames = array(null);
+		}
 		
-		$count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete();
-		
-		Tag::decrementCount($tagName, $tagSlug, $count);
-	}
-	
-	/**
-	 * Filter model to subset with the given tag
-	 * 
-	 * @param unknown $tagName
-	 */
-	public static function withTag($tagName) {
-		$tagSlug = Tag::slug($tagName);
-		
-		return static::whereHas('tagged', function($q) use($tagSlug) {
-			$q->where('tag_slug', '=', $tagSlug);
-		});
+		foreach($tagNames as $tagName) {
+			$tagName = trim($tagName);
+			$tagSlug = Tag::slug($tagName);
+			
+			if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
+				Tag::decrementCount($tagName, $tagSlug, $count);
+			}
+		}
 	}
 	
 	/**
@@ -86,15 +93,15 @@ trait Taggable {
 	 * @param $tagNames array|string
 	 */
 	public static function withTags($tagNames) {
-		if(gettype($tagNames) == 'array' && count($tagNames) > 0)
+		if(is_array($tagNames)) {
 			$tagSlugs = $tagNames;
-		elseif(gettype($tagNames) == 'string')
+		} elseif(is_string($tagNames)) {
 			$tagSlugs = explode(',', $tagNames);
-		else
-			$tagSlugs = [null];
-
-		for($i = 0; $i < count($tagSlugs); $i++)
-			$tagSlugs[$i] = Tag::slug($tagSlugs[$i]);
+		} else {
+			$tagSlugs = array(null);
+		}
+		
+		array_walk($tagSlugs, 'Conner\Tagging\Tag::slug', array());
 
 		return static::whereHas('tagged', function($q) use($tagSlugs) {
 			$q->whereIn('tag_slug', $tagSlugs);

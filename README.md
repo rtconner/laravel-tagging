@@ -31,10 +31,8 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     
     $article->tagNames(); // get array of related tag names	
     
-    Article::withTag('Gardening')->get(); // fetch all articles with tag
+    Article::withTags('Gardening, Cooking')->get() // fetch all articles with all tags
     
-    Article::withTags('Gardening, Cooking')->get() // fetch all articles with given tags
-    
-    Article::withTags(['Gardening','Cooking'])->get() // fetch all articles with given tags
+    Article::withTags(array('Gardening','Cooking'))->get() // fetch all articles with all tags
     
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
