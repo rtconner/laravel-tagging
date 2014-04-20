@@ -19,31 +19,10 @@ trait Taggable {
 	 * @param $tagName string or array
 	 */
 	public function tag($tagNames) {
-
-		if(is_array($tagNames)) {
-			
-		} elseif(is_string($tagNames)) {
-			$tagNames = explode(',', $tagNames);
-		} else {
-			$tagNames = array(null);
-		}
+		$tagNames = $this->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
-			$tagName = trim($tagName);
-	
-			$tagSlug = Tag::slug($tagName);
-			
-			$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
-			if($previousCount >= 1) { continue; }
-			
-			$tagged = new Tagged(array(
-				'tag_name'=>Str::title($tagName),
-				'tag_slug'=>$tagSlug,
-			));
-			
-			$this->tagged()->save($tagged);
-	
-			Tag::incrementCount($tagName, $tagSlug, 1);
+			$this->addTag($tagName);
 		}
 	}
 	
@@ -69,21 +48,30 @@ trait Taggable {
 	 * @param $tagName string or array
 	 */
 	public function untag($tagNames) {
-		if(is_array($tagNames)) {
-				
-		} elseif(is_string($tagNames)) {
-			$tagNames = explode(',', $tagNames);
-		} else {
-			$tagNames = array(null);
-		}
+		$tagNames = $this->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
-			$tagName = trim($tagName);
-			$tagSlug = Tag::slug($tagName);
-			
-			if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
-				Tag::decrementCount($tagName, $tagSlug, $count);
-			}
+			$this->removeTag($tagName);
+		}
+	}
+	
+	/**
+	 * Replace the tags from this model
+	 * 
+	 * @param $tagName string or array
+	 */
+	public function retag($tagNames) {
+		$tagNames = $this->makeTagArray($tagNames);
+		$currentTagNames = $this->tagNames();
+		
+		$deletions = array_diff($currentTagNames, $tagNames);
+		$additions = array_diff($tagNames, $currentTagNames);
+		
+		foreach($deletions as $tagName) {
+			$this->removeTag($tagName);
+		}
+		foreach($additions as $tagName) {
+			$this->addTag($tagName);
 		}
 	}
 	
@@ -93,18 +81,62 @@ trait Taggable {
 	 * @param $tagNames array|string
 	 */
 	public static function withTags($tagNames) {
-		if(is_array($tagNames)) {
-			$tagSlugs = $tagNames;
-		} elseif(is_string($tagNames)) {
-			$tagSlugs = explode(',', $tagNames);
-		} else {
-			$tagSlugs = array(null);
-		}
+		$tagSlugs = $this->makeTagArray($tagNames);
 		
 		array_walk($tagSlugs, 'Conner\Tagging\Tag::slug', array());
 
 		return static::whereHas('tagged', function($q) use($tagSlugs) {
 			$q->whereIn('tag_slug', $tagSlugs);
 		});
+	}
+	
+	/**
+	 * Converts input into array
+	 * 
+	 * @param $tagName string or array
+	 */
+	private function makeTagArray($tagNames) {
+		if(is_string($tagNames)) {
+			$tagNames = explode(',', $tagNames);
+		} elseif(!is_array($tagNames)) {
+			$tagNames = array(null);
+		}
+		return $tagNames;
+	}
+	
+	/**
+	 * Adds a single tag
+	 * 
+	 * @param $tagName string
+	 */
+	private function addTag($tagName) {
+		$tagName = trim($tagName);
+		$tagSlug = Tag::slug($tagName);
+		
+		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
+		if($previousCount >= 1) { return; }
+		
+		$tagged = new Tagged(array(
+			'tag_name'=>Str::title($tagName),
+			'tag_slug'=>$tagSlug,
+		));
+		
+		$this->tagged()->save($tagged);
+
+		Tag::incrementCount($tagName, $tagSlug, 1);
+	}
+	
+	/**
+	 * Removes a single tag
+	 * 
+	 * @param $tagName string
+	 */
+	private function removeTag($tagName) {
+		$tagName = trim($tagName);
+		$tagSlug = Tag::slug($tagName);
+		
+		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
+			Tag::decrementCount($tagName, $tagSlug, $count);
+		}
 	}
 }
