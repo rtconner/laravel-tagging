@@ -45,9 +45,17 @@ trait Taggable {
 	/**
 	 * Remove the tag from this model
 	 * 
-	 * @param $tagName string or array
+	 * @param $tagName string or array (or null to remove all tags)
 	 */
-	public function untag($tagNames) {
+	public function untag($tagNames=null) {
+		if(is_null($tagNames)) {
+			$currentTagNames = $this->tagNames();
+			foreach($currentTagNames as $tagName) {
+				$this->removeTag($tagName);
+			}
+			return;
+		}
+		
 		$tagNames = $this->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {

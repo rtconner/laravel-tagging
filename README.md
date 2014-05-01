@@ -26,6 +26,9 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     $article->tag('Gardening'); // attach the tag
     
     $article->untag('Cooking'); // remove Cooking tag
+    $article->untag(); // remove all tags
+    
+    $article->retag(array('Fruit', 'Fish')); // delete current tags and save new tags
     
     $article->tagged(); // return Collection of rows tagged to article
     

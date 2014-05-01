@@ -51,6 +51,19 @@ class TaggingTest extends \TestCase {
 		$this->assertInternalType('string', $tag->slug);
 		$this->assertInternalType('int', $tag->id);
 	}
+	
+	public function testRetag() {
+		$stub = $this->randomStub();
+		
+		$stub->tag(array('First Tag', '2nd Tag', 'Tag #3'));
+
+		$stub->retag('A, B, c');
+		
+		$this->assertSame(array('A', 'B', 'C'), $stub->tagNames());
+		
+		$stub->untag();
+		$this->assertEmpty($stub->tagNames());
+	}
 
 	public function testInternational() {
 		$stub = $this->randomStub();
