@@ -61,7 +61,7 @@ class Tag extends \Eloquent {
 	}
 	
 	/**
-	 * Increment count of tag by one. This function will create tag record if it does not exist.
+	 * Decrement count of tag by one. This function will create tag record if it does not exist.
 	 *
 	 * @param string $tagString
 	 */
