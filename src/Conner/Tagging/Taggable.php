@@ -19,7 +19,7 @@ trait Taggable {
 	 * @param $tagName string or array
 	 */
 	public function tag($tagNames) {
-		$tagNames = $this->makeTagArray($tagNames);
+		$tagNames = self::makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
 			$this->addTag($tagName);
@@ -56,7 +56,7 @@ trait Taggable {
 			return;
 		}
 		
-		$tagNames = $this->makeTagArray($tagNames);
+		$tagNames = self::makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
 			$this->removeTag($tagName);
@@ -69,7 +69,7 @@ trait Taggable {
 	 * @param $tagName string or array
 	 */
 	public function retag($tagNames) {
-		$tagNames = $this->makeTagArray($tagNames);
+		$tagNames = self::makeTagArray($tagNames);
 		$currentTagNames = $this->tagNames();
 		
 		$deletions = array_diff($currentTagNames, $tagNames);
@@ -89,7 +89,7 @@ trait Taggable {
 	 * @param $tagNames array|string
 	 */
 	public static function withTags($tagNames) {
-		$tagSlugs = $this->makeTagArray($tagNames);
+		$tagSlugs = self::makeTagArray($tagNames);
 		
 		array_walk($tagSlugs, 'Conner\Tagging\Tag::slug', array());
 
@@ -103,7 +103,7 @@ trait Taggable {
 	 * 
 	 * @param $tagName string or array
 	 */
-	private function makeTagArray($tagNames) {
+	private static function makeTagArray($tagNames) {
 		if(is_string($tagNames)) {
 			$tagNames = explode(',', $tagNames);
 		} elseif(!is_array($tagNames)) {
