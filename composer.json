@@ -17,6 +17,9 @@
 	"autoload": {
 		"psr-0": {
 			"Conner\\Tagging\\": "src/"
-		}
+		},
+		"classmap": [
+			"src/migrations"
+		]
 	}
 }
