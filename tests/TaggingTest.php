@@ -10,10 +10,15 @@ class TaggingTest extends \TestCase {
 		\Illuminate\Foundation\Testing\TestCase::setUp();
 		
 		\Artisan::call('migrate', array('--package'=>'rtconner\laravel-tagging'));
+
+		$path = realpath(__DIR__.'/migrations');
+		$path = substr($path, strlen(getcwd())+1);
+		
+		\Artisan::call('migrate', array('--path'=>$path));
 		
 		include_once(dirname(__FILE__).'\Stub.php');
 	}
-	
+
 	public function testTagging() {
 		$stub = $this->randomStub();
 	
@@ -93,11 +98,38 @@ class TaggingTest extends \TestCase {
 		$str = 'same-slug';
 		$this->assertEquals(Tag::slug($str), $str);
 	}
+
+	public function testWithAny() {
+		$stub = $this->randomStub();
+	
+		$stub->tag(array('One', 'Two', 'Three'));
+	
+		$found1 = TaggingStub::withAnyTag(array('One', 'Four'))->count();
+		$found2 = TaggingStub::withAnyTag(array('One', 'Two', 'Three'))->count();
+		$nofound = TaggingStub::withAnyTag(array('ZZZZZZ'))->count();
+
+		$this->assertNotEmpty($found1);
+		$this->assertNotEmpty($found2);
+		$this->assertEmpty($nofound);
+	}
+	
+	public function testWithAll() {
+		$stub = $this->randomStub();
+	
+		$stub->tag(array('One', 'Two', 'Three'));
+	
+		$nofound = TaggingStub::withAllTags(array('One', 'Four'))->count();
+		$found = TaggingStub::withAllTags(array('One', 'Two'))->count();
+		
+		$this->assertNotEmpty($found);
+		$this->assertEmpty($nofound);
+	}
 	
 	private function randomStub() {
 		$stub = new TaggingStub;
 		$stub->id = rand(1,1000);
-	
+		$stub->save();
+		
 		return $stub;
 	}
 	

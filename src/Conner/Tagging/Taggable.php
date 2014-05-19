@@ -84,17 +84,45 @@ trait Taggable {
 	}
 	
 	/**
+	 * @deprecated
+	 */
+	public static function withTags($tagNames) {
+		return self::withAllTags($tagNames);
+	}
+		
+	/**
 	 * Filter model to subset with the given tags
 	 * 
 	 * @param $tagNames array|string
 	 */
-	public static function withTags($tagNames) {
-		$tagSlugs = self::makeTagArray($tagNames);
+	public static function withAllTags($tagNames) {
+		$tagNames = self::makeTagArray($tagNames);
 		
-		array_walk($tagSlugs, 'Conner\Tagging\Tag::slug', array());
+		$tagNames = array_map('Conner\Tagging\Tag::slug', $tagNames);
 
-		return static::whereHas('tagged', function($q) use($tagSlugs) {
-			$q->whereIn('tag_slug', $tagSlugs);
+		$builder = self::query();
+		
+		foreach($tagNames as $tagSlug) {
+			$builder->whereHas('tagged', function($q) use($tagSlug) {
+				$q->where('tag_slug', '=', $tagSlug);
+			});
+		}
+		
+		return $builder;
+	}
+		
+	/**
+	 * Filter model to subset with the given tags
+	 * 
+	 * @param $tagNames array|string
+	 */
+	public static function withAnyTag($tagNames) {
+		$tagNames = self::makeTagArray($tagNames);
+		
+		$tagNames = array_map('Conner\Tagging\Tag::slug', $tagNames);
+		
+		return static::whereHas('tagged', function($q) use($tagNames) {
+			$q->whereIn('tag_slug', $tagNames);
 		});
 	}
 	
@@ -102,6 +130,7 @@ trait Taggable {
 	 * Converts input into array
 	 * 
 	 * @param $tagName string or array
+	 * @return array
 	 */
 	private static function makeTagArray($tagNames) {
 		if(is_string($tagNames)) {
@@ -109,6 +138,9 @@ trait Taggable {
 		} elseif(!is_array($tagNames)) {
 			$tagNames = array(null);
 		}
+		
+		$tagNames = array_map('trim', $tagNames);
+
 		return $tagNames;
 	}
 	
