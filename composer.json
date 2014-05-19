@@ -15,11 +15,11 @@
 		"illuminate/foundation": ">=4.0.0"
 	},
 	"autoload": {
-		"psr-0": {
-			"Conner\\Tagging\\": "src/"
-		},
 		"classmap": [
 			"src/migrations"
-		]
+		],
+		"psr-0": {
+			"Conner\\Tagging\\": "src/"
+		}
 	}
 }
