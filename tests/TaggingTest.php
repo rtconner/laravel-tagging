@@ -73,7 +73,7 @@ class TaggingTest extends \TestCase {
 	public function testInternational() {
 		$stub = $this->randomStub();
 		
-		$tagStrings = array('Â«Ï„Î±Ð‘Ð¬â„“ÏƒÂ»', 'ÐŸÐ¸ÑˆÐ¸', 'Ð¦ÐµÐ»ÑƒÑŽ', 'ÐŸÐ§Ñ�Ð¦Ñ‰');
+		$tagStrings = array('«ταБЬℓσ»', 'Пиши', 'Целую', 'ПЧяЦщ');
 	
 		foreach($tagStrings as $tagString) {
 			$stub->tag($tagString);
@@ -86,13 +86,13 @@ class TaggingTest extends \TestCase {
 	}
 	
 	public function testSlugs() {
-		$str = 'ÐŸÐ§Ñ�Ð¦Ñ‰';
+		$str = 'ПЧяЦщ';
 		$this->assertNotEquals(Tag::slug($str), $str);
 
-		$str = 'quiÃ©nsÃ­';
+		$str = 'quiénsí';
 		$this->assertNotEquals(Tag::slug($str), $str);
 
-		$str = 'ÄŒÄ¢';
+		$str = 'ČĢ';
 		$this->assertNotEquals(Tag::slug($str), $str);
 
 		$str = 'same-slug';
