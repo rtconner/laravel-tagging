@@ -73,7 +73,7 @@ class TaggingTest extends \TestCase {
 	public function testInternational() {
 		$stub = $this->randomStub();
 		
-		$tagStrings = array('«ταБЬℓσ»', 'Пиши', 'Целую', 'ПЧяЦщ');
+		$tagStrings = array('Â«Ï„Î±Ð‘Ð¬â„“ÏƒÂ»', 'ÐŸÐ¸ÑˆÐ¸', 'Ð¦ÐµÐ»ÑƒÑŽ', 'ÐŸÐ§Ñ�Ð¦Ñ‰');
 	
 		foreach($tagStrings as $tagString) {
 			$stub->tag($tagString);
@@ -86,13 +86,13 @@ class TaggingTest extends \TestCase {
 	}
 	
 	public function testSlugs() {
-		$str = 'ПЧяЦщ';
+		$str = 'ÐŸÐ§Ñ�Ð¦Ñ‰';
 		$this->assertNotEquals(Tag::slug($str), $str);
 
-		$str = 'quiénsí';
+		$str = 'quiÃ©nsÃ­';
 		$this->assertNotEquals(Tag::slug($str), $str);
 
-		$str = 'ČĢ';
+		$str = 'ÄŒÄ¢';
 		$this->assertNotEquals(Tag::slug($str), $str);
 
 		$str = 'same-slug';
@@ -103,14 +103,14 @@ class TaggingTest extends \TestCase {
 		$stub = $this->randomStub();
 	
 		$stub->tag(array('One', 'Two', 'Three'));
-	
+
 		$found1 = TaggingStub::withAnyTag(array('One', 'Four'))->count();
 		$found2 = TaggingStub::withAnyTag(array('One', 'Two', 'Three'))->count();
 		$nofound = TaggingStub::withAnyTag(array('ZZZZZZ'))->count();
 
-		$this->assertNotEmpty($found1);
-		$this->assertNotEmpty($found2);
-		$this->assertEmpty($nofound);
+		$this->assertGreaterThan(0, $found1);
+		$this->assertGreaterThan(0, $found2);
+		$this->assertEquals(0, $nofound);
 	}
 	
 	public function testWithAll() {
@@ -120,9 +120,9 @@ class TaggingTest extends \TestCase {
 	
 		$nofound = TaggingStub::withAllTags(array('One', 'Four'))->count();
 		$found = TaggingStub::withAllTags(array('One', 'Two'))->count();
-		
-		$this->assertNotEmpty($found);
-		$this->assertEmpty($nofound);
+
+		$this->assertGreaterThan(0, $found);
+		$this->assertEquals(0, $nofound);
 	}
 	
 	private function randomStub() {

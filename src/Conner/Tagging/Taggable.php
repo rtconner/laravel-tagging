@@ -84,18 +84,11 @@ trait Taggable {
 	}
 	
 	/**
-	 * @deprecated
-	 */
-	public static function withTags($tagNames) {
-		return self::withAllTags($tagNames);
-	}
-		
-	/**
 	 * Filter model to subset with the given tags
 	 * 
 	 * @param $tagNames array|string
 	 */
-	public static function withAllTags($tagNames) {
+	public function scopeWithAllTags($query, $tagNames) {
 		$tagNames = self::makeTagArray($tagNames);
 		
 		$tagNames = array_map('Conner\Tagging\Tag::slug', $tagNames);
@@ -116,11 +109,11 @@ trait Taggable {
 	 * 
 	 * @param $tagNames array|string
 	 */
-	public static function withAnyTag($tagNames) {
+	public function scopeWithAnyTag($query, $tagNames) {
 		$tagNames = self::makeTagArray($tagNames);
-		
+
 		$tagNames = array_map('Conner\Tagging\Tag::slug', $tagNames);
-		
+
 		return static::whereHas('tagged', function($q) use($tagNames) {
 			$q->whereIn('tag_slug', $tagNames);
 		});
