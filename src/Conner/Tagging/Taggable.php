@@ -137,7 +137,7 @@ trait Taggable {
 		
 		$this->tagged()->save($tagged);
 
-		Tag::incrementCount($tagName, $tagSlug, 1);
+		TaggingUtil::incrementCount($tagName, $tagSlug, 1);
 	}
 	
 	/**
@@ -150,7 +150,7 @@ trait Taggable {
 		$tagSlug = TaggingUtil::slug($tagName);
 		
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
-			Tag::decrementCount($tagName, $tagSlug, $count);
+			TaggingUtil::decrementCount($tagName, $tagSlug, $count);
 		}
 	}
 }

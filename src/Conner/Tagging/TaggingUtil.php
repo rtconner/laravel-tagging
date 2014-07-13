@@ -1,5 +1,7 @@
 <?php namespace Conner\Tagging;
 
+use Conner\Tagging\Tag;
+
 /**
  * Utility functions to help with various tagging functionality.
  * 
@@ -137,6 +139,50 @@ class TaggingUtil {
 		$str = trim($str, $options['delimiter']);
 
 		return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
+	}
+
+	/**
+	 * Private! Please do not call this function directly, just let the Tag library use it.
+	 * Increment count of tag by one. This function will create tag record if it does not exist.
+	 * 
+	 * @param string $tagString
+	 */
+	public static function incrementCount($tagString, $tagSlug, $count) {
+		if($count <= 0) { return; }
+		
+		$tag = Tag::where('slug', '=', $tagSlug)->first();
+
+		if(!$tag) {
+			$tag = new Tag;
+			$tag->name = $tagString;
+			$tag->slug = $tagSlug;
+			$tag->suggest = false;
+			$tag->save();
+		}
+		
+		$tag->count = $tag->count + $count;
+		$tag->save();
+	}
+	
+	/**
+	 * Private! Please do not call this function directly, let the Tag library use it.
+	 * Decrement count of tag by one. This function will create tag record if it does not exist.
+	 *
+	 * @param string $tagString
+	 */
+	public static function decrementCount($tagString, $tagSlug, $count) {
+		if($count <= 0) { return; }
+		
+		$tag = Tag::where('slug', '=', $tagSlug)->first();
+	
+		if($tag) {
+			$tag->count = $tag->count - $count;
+			if($tag->count < 0) {
+				$tag->count = 0;
+				\Log::warning("The \Conner\Tagging\Tag count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
+			}
+			$tag->save();
+		}
 	}
 	
 }
