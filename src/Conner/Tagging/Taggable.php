@@ -1,6 +1,7 @@
 <?php namespace Conner\Tagging;
 
 use Illuminate\Support\Str;
+use Conner\Tagging\TaggingUtil;
 
 trait Taggable {
 
@@ -19,7 +20,7 @@ trait Taggable {
 	 * @param $tagName string or array
 	 */
 	public function tag($tagNames) {
-		$tagNames = self::makeTagArray($tagNames);
+		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
 			$this->addTag($tagName);
@@ -33,9 +34,9 @@ trait Taggable {
 	 */
 	public function tagNames() {
 		$tagNames = array();
-		$taggedIterator = $this->tagged()->select(array('tag_name'));
+		$tagged = $this->tagged()->get(array('tag_name'));
 
-		foreach($taggedIterator->get() as $tagged) {
+		foreach($tagged as $tagged) {
 			$tagNames[] = $tagged->tag_name;
 		}
 		
@@ -56,7 +57,7 @@ trait Taggable {
 			return;
 		}
 		
-		$tagNames = self::makeTagArray($tagNames);
+		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
 			$this->removeTag($tagName);
@@ -69,7 +70,7 @@ trait Taggable {
 	 * @param $tagName string or array
 	 */
 	public function retag($tagNames) {
-		$tagNames = self::makeTagArray($tagNames);
+		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		$currentTagNames = $this->tagNames();
 		
 		$deletions = array_diff($currentTagNames, $tagNames);
@@ -89,19 +90,17 @@ trait Taggable {
 	 * @param $tagNames array|string
 	 */
 	public function scopeWithAllTags($query, $tagNames) {
-		$tagNames = self::makeTagArray($tagNames);
+		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
-		$tagNames = array_map('Conner\Tagging\Tag::slug', $tagNames);
+		$tagNames = array_map('\Conner\Tagging\TaggingUtil::slug', $tagNames);
 
-		$builder = self::query();
-		
 		foreach($tagNames as $tagSlug) {
-			$builder->whereHas('tagged', function($q) use($tagSlug) {
+			$query->whereHas('tagged', function($q) use($tagSlug) {
 				$q->where('tag_slug', '=', $tagSlug);
 			});
 		}
 		
-		return $builder;
+		return $query;
 	}
 		
 	/**
@@ -110,31 +109,13 @@ trait Taggable {
 	 * @param $tagNames array|string
 	 */
 	public function scopeWithAnyTag($query, $tagNames) {
-		$tagNames = self::makeTagArray($tagNames);
+		$tagNames = TaggingUtil::makeTagArray($tagNames);
 
-		$tagNames = array_map('Conner\Tagging\Tag::slug', $tagNames);
+		$tagNames = array_map('\Conner\Tagging\TaggingUtil::slug', $tagNames);
 
-		return static::whereHas('tagged', function($q) use($tagNames) {
+		return $query->whereHas('tagged', function($q) use($tagNames) {
 			$q->whereIn('tag_slug', $tagNames);
 		});
-	}
-	
-	/**
-	 * Converts input into array
-	 * 
-	 * @param $tagName string or array
-	 * @return array
-	 */
-	private static function makeTagArray($tagNames) {
-		if(is_string($tagNames)) {
-			$tagNames = explode(',', $tagNames);
-		} elseif(!is_array($tagNames)) {
-			$tagNames = array(null);
-		}
-		
-		$tagNames = array_map('trim', $tagNames);
-
-		return $tagNames;
 	}
 	
 	/**
@@ -144,7 +125,7 @@ trait Taggable {
 	 */
 	private function addTag($tagName) {
 		$tagName = trim($tagName);
-		$tagSlug = Tag::slug($tagName);
+		$tagSlug = TaggingUtil::slug($tagName);
 		
 		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
 		if($previousCount >= 1) { return; }
@@ -166,7 +147,7 @@ trait Taggable {
 	 */
 	private function removeTag($tagName) {
 		$tagName = trim($tagName);
-		$tagSlug = Tag::slug($tagName);
+		$tagSlug = TaggingUtil::slug($tagName);
 		
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
 			Tag::decrementCount($tagName, $tagSlug, $count);

@@ -2,6 +2,7 @@
 
 use Conner\Tagging\Taggable;
 use Conner\Tagging\Tag;
+use Conner\Tagging\TaggingUtil;
 use Illuminate\Support\Facades\Config;
 
 class TaggingTest extends \TestCase {
@@ -57,6 +58,18 @@ class TaggingTest extends \TestCase {
 		$this->assertInternalType('int', $tag->id);
 	}
 	
+	public function testTagNames() {
+		$stub = $this->randomStub();
+		
+		$str = 'First Tag, Second Tag, Tag #3';
+		$arr = array('First Tag', 'Second Tag', 'Tag #3');
+		
+		$this->assertSame($arr, TaggingUtil::makeTagArray($str));
+
+		$stub->tag($str);
+		$this->assertSame($arr, $stub->tagNames());
+	}
+	
 	public function testRetag() {
 		$stub = $this->randomStub();
 		
@@ -73,7 +86,7 @@ class TaggingTest extends \TestCase {
 	public function testInternational() {
 		$stub = $this->randomStub();
 		
-		$tagStrings = array('«ταБЬℓσ»', 'Пиши', 'Целую', 'ПЧяЦщ');
+		$tagStrings = array('Â«Ï„Î±Ð‘Ð¬â„“ÏƒÂ»', 'ÐŸÐ¸ÑˆÐ¸', 'Ð¦ÐµÐ»ÑƒÑŽ', 'ÐŸÐ§Ñ�Ð¦Ñ‰');
 	
 		foreach($tagStrings as $tagString) {
 			$stub->tag($tagString);
@@ -86,17 +99,20 @@ class TaggingTest extends \TestCase {
 	}
 	
 	public function testSlugs() {
-		$str = 'ПЧяЦщ';
-		$this->assertNotEquals(Tag::slug($str), $str);
+		$str = 'ÐŸÐ§Ñ�Ð¦Ñ‰';
+		$this->assertNotEquals(TaggingUtil::slug($str), $str);
 
-		$str = 'quiénsí';
-		$this->assertNotEquals(Tag::slug($str), $str);
+		$str = 'quiÃ©nsÃ­';
+		$this->assertNotEquals(TaggingUtil::slug($str), $str);
 
-		$str = 'ČĢ';
-		$this->assertNotEquals(Tag::slug($str), $str);
+		$str = 'ÄŒÄ¢';
+		$this->assertNotEquals(TaggingUtil::slug($str), $str);
 
 		$str = 'same-slug';
-		$this->assertEquals(Tag::slug($str), $str);
+		$this->assertEquals(TaggingUtil::slug($str), $str);
+
+		$str = '&=*!$&&,';
+		$this->assertNotEquals(TaggingUtil::slug($str), $str);
 	}
 
 	public function testWithAny() {
@@ -111,6 +127,12 @@ class TaggingTest extends \TestCase {
 		$this->assertGreaterThan(0, $found1);
 		$this->assertGreaterThan(0, $found2);
 		$this->assertEquals(0, $nofound);
+		
+		$found = TaggingStub::where(1, 1)->withAnyTag(array('One', 'Two', 'Three'))->count();
+		$notfound = TaggingStub::where(1, 1)->withAnyTag(array('ZZZZZZ'))->count();
+		
+		$this->assertGreaterThan(0, $found);
+		$this->assertEquals(0, $notfound);
 	}
 	
 	public function testWithAll() {
@@ -121,6 +143,12 @@ class TaggingTest extends \TestCase {
 		$nofound = TaggingStub::withAllTags(array('One', 'Four'))->count();
 		$found = TaggingStub::withAllTags(array('One', 'Two'))->count();
 
+		$this->assertGreaterThan(0, $found);
+		$this->assertEquals(0, $nofound);
+		
+		$nofound = TaggingStub::where(1, 1)->withAllTags(array('One', 'Four'))->count();
+		$found = TaggingStub::where(1, 1)->withAllTags(array('One', 'Two'))->count();
+		
 		$this->assertGreaterThan(0, $found);
 		$this->assertEquals(0, $nofound);
 	}
