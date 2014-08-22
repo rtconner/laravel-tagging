@@ -6,8 +6,8 @@
 	"keywords": ["tag", "tags", "tagging", "laravel", "taggable", "tagged", "eloquent"],
 	"authors": [
 		{
-            "name": "Robert Conner",
-            "email": "rtconner@smarter.bz"
+			"name": "Robert Conner",
+			"email": "rtconner@smarter.bz"
 		}
 	],
 	"require": {
