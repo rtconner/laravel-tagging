@@ -1,21 +1,46 @@
-<?php namespace Conner\Tagging\Tests;
+<?php
 
 use Conner\Tagging\Taggable;
 use Conner\Tagging\Tag;
 use Conner\Tagging\TaggingUtil;
 use Illuminate\Support\Facades\Config;
+use Conner\Tagging\Tests\TaggingStub;
 
-class TaggingTest extends \TestCase {
+class TaggingTest extends \Orchestra\Testbench\TestCase {
 
+	/**
+	 * Define environment setup.
+	 *
+	 * @param Illuminate\Foundation\Application $app
+	 * @return void
+	 */
+	protected function getEnvironmentSetUp($app) {
+		// reset base path to point to our package's src directory
+		$app['path.base'] = __DIR__ . '/../src';
+		$app['config']->set('database.default', 'testbench');
+		$app['config']->set('database.connections.testbench', array(
+			'driver' => 'sqlite',
+			'database' => ':memory:',
+			'prefix' => '',
+		));
+	}
+	
 	public function setUp() {
-		\Illuminate\Foundation\Testing\TestCase::setUp();
+		parent::setUp();
 		
-		\Artisan::call('migrate', array('--package'=>'rtconner\laravel-tagging'));
+		$artisan = $this->app->make('artisan');
+		
+		$artisan->call('migrate', array(
+			'--database' => 'testbench',
+			'--package'=>'rtconner\laravel-tagging',
+			'--path'=>'migrations',
+		));
 
-		$path = realpath(__DIR__.'/migrations');
-		$path = substr($path, strlen(getcwd())+1);
-		
-		\Artisan::call('migrate', array('--path'=>$path));
+		$artisan->call('migrate', array(
+			'--database' => 'testbench',
+			'--package'=>'rtconner\laravel-tagging',
+			'--path'=>'../tests/migrations',
+		));
 		
 		include_once(dirname(__FILE__).'\Stub.php');
 	}
@@ -97,23 +122,6 @@ class TaggingTest extends \TestCase {
 			$this->assertNotEmpty($tag);
 		}
 	}
-	
-	public function testSlugs() {
-		$str = 'ÐŸÐ§Ñ�Ð¦Ñ‰';
-		$this->assertNotEquals(TaggingUtil::slug($str), $str);
-
-		$str = 'quiÃ©nsÃ­';
-		$this->assertNotEquals(TaggingUtil::slug($str), $str);
-
-		$str = 'ÄŒÄ¢';
-		$this->assertNotEquals(TaggingUtil::slug($str), $str);
-
-		$str = 'same-slug';
-		$this->assertEquals(TaggingUtil::slug($str), $str);
-
-		$str = '&=*!$&&,';
-		$this->assertNotEquals(TaggingUtil::slug($str), $str);
-	}
 
 	public function testWithAny() {
 		$stub = $this->randomStub();
@@ -134,7 +142,7 @@ class TaggingTest extends \TestCase {
 		$this->assertGreaterThan(0, $found);
 		$this->assertEquals(0, $notfound);
 	}
-	
+
 	public function testWithAll() {
 		$stub = $this->randomStub();
 	
@@ -160,5 +168,5 @@ class TaggingTest extends \TestCase {
 		
 		return $stub;
 	}
-	
+
 }

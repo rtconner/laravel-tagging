@@ -1,6 +1,5 @@
 <?php namespace Conner\Tagging;
 
-use Illuminate\Support\Str;
 use Conner\Tagging\TaggingUtil;
 
 class Tag extends \Eloquent {
@@ -18,7 +17,6 @@ class Tag extends \Eloquent {
 		
 		if($validator->passes()) {
 			$this->slug = TaggingUtil::slug($this->name);
-			$this->name = Str::title($this->name);
 			parent::save($options);
 		} else {
 			throw new \Exception('Tag Name is required');
@@ -36,7 +34,7 @@ class Tag extends \Eloquent {
 	 * Name auto-mutator
 	 */
 	public function setNameAttribute($value) {
-		$this->attributes['name'] = Str::title($value);
+		$this->attributes['name'] = call_user_func('\Str::title', $value);
 	}
 	
 }
