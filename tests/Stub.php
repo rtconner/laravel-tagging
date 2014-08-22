@@ -2,11 +2,6 @@
 
 use Conner\Tagging\Taggable;
 
-class TaggingStub extends \Eloquent {
+class TaggingStub extends \Illuminate\Database\Eloquent\Model {
 	use Taggable;
-	
-	function migrateAndSeed() {
-		
-	}
-	
 }
