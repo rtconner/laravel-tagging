@@ -21,11 +21,11 @@
 		"orchestra/testbench": "2.2.*"
 	},
 	"repositories": [
-        {
-            "type": "vcs",
-            "url": "git://github.com/orchestral/phpseclib.git"
-        }
-    ],
+		{
+			"type": "vcs",
+			"url": "git://github.com/orchestral/phpseclib.git"
+		}
+	],
 	"autoload": {
 		"classmap": [
 			"src/migrations"
