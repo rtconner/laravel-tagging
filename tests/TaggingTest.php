@@ -42,7 +42,7 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 			'--path'=>'../tests/migrations',
 		));
 		
-		include_once(dirname(__FILE__).'\Stub.php');
+		include_once(dirname(__FILE__).'/Stub.php');
 	}
 
 	public function testTagging() {
