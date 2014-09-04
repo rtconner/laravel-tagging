@@ -4,14 +4,14 @@ use Conner\Tagging\Tag;
 
 /**
  * Utility functions to help with various tagging functionality.
- * 
+ *
  * @author Rob Conner <rtconner@gmail.com>
  */
 class TaggingUtil {
 	
 	/**
 	 * Converts input into array
-	 * 
+	 *
 	 * @param $tagName string or array
 	 * @return array
 	 */
@@ -42,7 +42,7 @@ class TaggingUtil {
 	public static function slug($str) {
 		
 		// Make sure string is in UTF-8 and strip invalid UTF-8 characters
-		$str = mb_convert_encoding((string)$str, 'UTF-8', mb_list_encodings());
+		$str = mb_convert_encoding((string)$str, 'UTF-8');
 
 		$options = array(
 			'delimiter' => '-',
@@ -144,7 +144,7 @@ class TaggingUtil {
 	/**
 	 * Private! Please do not call this function directly, just let the Tag library use it.
 	 * Increment count of tag by one. This function will create tag record if it does not exist.
-	 * 
+	 *
 	 * @param string $tagString
 	 */
 	public static function incrementCount($tagString, $tagSlug, $count) {

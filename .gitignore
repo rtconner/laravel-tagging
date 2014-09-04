@@ -4,4 +4,4 @@
 .idea
 .buildpath
 composer.lock
-vendor
+/vendor
