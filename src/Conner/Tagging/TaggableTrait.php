@@ -3,11 +3,11 @@
 use Illuminate\Support\Str;
 use Conner\Tagging\TaggingUtil;
 
-trait Taggable {
+trait TaggableTrait {
 
 	/**
 	 * Return collection of tags related to the tagged model
-	 * 
+	 *
 	 * @return Illuminate\Database\Eloquent\Collection
 	 */
 	public function tagged() {
@@ -16,7 +16,7 @@ trait Taggable {
 	
 	/**
 	 * Perform the action of tagging the model with the given string
-	 * 
+	 *
 	 * @param $tagName string or array
 	 */
 	public function tag($tagNames) {
@@ -29,7 +29,7 @@ trait Taggable {
 	
 	/**
 	 * Return array of the tag names related to the current model
-	 * 
+	 *
 	 * @return array
 	 */
 	public function tagNames() {
@@ -45,7 +45,7 @@ trait Taggable {
 	
 	/**
 	 * Remove the tag from this model
-	 * 
+	 *
 	 * @param $tagName string or array (or null to remove all tags)
 	 */
 	public function untag($tagNames=null) {
@@ -66,7 +66,7 @@ trait Taggable {
 	
 	/**
 	 * Replace the tags from this model
-	 * 
+	 *
 	 * @param $tagName string or array
 	 */
 	public function retag($tagNames) {
@@ -86,7 +86,7 @@ trait Taggable {
 	
 	/**
 	 * Filter model to subset with the given tags
-	 * 
+	 *
 	 * @param $tagNames array|string
 	 */
 	public function scopeWithAllTags($query, $tagNames) {
@@ -105,7 +105,7 @@ trait Taggable {
 		
 	/**
 	 * Filter model to subset with the given tags
-	 * 
+	 *
 	 * @param $tagNames array|string
 	 */
 	public function scopeWithAnyTag($query, $tagNames) {
@@ -120,7 +120,7 @@ trait Taggable {
 	
 	/**
 	 * Adds a single tag
-	 * 
+	 *
 	 * @param $tagName string
 	 */
 	private function addTag($tagName) {
@@ -142,7 +142,7 @@ trait Taggable {
 	
 	/**
 	 * Removes a single tag
-	 * 
+	 *
 	 * @param $tagName string
 	 */
 	private function removeTag($tagName) {
