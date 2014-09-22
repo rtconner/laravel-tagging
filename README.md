@@ -1,7 +1,10 @@
 Laravel Tag Plugin
 ============
 
-[![Latest Stable Version](https://poser.pugx.org/rtconner/laravel-tagging/v/stable.svg)](https://packagist.org/packages/rtconner/laravel-tagging)[![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging) [![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging) [![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=master)](https://travis-ci.org/rtconner/laravel-tagging)
+[![Latest Stable Version](https://poser.pugx.org/rtconner/laravel-tagging/v/stable.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
+[![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
+[![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
+[![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=master)](https://travis-ci.org/rtconner/laravel-tagging)
 
 This package is not meant to handle javascript or html in any way. This package handles database storage and read/writes only.
 
@@ -42,3 +45,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     Article::withAllTags('Gardening, Cooking')->get() // only fetch articles with all the tags
     
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
+
+#### Credits
+
+ - Robert Conner - http://smartersoftware.net [![Flattr This](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rtconner&url=https://github.com/rtconner/laravel-tagging&title=Laravel+Tagging&language=&tags=github&category=software)
