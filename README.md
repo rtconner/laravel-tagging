@@ -48,4 +48,4 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 
 #### Credits
 
- - Robert Conner - http://smartersoftware.net [![Flattr This](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rtconner&url=https://github.com/rtconner/laravel-tagging&title=Laravel+Tagging&language=&tags=github&category=software)
+ - Robert Conner - http://smartersoftware.net
