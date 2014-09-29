@@ -1,6 +1,5 @@
 <?php
 
-use Conner\Tagging\Taggable;
 use Conner\Tagging\Tag;
 use Conner\Tagging\TaggingUtil;
 use Illuminate\Support\Facades\Config;
