@@ -9,6 +9,6 @@ return array(
 	'displayer' => '\Str::title',
 	
 	// database connection for Conner\Taggable\Tag model to use
-	'connection' => 'default',
+// 	'connection' => 'mysql',
 	
 );
