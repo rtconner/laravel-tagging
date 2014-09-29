@@ -1,7 +1,10 @@
 Laravel Tag Plugin
 ============
 
-[![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging) [![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging) [![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=master)](https://travis-ci.org/rtconner/laravel-tagging)
+[![Latest Stable Version](https://poser.pugx.org/rtconner/laravel-tagging/v/stable.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
+[![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
+[![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
+[![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=master)](https://travis-ci.org/rtconner/laravel-tagging)
 
 This package is not meant to handle javascript or html in any way. This package handles database storage and read/writes only.
 
@@ -20,7 +23,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 #### Setup your models
 
     class Article extends \Eloquent {
-        use Conner\Tagging\Taggable;
+        use Conner\Tagging\TaggableTrait;
     }
 
 #### Sample Usage
@@ -42,3 +45,19 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     Article::withAllTags('Gardening, Cooking')->get() // only fetch articles with all the tags
     
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
+
+#### (Optional) Configuration
+
+If you want to use any of the configuration options, you must enable the TaggingServiceProvider and also, publish the config.php
+
+    php artisan config:publish rtconner/laravel-tagging
+   
+    'providers' => array(
+        'Conner\Tagging\TaggingServiceProvider',
+    );
+    
+After these two steps are done, edit at the config.php with your prefered settings.
+
+#### Credits
+
+ - Robert Conner - http://smartersoftware.net

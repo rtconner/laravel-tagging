@@ -9,6 +9,14 @@ class Tag extends \Eloquent {
 	protected $softDelete = false;
 	public $fillable = ['name'];
 	
+	public function __construct(array $attributes = array()) {
+		parent::__construct($attributes);
+		
+		if($connection = \Config::get('tagging::connection')) {
+			$this->connection = $connection;
+		}
+	}
+	
 	public function save(array $options = array()) {
 		$validator = \Validator::make(
 			array('name' => $this->name),
@@ -16,7 +24,10 @@ class Tag extends \Eloquent {
 		);
 		
 		if($validator->passes()) {
-			$this->slug = TaggingUtil::slug($this->name);
+			$normalizer = \Config::get('tagging::normalizer');
+			$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+			
+			$this->slug = call_user_func($normalizer, $this->name);
 			parent::save($options);
 		} else {
 			throw new \Exception('Tag Name is required');
@@ -34,7 +45,10 @@ class Tag extends \Eloquent {
 	 * Name auto-mutator
 	 */
 	public function setNameAttribute($value) {
-		$this->attributes['name'] = call_user_func('\Str::title', $value);
+		$displayer = \Config::get('tagging::displayer');
+		$displayer = empty($displayer) ? '\Str::title' : $displayer;
+		
+		$this->attributes['name'] = call_user_func($displayer, $value);
 	}
 	
 }
