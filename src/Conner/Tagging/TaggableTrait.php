@@ -111,7 +111,10 @@ trait TaggableTrait {
 	public function scopeWithAnyTag($query, $tagNames) {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 
-		$tagNames = array_map('\Conner\Tagging\TaggingUtil::slug', $tagNames);
+		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+		
+		$tagNames = array_map($normalizer, $tagNames);
 
 		return $query->whereHas('tagged', function($q) use($tagNames) {
 			$q->whereIn('tag_slug', $tagNames);
@@ -130,8 +133,11 @@ trait TaggableTrait {
 		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
 		if($previousCount >= 1) { return; }
 		
+		$displayer = \Config::get('tagging::displayer');
+		$displayer = empty($displayer) ? '\Str::title' : $displayer;
+		
 		$tagged = new Tagged(array(
-			'tag_name'=>Str::title($tagName),
+			'tag_name'=>call_user_func($displayer, $tagName),
 			'tag_slug'=>$tagSlug,
 		));
 		
@@ -147,7 +153,11 @@ trait TaggableTrait {
 	 */
 	private function removeTag($tagName) {
 		$tagName = trim($tagName);
-		$tagSlug = TaggingUtil::slug($tagName);
+		
+		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+		
+		$tagSlug = call_user_func($normalizer, $tagName);
 		
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
 			TaggingUtil::decrementCount($tagName, $tagSlug, $count);

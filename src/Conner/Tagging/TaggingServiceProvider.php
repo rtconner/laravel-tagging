@@ -1,8 +1,8 @@
-<?php namespace Conner\Addresses;
+<?php namespace Conner\Tagging;
 
 use Illuminate\Support\ServiceProvider;
 
-class AddressesServiceProvider extends ServiceProvider {
+class TaggingServiceProvider extends ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.

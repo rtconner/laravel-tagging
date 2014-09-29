@@ -8,7 +8,7 @@ return array(
 	// display value of tags are passed through (for front end display)
 	'displayer' => '\Str::title',
 	
-	// database connection for Tag tables to use
+	// database connection for Conner\Taggable\Tag model to use
 	'connection' => 'default',
 	
 );
