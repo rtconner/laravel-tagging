@@ -13,7 +13,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 #### Composer Install
 
     "require": {
-        "rtconner/laravel-tagging": "0.3.*"
+        "rtconner/laravel-tagging": "0.4.0"
     }
 
 #### Run the migrations
