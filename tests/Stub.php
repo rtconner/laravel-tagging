@@ -1,7 +1,7 @@
 <?php namespace Conner\Tagging\Tests;
 
-use Conner\Tagging\Taggable;
+use Conner\Tagging\TaggableTrait;
 
 class TaggingStub extends \Illuminate\Database\Eloquent\Model {
-	use Taggable;
+	use TaggableTrait;
 }
