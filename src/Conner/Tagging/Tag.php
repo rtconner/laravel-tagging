@@ -9,6 +9,14 @@ class Tag extends \Eloquent {
 	protected $softDelete = false;
 	public $fillable = ['name'];
 	
+	public function __construct(array $attributes = array()) {
+		parent::__construct($attributes);
+		
+		if($connection = \Config::get('tagging::connection')) {
+			$this->connection = $connection;
+		}
+	}
+	
 	public function save(array $options = array()) {
 		$validator = \Validator::make(
 			array('name' => $this->name),
