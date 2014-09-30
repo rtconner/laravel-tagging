@@ -46,7 +46,7 @@ class TaggingUtil {
 
 		$options = array(
 			'delimiter' => '-',
-			'limit' => null,
+			'limit' => '255',
 			'lowercase' => true,
 			'replacements' => array(),
 			'transliterate' => true,
