@@ -35,7 +35,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     
     $article->retag(array('Fruit', 'Fish')); // delete current tags and save new tags
     
-    $article->tagged(); // return Collection of rows tagged to article
+    $article->tagged; // return Collection of rows tagged to article
     
     $article->tagNames(); // get array of related tag names	
     

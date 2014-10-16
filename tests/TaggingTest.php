@@ -54,6 +54,8 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 		}
 	
 		$this->assertEquals(count($tagStrings)-2, $stub->tagged->count());
+		
+		$this->assertInstanceOf('\Illuminate\Support\Collection', $stub->tagged);
 	}
 	
 	public function testUntag() {
