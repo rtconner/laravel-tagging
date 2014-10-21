@@ -1,5 +1,8 @@
 <?php namespace Conner\Tagging;
 
+/**
+ * Copyright (C) 2014 Robert Conner
+ */
 class Tagged extends \Eloquent {
 
 	protected $table = 'tagging_tagged';

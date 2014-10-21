@@ -2,6 +2,9 @@
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Copyright (C) 2014 Robert Conner
+ */
 class TaggingServiceProvider extends ServiceProvider {
 
 	/**

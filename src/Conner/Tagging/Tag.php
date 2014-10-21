@@ -2,6 +2,9 @@
 
 use Conner\Tagging\TaggingUtil;
 
+/**
+ * Copyright (C) 2014 Robert Conner
+ */
 class Tag extends \Eloquent {
 
 	protected $table = 'tagging_tags';

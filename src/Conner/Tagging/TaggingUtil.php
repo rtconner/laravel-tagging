@@ -6,6 +6,8 @@ use Conner\Tagging\Tag;
  * Utility functions to help with various tagging functionality.
  *
  * @author Rob Conner <rtconner@gmail.com>
+ *
+ * Copyright (C) 2014 Robert Conner
  */
 class TaggingUtil {
 	

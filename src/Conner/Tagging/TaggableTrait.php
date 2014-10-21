@@ -3,6 +3,9 @@
 use Illuminate\Support\Str;
 use Conner\Tagging\TaggingUtil;
 
+/**
+ * Copyright (C) 2014 Robert Conner
+ */
 trait TaggableTrait {
 
 	/**
