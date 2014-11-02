@@ -45,6 +45,22 @@ trait TaggableTrait {
 		
 		return $tagNames;
 	}
+
+	/**
+	 * Return array of the tag slugs related to the current model
+	 *
+	 * @return array
+	 */
+	public function tagSlugs() {
+		$tagSlugs = array();
+		$tagged = $this->tagged()->get(array('tag_slug'));
+
+		foreach($tagged as $tagged) {
+			$tagSlugs[] = $tagged->tag_slug;
+		}
+		
+		return $tagSlugs;
+	}
 	
 	/**
 	 * Remove the tag from this model
