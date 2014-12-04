@@ -27,7 +27,7 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 	public function setUp() {
 		parent::setUp();
 		
-		$artisan = $this->app->make('artisan');
+		$artisan = $this->app->make('Illuminate\Contracts\Console\Kernel');
 		
 		$artisan->call('migrate', array(
 			'--database' => 'testbench',
@@ -35,7 +35,7 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 			'--path'=>'migrations',
 		));
 
-		$artisan->call('migrate', array(
+                $artisan->call('migrate', array(
 			'--database' => 'testbench',
 			'--package'=>'rtconner\laravel-tagging',
 			'--path'=>'../tests/migrations',
