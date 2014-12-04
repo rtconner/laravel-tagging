@@ -1,11 +1,12 @@
 <?php namespace Conner\Tagging;
 
 use Conner\Tagging\TaggingUtil;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * Copyright (C) 2014 Robert Conner
  */
-class Tag extends \Eloquent {
+class Tag extends Eloquent {
 
 	protected $table = 'tagging_tags';
 	public $timestamps = false;
