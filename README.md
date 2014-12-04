@@ -1,3 +1,5 @@
+Added support for Laravel 5
+
 Laravel Tag Plugin
 ============
 
