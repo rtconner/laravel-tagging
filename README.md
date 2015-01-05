@@ -16,7 +16,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 	composer require rtconner/laravel-tagging ~0.4
 	
 	Laravel 5 (not stable)
-	composer require rtconner/laravel-tagging dev-master
+	composer require rtconner/laravel-tagging dev-laravel-5
 
 #### Run the migrations
 
