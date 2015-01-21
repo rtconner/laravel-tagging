@@ -111,7 +111,10 @@ trait TaggableTrait {
 	public function scopeWithAllTags($query, $tagNames) {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
-		$tagNames = array_map('\Conner\Tagging\TaggingUtil::slug', $tagNames);
+		// $tagNames = array_map('\Conner\Tagging\TaggingUtil::slug', $tagNames);
+		
+		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 
 		foreach($tagNames as $tagSlug) {
 			$query->whereHas('tagged', function($q) use($tagSlug) {
@@ -147,7 +150,12 @@ trait TaggableTrait {
 	 */
 	private function addTag($tagName) {
 		$tagName = trim($tagName);
-		$tagSlug = TaggingUtil::slug($tagName);
+		// $tagSlug = TaggingUtil::slug($tagName);
+		
+		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+
+		$tagSlug = call_user_func($normalizer, $tagName);
 		
 		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
 		if($previousCount >= 1) { return; }
