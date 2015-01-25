@@ -111,8 +111,6 @@ trait TaggableTrait {
 	public function scopeWithAllTags($query, $tagNames) {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
-		// $tagNames = array_map('\Conner\Tagging\TaggingUtil::slug', $tagNames);
-		
 		$normalizer = \Config::get('tagging::normalizer');
 		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 
@@ -150,7 +148,6 @@ trait TaggableTrait {
 	 */
 	private function addTag($tagName) {
 		$tagName = trim($tagName);
-		// $tagSlug = TaggingUtil::slug($tagName);
 		
 		$normalizer = \Config::get('tagging::normalizer');
 		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
