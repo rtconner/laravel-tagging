@@ -2,6 +2,7 @@
 
 use Conner\Tagging\Tag;
 use Conner\Tagging\TaggableTrait;
+use Conner\Tagging\Tagged;
 use Conner\Tagging\TaggingUtil;
 
 class TaggingTest extends \Orchestra\Testbench\TestCase {
@@ -159,6 +160,15 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 
 		$this->assertGreaterThan(0, $found);
 		$this->assertEquals(0, $nofound);
+	}
+
+
+	public function testAllTags() {
+		$stub = $this->randomStub();
+		$stub->tag(array('One', 'Two', 'Three'));
+
+		$tags = TaggingStub::allTags();
+		$this->assertEquals(3, $tags->count());
 	}
 	
 	private function randomStub() {

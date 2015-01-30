@@ -1,8 +1,5 @@
 <?php namespace Conner\Tagging;
 
-use Illuminate\Support\Str;
-use Conner\Tagging\TaggingUtil;
-
 /**
  * Copyright (C) 2014 Robert Conner
  */
@@ -191,15 +188,13 @@ trait TaggableTrait {
 	/**
 	 * Return an array of all of the tags that are in use by this model
 	 *
-	 * @return array
+	 * @return Collection
 	 */
 	public static function allTags() {
-		return static::newQuery()
-			->distinct()
-			->join('tagging_tags', 'tagging_tagged.tag_slug', '=', 'tagging_tags.slug')
-			->where('tagging_tagged.taggable_type', 'like', get_called_class())
-			->orderBy('tagging_tags.slug')
-			->lists('tagging_tags.slug');
+		return Tagged::distinct()
+			->where('taggable_type', '=', get_called_class())
+			->orderBy('tag_slug', 'ASC')
+			->get(array('tag_slug', 'tag_name', 'count'));
 	}
 
 }

@@ -48,6 +48,8 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
 
+    Article::allTags(); // return collection of all tags on any articles
+
 #### (Optional) Configuration
 
 If you want to use any of the configuration options, you must enable the TaggingServiceProvider and also, publish the config.php
