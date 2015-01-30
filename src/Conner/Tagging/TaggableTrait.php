@@ -112,11 +112,11 @@ trait TaggableTrait {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
 		$normalizer = \Config::get('tagging::normalizer');
-		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+		$normalizer = empty($normalizer) ? 'Conner\Tagging\TaggingUtil::slug' : $normalizer;
 
 		foreach($tagNames as $tagSlug) {
-			$query->whereHas('tagged', function($q) use($tagSlug) {
-				$q->where('tag_slug', '=', $tagSlug);
+			$query->whereHas('tagged', function($q) use($tagSlug, $normalizer) {
+				$q->where('tag_slug', '=', call_user_func($normalizer, $tagSlug));
 			});
 		}
 		
@@ -187,4 +187,19 @@ trait TaggableTrait {
 			TaggingUtil::decrementCount($tagName, $tagSlug, $count);
 		}
 	}
+
+	/**
+	 * Return an array of all of the tags that are in use by this model
+	 *
+	 * @return array
+	 */
+	public static function allTags() {
+		return static::newQuery()
+			->distinct()
+			->join('tagging_tags', 'tagging_tagged.tag_slug', '=', 'tagging_tags.slug')
+			->where('tagging_tagged.taggable_type', 'like', get_called_class())
+			->orderBy('tagging_tags.slug')
+			->lists('tagging_tags.slug');
+	}
+
 }
