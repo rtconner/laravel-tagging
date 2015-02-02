@@ -168,7 +168,18 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 		$stub->tag(array('One', 'Two', 'Three'));
 
 		$tags = TaggingStub::allTags();
+
 		$this->assertEquals(3, $tags->count());
+
+		$stub = $this->randomStub();
+		$stub->tag(array('One', 'Two', 'Three'));
+		$stub = $this->randomStub();
+		$stub->tag(array('One', 'Two', 'Three'));
+		$tags = TaggingStub::allTags();
+
+		foreach($tags as $tag) {
+			$this->assertEquals(3, $tag->count);
+		}
 	}
 	
 	private function randomStub() {

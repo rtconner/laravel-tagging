@@ -192,9 +192,10 @@ trait TaggableTrait {
 	 */
 	public static function allTags() {
 		return Tagged::distinct()
+			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
 			->where('taggable_type', '=', get_called_class())
 			->orderBy('tag_slug', 'ASC')
-			->get(array('tag_slug', 'tag_name', 'count'));
+			->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
 	}
 
 }
