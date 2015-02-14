@@ -1,8 +1,5 @@
 <?php namespace Conner\Tagging;
 
-use Illuminate\Support\Str;
-use Conner\Tagging\TaggingUtil;
-
 /**
  * Copyright (C) 2014 Robert Conner
  */
@@ -112,11 +109,11 @@ trait TaggableTrait {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
 		$normalizer = \Config::get('tagging::normalizer');
-		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+		$normalizer = empty($normalizer) ? 'Conner\Tagging\TaggingUtil::slug' : $normalizer;
 
 		foreach($tagNames as $tagSlug) {
-			$query->whereHas('tagged', function($q) use($tagSlug) {
-				$q->where('tag_slug', '=', $tagSlug);
+			$query->whereHas('tagged', function($q) use($tagSlug, $normalizer) {
+				$q->where('tag_slug', '=', call_user_func($normalizer, $tagSlug));
 			});
 		}
 		
@@ -187,4 +184,18 @@ trait TaggableTrait {
 			TaggingUtil::decrementCount($tagName, $tagSlug, $count);
 		}
 	}
+
+	/**
+	 * Return an array of all of the tags that are in use by this model
+	 *
+	 * @return Collection
+	 */
+	public static function allTags() {
+		return Tagged::distinct()
+			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
+			->where('taggable_type', '=', get_called_class())
+			->orderBy('tag_slug', 'ASC')
+			->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
+	}
+
 }

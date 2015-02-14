@@ -1,7 +1,5 @@
 <?php namespace Conner\Tagging;
 
-use Conner\Tagging\Tag;
-
 /**
  * Utility functions to help with various tagging functionality.
  *

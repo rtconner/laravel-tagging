@@ -13,7 +13,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 #### Composer Install
 
 	Laravel 4
-	composer require rtconner/laravel-tagging ~0.4
+	composer require rtconner/laravel-tagging ~0.5
 	
 	Laravel 5 (not stable)
 	composer require rtconner/laravel-tagging dev-laravel-5
@@ -48,6 +48,8 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
 
+    Article::allTags(); // return collection of all tags on any articles
+
 #### (Optional) Configuration
 
 If you want to use any of the configuration options, you must enable the TaggingServiceProvider and also, publish the config.php
@@ -63,3 +65,7 @@ After these two steps are done, edit at the config.php with your prefered settin
 #### Credits
 
  - Robert Conner - http://smartersoftware.net
+
+#### Further Reading
+
+ - 3rd Party Posting on installation with Twitter Bootstrap 2.3 : http://blog.stickyrice.net/archives/2015/laravel-tagging-bootstrap-tags-input-rtconner/

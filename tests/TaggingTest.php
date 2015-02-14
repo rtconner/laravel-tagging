@@ -1,9 +1,9 @@
 <?php
 
 use Conner\Tagging\Tag;
+use Conner\Tagging\TaggableTrait;
+use Conner\Tagging\Tagged;
 use Conner\Tagging\TaggingUtil;
-use Illuminate\Support\Facades\Config;
-use Conner\Tagging\Tests\TaggingStub;
 
 class TaggingTest extends \Orchestra\Testbench\TestCase {
 
@@ -25,9 +25,11 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 	}
 	
 	public function setUp() {
+		include_once __DIR__.'/../vendor/autoload.php';
+
 		parent::setUp();
 		
-		$artisan = $this->app->make('Illuminate\Contracts\Console\Kernel');
+		$artisan = $this->app->make('artisan');
 		
 		$artisan->call('migrate', array(
 			'--database' => 'testbench',
@@ -40,8 +42,6 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 			'--package'=>'rtconner\laravel-tagging',
 			'--path'=>'../tests/migrations',
 		));
-		
-		include_once(dirname(__FILE__).'/Stub.php');
 	}
 
 	public function testTagging() {
@@ -148,26 +148,50 @@ class TaggingTest extends \Orchestra\Testbench\TestCase {
 		$stub = $this->randomStub();
 	
 		$stub->tag(array('One', 'Two', 'Three'));
-	
+
 		$nofound = TaggingStub::withAllTags(array('One', 'Four'))->count();
 		$found = TaggingStub::withAllTags(array('One', 'Two'))->count();
 
 		$this->assertGreaterThan(0, $found);
 		$this->assertEquals(0, $nofound);
-		
+
 		$nofound = TaggingStub::where(1, 1)->withAllTags(array('One', 'Four'))->count();
 		$found = TaggingStub::where(1, 1)->withAllTags(array('One', 'Two'))->count();
-		
+
 		$this->assertGreaterThan(0, $found);
 		$this->assertEquals(0, $nofound);
+	}
+
+
+	public function testAllTags() {
+		$stub = $this->randomStub();
+		$stub->tag(array('One', 'Two', 'Three'));
+
+		$tags = TaggingStub::allTags();
+
+		$this->assertEquals(3, $tags->count());
+
+		$stub = $this->randomStub();
+		$stub->tag(array('One', 'Two', 'Three'));
+		$stub = $this->randomStub();
+		$stub->tag(array('One', 'Two', 'Three'));
+		$tags = TaggingStub::allTags();
+
+		foreach($tags as $tag) {
+			$this->assertEquals(3, $tag->count);
+		}
 	}
 	
 	private function randomStub() {
 		$stub = new TaggingStub;
-		$stub->id = rand(1,1000);
+		$stub->id = rand(1, 10000);
 		$stub->save();
 		
 		return $stub;
 	}
 
+}
+
+class TaggingStub extends \Illuminate\Database\Eloquent\Model {
+	use TaggableTrait;
 }

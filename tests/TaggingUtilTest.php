@@ -1,7 +1,6 @@
 <?php
 
 use Conner\Tagging\TaggingUtil;
-use Illuminate\Support\Facades\Config;
 
 class TaggingUtilTest extends PHPUnit_Framework_TestCase {
 
