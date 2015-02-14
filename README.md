@@ -65,3 +65,7 @@ After these two steps are done, edit at the config.php with your prefered settin
 #### Credits
 
  - Robert Conner - http://smartersoftware.net
+
+#### Further Reading
+
+ - 3rd Party Posting on installation with Twitter Bootstrap 2.3 : http://blog.stickyrice.net/archives/2015/laravel-tagging-bootstrap-tags-input-rtconner/
