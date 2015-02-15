@@ -18,20 +18,20 @@
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
 		"doctrine/dbal": "~2.5",
-		"orchestra/testbench": "~3.0"
+		"orchestra/testbench": "~3.0",
+		"phpseclib/phpseclib": ">=0.3.7"
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "git://github.com/orchestral/phpseclib.git"
-		}
-	],
 	"autoload": {
 		"classmap": [
 			"migrations"
 		],
 		"psr-0": {
 			"Conner\\Tagging\\": "src/"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-laravel-5": "dev-master"
 		}
 	},
   	"minimum-stability": "dev"
