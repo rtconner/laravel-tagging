@@ -29,10 +29,5 @@
 			"Conner\\Tagging\\": "src/"
 		}
 	},
-	"extra": {
-		"branch-alias": {
-			"dev-laravel-5": "dev-master"
-		}
-	},
   	"minimum-stability": "dev"
 }
