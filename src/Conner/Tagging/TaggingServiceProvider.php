@@ -16,8 +16,6 @@ class TaggingServiceProvider extends ServiceProvider {
 	 * Bootstrap the application events.
 	 */
 	public function boot() {
-		$this->package('rtconner/laravel-tagging', 'tagging');
-		
 		$this->publishes([
 			__DIR__.'/config/tagging' => config_path('tagging.php'),
 		]);
