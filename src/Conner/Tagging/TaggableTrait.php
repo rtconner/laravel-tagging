@@ -155,7 +155,7 @@ trait TaggableTrait {
 		if($previousCount >= 1) { return; }
 		
 		$displayer = config('tagging.displayer');
-		$displayer = empty($displayer) ? '\Str::title' : $displayer;
+		$displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;
 		
 		$tagged = new Tagged(array(
 			'tag_name'=>call_user_func($displayer, $tagName),

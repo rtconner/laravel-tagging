@@ -50,7 +50,7 @@ class Tag extends Eloquent {
 	 */
 	public function setNameAttribute($value) {
 		$displayer = config('tagging.displayer');
-		$displayer = empty($displayer) ? '\Str::title' : $displayer;
+		$displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;
 		
 		$this->attributes['name'] = call_user_func($displayer, $value);
 	}
