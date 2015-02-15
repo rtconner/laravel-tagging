@@ -52,14 +52,14 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 #### (Optional) Configuration
 
 If you want to use any of the configuration options, you must enable the TaggingServiceProvider and also, publish the config.php
-
-    php artisan config:publish rtconner/laravel-tagging
    
     'providers' => array(
         'Conner\Tagging\TaggingServiceProvider',
     );
-    
-After these two steps are done, edit at the config.php with your prefered settings.
+
+    php artisan vendor:publish
+        
+After these two steps are done, edit at the config/tagging.php with your prefered settings.
 
 #### Credits
 
