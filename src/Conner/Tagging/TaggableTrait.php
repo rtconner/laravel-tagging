@@ -108,7 +108,7 @@ trait TaggableTrait {
 	public function scopeWithAllTags($query, $tagNames) {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
-		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = config('tagging.normalizer');
 		$normalizer = empty($normalizer) ? 'Conner\Tagging\TaggingUtil::slug' : $normalizer;
 
 		foreach($tagNames as $tagSlug) {
@@ -128,7 +128,7 @@ trait TaggableTrait {
 	public function scopeWithAnyTag($query, $tagNames) {
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 
-		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = config('tagging.normalizer');
 		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 		
 		$tagNames = array_map($normalizer, $tagNames);
@@ -146,7 +146,7 @@ trait TaggableTrait {
 	private function addTag($tagName) {
 		$tagName = trim($tagName);
 		
-		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = config('tagging.normalizer');
 		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 
 		$tagSlug = call_user_func($normalizer, $tagName);
@@ -154,7 +154,7 @@ trait TaggableTrait {
 		$previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
 		if($previousCount >= 1) { return; }
 		
-		$displayer = \Config::get('tagging::displayer');
+		$displayer = config('tagging.displayer');
 		$displayer = empty($displayer) ? '\Str::title' : $displayer;
 		
 		$tagged = new Tagged(array(
@@ -175,7 +175,7 @@ trait TaggableTrait {
 	private function removeTag($tagName) {
 		$tagName = trim($tagName);
 		
-		$normalizer = \Config::get('tagging::normalizer');
+		$normalizer = config('tagging.normalizer');
 		$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 		
 		$tagSlug = call_user_func($normalizer, $tagName);
@@ -190,7 +190,7 @@ trait TaggableTrait {
 	 *
 	 * @return Collection
 	 */
-	public static function allTags() {
+	public static function existingTags() {
 		return Tagged::distinct()
 			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
 			->where('taggable_type', '=', get_called_class())

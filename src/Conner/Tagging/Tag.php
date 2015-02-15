@@ -16,7 +16,7 @@ class Tag extends Eloquent {
 	public function __construct(array $attributes = array()) {
 		parent::__construct($attributes);
 		
-		if($connection = \Config::get('tagging::connection')) {
+		if($connection = config('tagging.connection')) {
 			$this->connection = $connection;
 		}
 	}
@@ -28,7 +28,7 @@ class Tag extends Eloquent {
 		);
 		
 		if($validator->passes()) {
-			$normalizer = \Config::get('tagging::normalizer');
+			$normalizer = config('tagging.normalizer');
 			$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 			
 			$this->slug = call_user_func($normalizer, $this->name);
@@ -49,7 +49,7 @@ class Tag extends Eloquent {
 	 * Name auto-mutator
 	 */
 	public function setNameAttribute($value) {
-		$displayer = \Config::get('tagging::displayer');
+		$displayer = config('tagging.displayer');
 		$displayer = empty($displayer) ? '\Str::title' : $displayer;
 		
 		$this->attributes['name'] = call_user_func($displayer, $value);

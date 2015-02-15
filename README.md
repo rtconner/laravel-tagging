@@ -10,17 +10,16 @@ This package is not meant to handle javascript or html in any way. This package 
 
 There are no real limits on what characters can be used in a tag. It uses a slug transform to determine if two tags are identical ("sugar-free" and "Sugar Free" would be treated as the same tag). Tag display names are run through Str::title()
 
-#### Composer Install
+Laravel 5 Documentation : https://github.com/rtconner/laravel-tagging/tree/laravel-5
+Laravel 4 Documentation : https://github.com/rtconner/laravel-tagging/tree/laravel-4
 
-	Laravel 4
-	composer require rtconner/laravel-tagging ~0.5
+#### Composer Install
 	
-	Laravel 5 (not stable)
 	composer require rtconner/laravel-tagging dev-laravel-5
 
 #### Run the migrations
 
-	php artisan migrate --package=rtconner/laravel-tagging
+	php artisan migrate --path=vendor/rtconner/laravel-tagging/migrations
 	
 #### Setup your models
 
@@ -48,7 +47,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
     
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
 
-    Article::allTags(); // return collection of all tags on any articles
+    Article::existingTags(); // return collection of all existing tags on any articles
 
 #### (Optional) Configuration
 
