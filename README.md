@@ -10,13 +10,12 @@ This package is not meant to handle javascript or html in any way. This package 
 
 There are no real limits on what characters can be used in a tag. It uses a slug transform to determine if two tags are identical ("sugar-free" and "Sugar Free" would be treated as the same tag). Tag display names are run through Str::title()
 
-#### Composer Install
+[Laravel 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)  
+[Laravel 4 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-4)
 
-	Laravel 4
+#### Composer Install (for Laravel 4)
+
 	composer require rtconner/laravel-tagging ~0.5
-	
-	Laravel 5 (not stable)
-	composer require rtconner/laravel-tagging dev-master
 
 #### Run the migrations
 
