@@ -17,9 +17,19 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 	
 	composer require rtconner/laravel-tagging "~1.0.0"
 
-#### Run the migrations
+#### Install and then Run the migrations
 
-	php artisan migrate --path=vendor/rtconner/laravel-tagging/migrations
+The service provider is does not load on every page load, so it should not slow down your app.
+
+```php
+'providers' => array(
+	'Conner\Tagging\TaggingServiceProvider',
+);
+```
+```bash
+php artisan vendor:publish --provider="Conner\Tagging\TaggingServiceProvider"
+php artisan migrate --path=vendor/rtconner/laravel-tagging/migrations
+```
 	
 #### Setup your models
 
@@ -49,16 +59,6 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 
     Article::existingTags(); // return collection of all existing tags on any articles
 
-#### (Optional) Configuration
-
-If you want to use any of the configuration options, you must enable the TaggingServiceProvider and also, publish the config.php
-   
-    'providers' => array(
-        'Conner\Tagging\TaggingServiceProvider',
-    );
-
-    php artisan vendor:publish
-        
 After these two steps are done, edit at the config/tagging.php with your prefered settings.
 
 #### Credits

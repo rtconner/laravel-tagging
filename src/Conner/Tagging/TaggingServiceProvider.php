@@ -10,7 +10,7 @@ class TaggingServiceProvider extends ServiceProvider {
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 */
-	protected $defer = false;
+	protected $defer = true;
 	
 	/**
 	 * Bootstrap the application events.
@@ -18,6 +18,8 @@ class TaggingServiceProvider extends ServiceProvider {
 	public function boot() {
 		$this->publishes([
 			__DIR__.'/../../../config/tagging.php' => config_path('tagging.php'),
+			__DIR__.'/../../../migrations/2014_01_07_073615_create_tagged_table.php' => base_path('database/migrations/2014_01_07_073615_create_tagged_table.php'),
+			__DIR__.'/../../../migrations/2014_01_07_073615_create_tags_table.php' => base_path('database/migrations/2014_01_07_073615_create_tags_table.php'),
 		]);
 	}
 	
@@ -27,11 +29,10 @@ class TaggingServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function register() {
-
 	}
 
-	public function provides() {
-		return array('tagging');
+	public function when() {
+		return array('artisan.start');
 	}
 	
 }
