@@ -28,7 +28,7 @@ The service provider is does not load on every page load, so it should not slow 
 ```
 ```bash
 php artisan vendor:publish --provider="Conner\Tagging\TaggingServiceProvider"
-php artisan migrate --path=vendor/rtconner/laravel-tagging/migrations
+php artisan migrate
 ```
 	
 #### Setup your models
@@ -60,6 +60,10 @@ php artisan migrate --path=vendor/rtconner/laravel-tagging/migrations
     Article::existingTags(); // return collection of all existing tags on any articles
 
 After these two steps are done, edit at the config/tagging.php with your prefered settings.
+
+### Configure
+
+See config/tagging.php for configuration options.
 
 #### Credits
 
