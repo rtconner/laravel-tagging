@@ -30,6 +30,8 @@ The service provider is does not load on every page load, so it should not slow 
 php artisan vendor:publish --provider="Conner\Tagging\TaggingServiceProvider"
 php artisan migrate
 ```
+
+After these two steps are done, you can edit config/tagging.php with your prefered settings.
 	
 #### Setup your models
 
@@ -58,8 +60,6 @@ php artisan migrate
     Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
 
     Article::existingTags(); // return collection of all existing tags on any articles
-
-After these two steps are done, edit at the config/tagging.php with your prefered settings.
 
 ### Configure
 
