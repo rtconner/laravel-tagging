@@ -35,7 +35,7 @@ After these two steps are done, you can edit config/tagging.php with your prefer
 	
 #### Setup your models
 
-    class Article extends \Eloquent {
+    class Article extends \Illuminate\Database\Eloquent\Model {
         use \Conner\Tagging\TaggableTrait;
     }
 
