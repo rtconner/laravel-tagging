@@ -19,7 +19,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 
 #### Install and then Run the migrations
 
-The service provider is does not load on every page load, so it should not slow down your app.
+The service provider does not load on every page load, so it should not slow down your app.
 
 ```php
 'providers' => array(
