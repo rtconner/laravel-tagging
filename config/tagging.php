@@ -11,4 +11,7 @@ return array(
 	// database connection for Conner\Taggable\Tag model to use
 // 	'connection' => 'mysql',
 	
+	// when deleting a model, remove all the tags first
+	'untag_on_delete' => true,
+		
 );

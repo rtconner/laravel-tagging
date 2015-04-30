@@ -6,6 +6,20 @@
 trait TaggableTrait {
 
 	/**
+	 * Boot the soft taggable trait for a model.
+	 *
+	 * @return void
+	 */
+	public static function bootTaggableTrait()
+	{
+		if(\Config::get('tagging.untag_on_delete')) {
+			static::deleting(function($model) {
+				$model->untag();
+			});
+		}
+	}
+	
+	/**
 	 * Return collection of tags related to the tagged model
 	 *
 	 * @return Illuminate\Database\Eloquent\Collection
