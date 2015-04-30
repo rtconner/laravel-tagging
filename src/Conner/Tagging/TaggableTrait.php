@@ -205,9 +205,11 @@ trait TaggableTrait {
 	 * @return Collection
 	 */
 	public static function existingTags() {
+		$instance = new static();
+		
 		return Tagged::distinct()
 			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
-			->where('taggable_type', '=', get_called_class())
+			->where('taggable_type', '=', (new static)->getMorphClass())
 			->orderBy('tag_slug', 'ASC')
 			->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
 	}
