@@ -205,8 +205,6 @@ trait TaggableTrait {
 	 * @return Collection
 	 */
 	public static function existingTags() {
-		$instance = new static();
-		
 		return Tagged::distinct()
 			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
 			->where('taggable_type', '=', (new static)->getMorphClass())
