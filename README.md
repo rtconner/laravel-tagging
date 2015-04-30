@@ -63,7 +63,7 @@ After these two steps are done, you can edit config/tagging.php with your prefer
 
 ### Configure
 
-See config/tagging.php for configuration options.
+[See config/tagging.php](config/tagging.php) for configuration options.
 
 #### Credits
 
