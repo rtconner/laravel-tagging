@@ -16,18 +16,12 @@
 		"illuminate/support": "~5.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4.6",
-		"doctrine/dbal": "~2.5",
-		"orchestra/testbench": "~3.0",
-		"phpseclib/phpseclib": ">=0.3.7"
+		"phpunit/phpunit": ">= 4.0",
+		"mockery/mockery": ">= 0.9"
 	},
 	"autoload": {
-		"classmap": [
-			"migrations"
-		],
 		"psr-4": {
 			"Conner\\Tagging\\": "src/"
 		}
-	},
-  	"minimum-stability": "stable"
+	}
 }

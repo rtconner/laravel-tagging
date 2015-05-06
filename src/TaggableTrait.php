@@ -1,5 +1,7 @@
 <?php namespace Conner\Tagging;
 
+use Illuminate\Support\Facades\Config;
+
 /**
  * Copyright (C) 2014 Robert Conner
  */
@@ -12,7 +14,7 @@ trait TaggableTrait {
 	 */
 	public static function bootTaggableTrait()
 	{
-		if(\Config::get('tagging.untag_on_delete')) {
+		if(static::untagOnDelete()) {
 			static::deleting(function($model) {
 				$model->untag();
 			});
@@ -24,7 +26,8 @@ trait TaggableTrait {
 	 *
 	 * @return Illuminate\Database\Eloquent\Collection
 	 */
-	public function tagged() {
+	public function tagged()
+	{
 		return $this->morphMany('Conner\Tagging\Tagged', 'taggable');
 	}
 	
@@ -33,7 +36,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagName string or array
 	 */
-	public function tag($tagNames) {
+	public function tag($tagNames)
+	{
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
@@ -46,7 +50,8 @@ trait TaggableTrait {
 	 *
 	 * @return array
 	 */
-	public function tagNames() {
+	public function tagNames()
+	{
 		$tagNames = array();
 		$tagged = $this->tagged()->get(array('tag_name'));
 
@@ -62,7 +67,8 @@ trait TaggableTrait {
 	 *
 	 * @return array
 	 */
-	public function tagSlugs() {
+	public function tagSlugs()
+	{
 		$tagSlugs = array();
 		$tagged = $this->tagged()->get(array('tag_slug'));
 
@@ -78,7 +84,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagName string or array (or null to remove all tags)
 	 */
-	public function untag($tagNames=null) {
+	public function untag($tagNames=null)
+	{
 		if(is_null($tagNames)) {
 			$currentTagNames = $this->tagNames();
 			foreach($currentTagNames as $tagName) {
@@ -99,7 +106,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagName string or array
 	 */
-	public function retag($tagNames) {
+	public function retag($tagNames)
+	{
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		$currentTagNames = $this->tagNames();
 		
@@ -119,7 +127,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagNames array|string
 	 */
-	public function scopeWithAllTags($query, $tagNames) {
+	public function scopeWithAllTags($query, $tagNames)
+	{
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
@@ -139,7 +148,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagNames array|string
 	 */
-	public function scopeWithAnyTag($query, $tagNames) {
+	public function scopeWithAnyTag($query, $tagNames)
+	{
 		$tagNames = TaggingUtil::makeTagArray($tagNames);
 
 		$normalizer = config('tagging.normalizer');
@@ -157,7 +167,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagName string
 	 */
-	private function addTag($tagName) {
+	private function addTag($tagName)
+	{
 		$tagName = trim($tagName);
 		
 		$normalizer = config('tagging.normalizer');
@@ -186,7 +197,8 @@ trait TaggableTrait {
 	 *
 	 * @param $tagName string
 	 */
-	private function removeTag($tagName) {
+	private function removeTag($tagName)
+	{
 		$tagName = trim($tagName);
 		
 		$normalizer = config('tagging.normalizer');
@@ -204,12 +216,23 @@ trait TaggableTrait {
 	 *
 	 * @return Collection
 	 */
-	public static function existingTags() {
+	public static function existingTags()
+	{
 		return Tagged::distinct()
 			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
 			->where('taggable_type', '=', (new static)->getMorphClass())
 			->orderBy('tag_slug', 'ASC')
 			->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
+	}
+	
+	/**
+	 * Should untag on delete
+	 */
+	public static function untagOnDelete()
+	{
+		return static::$untagOnDelete !== null
+			? static::$untagOnDelete
+			: Config::get('tagging.untag_on_delete');
 	}
 
 }
