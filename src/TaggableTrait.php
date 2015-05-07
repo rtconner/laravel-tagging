@@ -230,7 +230,7 @@ trait TaggableTrait {
 	 */
 	public static function untagOnDelete()
 	{
-		return static::$untagOnDelete !== null
+		return isset(static::$untagOnDelete)
 			? static::$untagOnDelete
 			: Config::get('tagging.untag_on_delete');
 	}
