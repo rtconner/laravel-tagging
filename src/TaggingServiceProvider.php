@@ -18,8 +18,8 @@ class TaggingServiceProvider extends ServiceProvider {
 	public function boot() {
 		$this->publishes([
 				__DIR__.'/../config/tagging.php' => config_path('tagging.php'),
-				__DIR__.'/../migrations/2014_01_07_073615_create_tagged_table.php' => $this->app->databasePath().'/migrations/2014_01_07_073615_create_tagged_table.php',
-				__DIR__.'/../migrations/2014_01_07_073615_create_tags_table.php' => $this->app->databasePath().'/migrations/2014_01_07_073615_create_tags_table.php',
+				__DIR__.'/../migrations/2014_01_07_073615_create_tagged_table.php' => database_path('/migrations/2014_01_07_073615_create_tagged_table.php'),
+				__DIR__.'/../migrations/2014_01_07_073615_create_tags_table.php' => database_path('/migrations/2014_01_07_073615_create_tags_table.php'),
 		]);
 	}
 	
