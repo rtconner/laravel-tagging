@@ -65,6 +65,11 @@ After these two steps are done, you can edit config/tagging.php with your prefer
 
 [See config/tagging.php](config/tagging.php) for configuration options.
 
+#### Upgrading Laravel 4 to 5
+
+This library stores full model class names into the database. When you upgrade laravel and you add namespaces to your models, you will need to update the records stored in the database.
+Alternatively you can override Model::$morphClass on your model class to match the string stored in the database.
+
 #### Credits
 
  - Robert Conner - http://smartersoftware.net
