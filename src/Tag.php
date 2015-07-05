@@ -13,7 +13,8 @@ class Tag extends Eloquent {
 	protected $softDelete = false;
 	public $fillable = ['name'];
 	
-	public function __construct(array $attributes = array()) {
+	public function __construct(array $attributes = array())
+	{
 		parent::__construct($attributes);
 		
 		if($connection = config('tagging.connection')) {
@@ -21,7 +22,8 @@ class Tag extends Eloquent {
 		}
 	}
 	
-	public function save(array $options = array()) {
+	public function save(array $options = array())
+	{
 		$validator = \Validator::make(
 			array('name' => $this->name),
 			array('name' => 'required|min:1')
@@ -41,18 +43,34 @@ class Tag extends Eloquent {
 	/**
 	 * Get suggested tags
 	 */
-	public function scopeSuggested($query) {
+	public function scopeSuggested($query)
+	{
 		return $query->where('suggest', true);
 	}
 	
 	/**
 	 * Name auto-mutator
 	 */
-	public function setNameAttribute($value) {
+	public function setNameAttribute($value)
+	{
 		$displayer = config('tagging.displayer');
 		$displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;
 		
 		$this->attributes['name'] = call_user_func($displayer, $value);
+	}
+
+	/**
+	 * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
+	 * Does not delete tags where 'suggest'value is true
+	 * 
+	 * @return int
+	 */
+	public static function deleteUnused()
+	{
+		return (new static)->newQuery()
+				->where('count', '=', 0)
+				->where('suggest', false)
+				->delete();
 	}
 	
 }

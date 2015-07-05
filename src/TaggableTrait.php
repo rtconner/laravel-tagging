@@ -1,6 +1,7 @@
 <?php namespace Conner\Tagging;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -22,13 +23,30 @@ trait TaggableTrait {
 	}
 	
 	/**
-	 * Return collection of tags related to the tagged model
+	 * Return collection of tagged rows related to the tagged model
 	 *
 	 * @return Illuminate\Database\Eloquent\Collection
 	 */
 	public function tagged()
 	{
 		return $this->morphMany('Conner\Tagging\Tagged', 'taggable');
+	}
+
+	/**
+	 * Return collection of tags related to the tagged model
+	 * TODO : I'm sure there is a faster way to build this, but
+	 * If anyone knows how to do that, me love you long time.
+	 *
+	 * @return Illuminate\Database\Eloquent\Collection
+	 */
+	public function getTagsAttribute()
+	{
+		$tags = new Collection();
+		foreach($this->tagged as $tagged) {
+			$tags->add($tagged->tag);
+		}
+		
+		return $tags;
 	}
 	
 	/**
@@ -98,6 +116,10 @@ trait TaggableTrait {
 		
 		foreach($tagNames as $tagName) {
 			$this->removeTag($tagName);
+		}
+		
+		if(static::shouldDeleteUnused()) {
+			TaggingUtil::deleteUnusedTags();
 		}
 	}
 	
@@ -233,6 +255,14 @@ trait TaggableTrait {
 		return isset(static::$untagOnDelete)
 			? static::$untagOnDelete
 			: Config::get('tagging.untag_on_delete');
+	}
+	
+	/**
+	 * Delete tags that are not used anymore
+	 */
+	public static function shouldDeleteUnused()
+	{
+		return Config::get('tagging.untag_on_delete');
 	}
 
 }

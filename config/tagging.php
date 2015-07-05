@@ -2,16 +2,22 @@
 
 return array(
 	
-	// value of are passed through this before save of tags
+	// Datatype for primary keys of your models.
+	// used in migrations only
+	'primary_keys_type' => 'string', // 'string' or 'integer'
+		
+	// Value of are passed through this before save of tags
 	'normalizer' => '\Conner\Tagging\TaggingUtil::slug',
 	
-	// display value of tags are passed through (for front end display)
+	// Display value of tags are passed through (for front end display)
 	'displayer' => '\Illuminate\Support\Str::title',
 	
-	// database connection for Conner\Taggable\Tag model to use
+	// Database connection for Conner\Taggable\Tag model to use
 // 	'connection' => 'mysql',
 	
-	// when deleting a model, remove all the tags first
+	// When deleting a model, remove all the tags first
 	'untag_on_delete' => true,
 		
+	// Auto-delete unused tags from the 'tags' database table (when they are used zero times)
+	'delete_unused_tags'=>true,
 );

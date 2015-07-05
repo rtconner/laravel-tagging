@@ -39,7 +39,13 @@ After these two steps are done, you can edit config/tagging.php with your prefer
         use \Conner\Tagging\TaggableTrait;
     }
 
-#### Sample Usage
+#### Quick Sample Usage
+
+    $article = Article::with('tagged')->first(); // eager load
+   
+    foreach($article->tagged as $tagged) {
+    	echo $tagged->name . ' with url slug of ' . $tagged->tag_slug;
+    }
 
     $article->tag('Gardening'); // attach the tag
     
@@ -48,7 +54,8 @@ After these two steps are done, you can edit config/tagging.php with your prefer
     
     $article->retag(array('Fruit', 'Fish')); // delete current tags and save new tags
     
-    $article->tagged; // return Collection of rows tagged to article
+    $tagged = $article->tagged; // return Collection of rows tagged to article
+    $tags = $article->tags; // return Collection the actual tags (is slower than using tagged)
     
     $article->tagNames(); // get array of related tag names	
     

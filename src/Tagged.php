@@ -11,8 +11,14 @@ class Tagged extends Eloquent {
 	public $timestamps = false;
 	protected $fillable = ['tag_name', 'tag_slug'];
 
-	public function taggable() {
+	public function taggable() 
+	{
 		return $this->morphTo();
+	}
+	
+	public function tag()
+	{
+		return $this->belongsTo('Conner\Tagging\Tag', 'tag_slug', 'slug');
 	}
 
 }
