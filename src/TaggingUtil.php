@@ -40,17 +40,17 @@ class TaggingUtil {
 	 * @param string $str
 	 * @return string
 	 */
-	public static function slug($str) {
-	
+	public static function slug($str)
+	{
 		// Make sure string is in UTF-8 and strip invalid UTF-8 characters
 		$str = mb_convert_encoding((string)$str, 'UTF-8');
 	
 		$options = array(
-				'delimiter' => '-',
-				'limit' => '255',
-				'lowercase' => true,
-				'replacements' => array(),
-				'transliterate' => true,
+			'delimiter' => '-',
+			'limit' => '255',
+			'lowercase' => true,
+			'replacements' => array(),
+			'transliterate' => true,
 		);
 	
 		$char_map = array(
