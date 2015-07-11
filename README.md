@@ -48,7 +48,11 @@ class Article extends \Illuminate\Database\Eloquent\Model {
 $article = Article::with('tagged')->first(); // eager load
 
 foreach($article->tagged as $tagged) {
-	echo $tagged->name . ' with url slug of ' . $tagged->tag_slug;
+	echo $tagged->tag_name . ' with url slug of ' . $tagged->tag_slug;
+}
+
+foreach($article->tags as $tagged) { // this is a little slower than above (requires extra queries)
+	echo $tagged->name . ' with url slug of ' . $tagged->slug;
 }
 
 $article->tag('Gardening'); // attach the tag
