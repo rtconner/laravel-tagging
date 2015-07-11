@@ -15,7 +15,9 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 
 #### Composer Install (for Laravel 5)
 	
-	composer require rtconner/laravel-tagging "~1.0.7"
+```shell
+composer require rtconner/laravel-tagging "~1.0.7"
+```
 
 #### Install and then Run the migrations
 
@@ -34,40 +36,42 @@ php artisan migrate
 After these two steps are done, you can edit config/tagging.php with your prefered settings.
 	
 #### Setup your models
-
-    class Article extends \Illuminate\Database\Eloquent\Model {
-        use \Conner\Tagging\TaggableTrait;
-    }
+```php
+class Article extends \Illuminate\Database\Eloquent\Model {
+	use \Conner\Tagging\TaggableTrait;
+}
+```
 
 #### Quick Sample Usage
 
-    $article = Article::with('tagged')->first(); // eager load
-   
-    foreach($article->tagged as $tagged) {
-    	echo $tagged->name . ' with url slug of ' . $tagged->tag_slug;
-    }
+```php
+$article = Article::with('tagged')->first(); // eager load
 
-    $article->tag('Gardening'); // attach the tag
-    
-    $article->untag('Cooking'); // remove Cooking tag
-    $article->untag(); // remove all tags
-    
-    $article->retag(array('Fruit', 'Fish')); // delete current tags and save new tags
-    
-    $tagged = $article->tagged; // return Collection of rows tagged to article
-    $tags = $article->tags; // return Collection the actual tags (is slower than using tagged)
-    
-    $article->tagNames(); // get array of related tag names	
-    
-    Article::withAnyTag('Gardening, Cooking')->get() // fetch articles with any tag listed
-    Article::withAnyTag(array('Gardening','Cooking'))->get() // different sytax same result as above
-    
-    Article::withAllTags('Gardening, Cooking')->get() // only fetch articles with all the tags
-    
-    Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
+foreach($article->tagged as $tagged) {
+	echo $tagged->name . ' with url slug of ' . $tagged->tag_slug;
+}
 
-    Article::existingTags(); // return collection of all existing tags on any articles
+$article->tag('Gardening'); // attach the tag
 
+$article->untag('Cooking'); // remove Cooking tag
+$article->untag(); // remove all tags
+
+$article->retag(array('Fruit', 'Fish')); // delete current tags and save new tags
+
+$tagged = $article->tagged; // return Collection of rows tagged to article
+$tags = $article->tags; // return Collection the actual tags (is slower than using tagged)
+
+$article->tagNames(); // get array of related tag names	
+
+Article::withAnyTag('Gardening, Cooking')->get() // fetch articles with any tag listed
+Article::withAnyTag(array('Gardening','Cooking'))->get() // different sytax same result as above
+
+Article::withAllTags('Gardening, Cooking')->get() // only fetch articles with all the tags
+
+Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
+
+Article::existingTags(); // return collection of all existing tags on any articles
+```
 ### Configure
 
 [See config/tagging.php](config/tagging.php) for configuration options.
