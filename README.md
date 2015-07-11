@@ -51,8 +51,8 @@ foreach($article->tagged as $tagged) {
 	echo $tagged->tag_name . ' with url slug of ' . $tagged->tag_slug;
 }
 
-foreach($article->tags as $tagged) { // this is a little slower than above (requires extra queries)
-	echo $tagged->name . ' with url slug of ' . $tagged->slug;
+foreach($article->tags as $tag) { // this is a little slower than above (requires extra queries)
+	echo $tag->name . ' with url slug of ' . $tag->slug;
 }
 
 $article->tag('Gardening'); // attach the tag
