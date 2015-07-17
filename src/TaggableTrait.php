@@ -88,7 +88,7 @@ trait TaggableTrait {
 	public function tagSlugs()
 	{
 		$tagSlugs = array();
-		$tagged = $this->tagged()->get(array('tag_slug'));
+		$tagged = $this->tagged;
 
 		foreach($tagged as $tagged) {
 			$tagSlugs[] = $tagged->tag_slug;
