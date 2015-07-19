@@ -71,7 +71,7 @@ trait TaggableTrait {
 	public function tagNames()
 	{
 		$tagNames = array();
-		$tagged = $this->tagged()->get(array('tag_name'));
+		$tagged = $this->tagged;
 
 		foreach($tagged as $tagged) {
 			$tagNames[] = $tagged->tag_name;
