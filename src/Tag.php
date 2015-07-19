@@ -34,7 +34,7 @@ class Tag extends Eloquent {
 			$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
 			
 			$this->slug = call_user_func($normalizer, $this->name);
-			parent::save($options);
+			return parent::save($options);
 		} else {
 			throw new \Exception('Tag Name is required');
 		}
