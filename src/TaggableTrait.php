@@ -262,7 +262,7 @@ trait TaggableTrait {
 	 */
 	public static function shouldDeleteUnused()
 	{
-		return Config::get('tagging.untag_on_delete');
+		return Config::get('tagging.delete_unused_tags');
 	}
 
 }
