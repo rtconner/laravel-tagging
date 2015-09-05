@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Collection;
+use Conner\Tagging\Model\Tagged;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -155,15 +156,19 @@ trait Taggable {
 	 */
 	public function scopeWithAllTags($query, $tagNames)
 	{
-		$tagNames = Util::makeTagArray($tagNames);
+		$tagNames = $this->taggingUtility->makeTagArray($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
 		$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
 
 		foreach($tagNames as $tagSlug) {
-			$query->whereHas('tagged', function($q) use($tagSlug, $normalizer) {
-				$q->where('tag_slug', '=', call_user_func($normalizer, $tagSlug));
-			});
+			$className = get_class($query->getModel());
+		
+			$tags = Tagged::where('tag_slug', call_user_func($normalizer, $tagSlug))
+				->where('taggable_type', class_basename($className))
+				->lists('taggable_id');
+		
+			$query->whereIn($this->getTable().'.id', $tags);
 		}
 		
 		return $query;
@@ -176,16 +181,19 @@ trait Taggable {
 	 */
 	public function scopeWithAnyTag($query, $tagNames)
 	{
-		$tagNames = Util::makeTagArray($tagNames);
+		$tagNames = $this->taggingUtility->makeTagArray($tagNames);
 
 		$normalizer = config('tagging.normalizer');
 		$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
 		
 		$tagNames = array_map($normalizer, $tagNames);
-
-		return $query->whereHas('tagged', function($q) use($tagNames) {
-			$q->whereIn('tag_slug', $tagNames);
-		});
+		$className = get_class($query->getModel());
+		
+		$tags = Tagged::whereIn('tag_slug', $tagNames)
+			->where('taggable_type', class_basename($className))
+			->lists('taggable_id');
+		
+		return $query->whereIn($this->getTable().'.id', $tags);
 	}
 	
 	/**
