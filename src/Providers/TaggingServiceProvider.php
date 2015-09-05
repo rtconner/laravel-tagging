@@ -37,7 +37,16 @@ class TaggingServiceProvider extends ServiceProvider {
 			return new Util;
 		});
 	}
-
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Illuminate\Support\ServiceProvider::provides()
+	 */
+	public function provides()
+	{
+		return [TaggingUtility::class];
+	}
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see \Illuminate\Support\ServiceProvider::when()

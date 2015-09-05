@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Collection;
 use Conner\Tagging\Model\Tagged;
+use Conner\Tagging\Contracts\TaggingUtility;
 
 /**
  * Copyright (C) 2014 Robert Conner
  */
 trait Taggable {
 
-	protected $taggingUtility;
+	static $taggingUtility;
 	
 	/**
 	 * Boot the soft taggable trait for a model.
@@ -24,7 +25,7 @@ trait Taggable {
 			});
 		}
 		
-		$this->taggingUtility = app(TaggingUtility::class);
+		static::$taggingUtility = app(TaggingUtility::class);
 	}
 	
 	/**
@@ -61,7 +62,7 @@ trait Taggable {
 	 */
 	public function tag($tagNames)
 	{
-		$tagNames = Util::makeTagArray($tagNames);
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
 			$this->addTag($tagName);
@@ -117,14 +118,14 @@ trait Taggable {
 			return;
 		}
 		
-		$tagNames = Util::makeTagArray($tagNames);
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
 			$this->removeTag($tagName);
 		}
 		
 		if(static::shouldDeleteUnused()) {
-			Util::deleteUnusedTags();
+			static::$taggingUtility->deleteUnusedTags();
 		}
 	}
 	
@@ -135,7 +136,7 @@ trait Taggable {
 	 */
 	public function retag($tagNames)
 	{
-		$tagNames = Util::makeTagArray($tagNames);
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		$currentTagNames = $this->tagNames();
 		
 		$deletions = array_diff($currentTagNames, $tagNames);
@@ -156,10 +157,10 @@ trait Taggable {
 	 */
 	public function scopeWithAllTags($query, $tagNames)
 	{
-		$tagNames = $this->taggingUtility->makeTagArray($tagNames);
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
-		$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
+		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 
 		foreach($tagNames as $tagSlug) {
 			$className = get_class($query->getModel());
@@ -181,10 +182,10 @@ trait Taggable {
 	 */
 	public function scopeWithAnyTag($query, $tagNames)
 	{
-		$tagNames = $this->taggingUtility->makeTagArray($tagNames);
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 
 		$normalizer = config('tagging.normalizer');
-		$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
+		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 		
 		$tagNames = array_map($normalizer, $tagNames);
 		$className = get_class($query->getModel());
@@ -206,7 +207,7 @@ trait Taggable {
 		$tagName = trim($tagName);
 		
 		$normalizer = config('tagging.normalizer');
-		$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
+		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 
 		$tagSlug = call_user_func($normalizer, $tagName);
 		
@@ -223,7 +224,7 @@ trait Taggable {
 		
 		$this->tagged()->save($tagged);
 
-		Util::incrementCount($tagName, $tagSlug, 1);
+		static::$taggingUtility->incrementCount($tagName, $tagSlug, 1);
 	}
 	
 	/**
@@ -236,12 +237,12 @@ trait Taggable {
 		$tagName = trim($tagName);
 		
 		$normalizer = config('tagging.normalizer');
-		$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
+		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 		
 		$tagSlug = call_user_func($normalizer, $tagName);
 		
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
-			Util::decrementCount($tagName, $tagSlug, $count);
+			static::$taggingUtility->decrementCount($tagName, $tagSlug, $count);
 		}
 	}
 
