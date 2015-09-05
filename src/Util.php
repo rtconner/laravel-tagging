@@ -1,5 +1,8 @@
 <?php namespace Conner\Tagging;
 
+use Conner\Tagging\Contracts\TaggingUtility;
+use Conner\Tagging\Model\Tag;
+
 /**
  * Utility functions to help with various tagging functionality.
  *
@@ -7,7 +10,7 @@
  *
  * Copyright (C) 2014 Robert Conner
  */
-class TaggingUtil {
+class Util implements TaggingUtility {
 	
 	/**
 	 * Converts input into array
@@ -15,7 +18,7 @@ class TaggingUtil {
 	 * @param $tagName string or array
 	 * @return array
 	 */
-	public static function makeTagArray($tagNames) 
+	public function makeTagArray($tagNames) 
 	{
 		if(is_string($tagNames)) {
 			$tagNames = explode(',', $tagNames);
@@ -151,7 +154,7 @@ class TaggingUtil {
 	 *
 	 * @param string $tagString
 	 */
-	public static function incrementCount($tagString, $tagSlug, $count)
+	public function incrementCount($tagString, $tagSlug, $count)
 	{
 		if($count <= 0) { return; }
 		
@@ -175,7 +178,7 @@ class TaggingUtil {
 	 *
 	 * @param string $tagString
 	 */
-	public static function decrementCount($tagString, $tagSlug, $count)
+	public function decrementCount($tagString, $tagSlug, $count)
 	{
 		if($count <= 0) { return; }
 		
@@ -185,7 +188,7 @@ class TaggingUtil {
 			$tag->count = $tag->count - $count;
 			if($tag->count < 0) {
 				$tag->count = 0;
-				\Log::warning("The \Conner\Tagging\Tag count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
+				\Log::warning("The \Conner\Tagging\Model\Tag count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
 			}
 			$tag->save();
 		}
@@ -197,7 +200,7 @@ class TaggingUtil {
 	 * 
 	 * @return int
 	 */
-	public static function deleteUnusedTags()
+	public function deleteUnusedTags()
 	{
 		return Tag::deleteUnused();
 	}

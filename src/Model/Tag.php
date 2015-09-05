@@ -1,7 +1,8 @@
-<?php namespace Conner\Tagging;
+<?php namespace Conner\Tagging\Model;
 
-use Conner\Tagging\TaggingUtil;
+use Conner\Tagging\Util;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Conner\Tagging\Contracts\TaggingUtility;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -12,16 +13,28 @@ class Tag extends Eloquent {
 	public $timestamps = false;
 	protected $softDelete = false;
 	public $fillable = ['name'];
+	protected $taggingUtility;
 	
+	/**
+	 * @param array $attributes
+	 */
 	public function __construct(array $attributes = array())
 	{
 		parent::__construct($attributes);
 		
-		if($connection = config('tagging.connection')) {
+		if(function_exists('config') && $connection = config('tagging.connection')) {
 			$this->connection = $connection;
+		}
+		
+		if(function_exists('app')) {
+			$this->taggingUtility = app(TaggingUtility::class);
 		}
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Illuminate\Database\Eloquent\Model::save()
+	 */
 	public function save(array $options = array())
 	{
 		$validator = \Validator::make(
@@ -31,7 +44,7 @@ class Tag extends Eloquent {
 		
 		if($validator->passes()) {
 			$normalizer = config('tagging.normalizer');
-			$normalizer = empty($normalizer) ? '\Conner\Tagging\TaggingUtil::slug' : $normalizer;
+			$normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
 			
 			$this->slug = call_user_func($normalizer, $this->name);
 			return parent::save($options);
@@ -49,7 +62,9 @@ class Tag extends Eloquent {
 	}
 	
 	/**
-	 * Name auto-mutator
+	 * Set the name of the tag : $tag->name = 'myname'; 
+	 * 
+	 * @param string $value
 	 */
 	public function setNameAttribute($value)
 	{
