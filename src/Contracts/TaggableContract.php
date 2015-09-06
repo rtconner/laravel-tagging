@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Copyright (C) 2015 Robert Conner
  */
-interface Taggable {
+interface TaggableContract {
 
 	/**
 	 * Return collection of tagged rows related to the tagged model

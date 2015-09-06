@@ -20,7 +20,7 @@ class Util implements TaggingUtility {
 	 */
 	public function makeTagArray($tagNames) 
 	{
-		if(count($tagNames) == 1) {
+		if(is_array($tagNames) && count($tagNames) == 1) {
 			$tagNames = $tagNames[0];
 		}
 		
