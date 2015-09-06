@@ -81,6 +81,10 @@ Article::existingTags(); // return collection of all existing tags on any articl
 
 [See config/tagging.php](config/tagging.php) for configuration options.
 
+### Further Documentation
+
+[See the docs/ folder](docs) for more documentation.
+
 #### Upgrading Laravel 4 to 5
 
 This library stores full model class names into the database. When you upgrade laravel and you add namespaces to your models, you will need to update the records stored in the database.
