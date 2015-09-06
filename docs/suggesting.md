@@ -7,7 +7,7 @@ There is not much to it. You simply set the 'suggest' field in the database to t
 
 ```php
 $tag = Conner\Tagging\Model\Tag::where('slug', '=', 'blog')->first();
-$tag->suggested = true;
+$tag->suggest = true;
 $tag->save();
 ```
 
