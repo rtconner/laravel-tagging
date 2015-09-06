@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Collection;
 use Conner\Tagging\Model\Tagged;
 use Conner\Tagging\Contracts\TaggingUtility;
+use Conner\Tagging\Events\TagRemoved;
+use Conner\Tagging\Events\TagAdded;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -236,6 +238,8 @@ trait Taggable {
 		$this->tagged()->save($tagged);
 
 		static::$taggingUtility->incrementCount($tagName, $tagSlug, 1);
+		
+		event(new TagAdded($this));
 	}
 	
 	/**
@@ -255,6 +259,8 @@ trait Taggable {
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
 			static::$taggingUtility->decrementCount($tagName, $tagSlug, $count);
 		}
+		
+		event(new TagRemoved($this));
 	}
 
 	/**
