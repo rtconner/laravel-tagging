@@ -157,16 +157,20 @@ trait Taggable {
 	 */
 	public function scopeWithAllTags($query, $tagNames)
 	{
+		if(!is_array($tagNames)) {
+			$tagNames = func_get_args();
+			array_shift($tagNames);
+		}
+		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
+		$className = $query->getModel()->getMorphClass();
 
 		foreach($tagNames as $tagSlug) {
-			$className = get_class($query->getModel());
-		
 			$tags = Tagged::where('tag_slug', call_user_func($normalizer, $tagSlug))
-				->where('taggable_type', class_basename($className))
+				->where('taggable_type', $className)
 				->lists('taggable_id');
 		
 			$query->whereIn($this->getTable().'.id', $tags);
@@ -182,16 +186,21 @@ trait Taggable {
 	 */
 	public function scopeWithAnyTag($query, $tagNames)
 	{
+		if(!is_array($tagNames)) {
+			$tagNames = func_get_args();
+			array_shift($tagNames);
+		}
+		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
-
+		
 		$normalizer = config('tagging.normalizer');
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 		
 		$tagNames = array_map($normalizer, $tagNames);
-		$className = get_class($query->getModel());
+		$className = $query->getModel()->getMorphClass();
 		
 		$tags = Tagged::whereIn('tag_slug', $tagNames)
-			->where('taggable_type', class_basename($className))
+			->where('taggable_type', $className)
 			->lists('taggable_id');
 		
 		return $query->whereIn($this->getTable().'.id', $tags);
