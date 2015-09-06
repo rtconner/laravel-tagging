@@ -14,5 +14,5 @@ $tag->save();
 And then you can fetch a list of suggested tags when you need it.
 
 ```php
-$tag = Conner\Tagging\Model\Tag::suggested()->get();
+$suggestedTags = Conner\Tagging\Model\Tag::suggested()->get();
 ```
