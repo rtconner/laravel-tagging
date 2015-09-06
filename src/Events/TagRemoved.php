@@ -3,7 +3,7 @@
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Database\Eloquent\Model;
 
-class TagRemoved extends Event
+class TagRemoved
 {
 	use SerializesModels;
 
