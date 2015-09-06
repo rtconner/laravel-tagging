@@ -25,11 +25,11 @@ The service provider does not load on every page load, so it should not slow dow
 
 ```php
 'providers' => array(
-	'Conner\Tagging\TaggingServiceProvider',
+	'Conner\Tagging\Providers\TaggingServiceProvider',
 );
 ```
 ```bash
-php artisan vendor:publish --provider="Conner\Tagging\TaggingServiceProvider"
+php artisan vendor:publish --provider="Conner\Tagging\Providers\TaggingServiceProvider"
 php artisan migrate
 ```
 
@@ -38,7 +38,7 @@ After these two steps are done, you can edit config/tagging.php with your prefer
 #### Setup your models
 ```php
 class Article extends \Illuminate\Database\Eloquent\Model {
-	use \Conner\Tagging\TaggableTrait;
+	use \Conner\Tagging\Taggable;
 }
 ```
 
@@ -68,7 +68,8 @@ $tags = $article->tags; // return Collection the actual tags (is slower than usi
 $article->tagNames(); // get array of related tag names	
 
 Article::withAnyTag('Gardening, Cooking')->get() // fetch articles with any tag listed
-Article::withAnyTag(array('Gardening','Cooking'))->get() // different sytax same result as above
+Article::withAnyTag(['Gardening','Cooking'])->get() // different sytax, same result as above
+Article::withAnyTag('Gardening','Cooking')->get() // different sytax, same result as above
 
 Article::withAllTags('Gardening, Cooking')->get() // only fetch articles with all the tags
 

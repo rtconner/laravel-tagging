@@ -20,6 +20,10 @@ class Util implements TaggingUtility {
 	 */
 	public function makeTagArray($tagNames) 
 	{
+		if(count($tagNames) == 1) {
+			$tagNames = $tagNames[0];
+		}
+		
 		if(is_string($tagNames)) {
 			$tagNames = explode(',', $tagNames);
 		} elseif(!is_array($tagNames)) {
