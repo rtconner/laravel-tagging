@@ -45,7 +45,10 @@ class Article extends \Illuminate\Database\Eloquent\Model {
 #### Quick Sample Usage
 
 ```php
-$article = Article::with('tagged')->first(); // eager load
+$article = Article::with(['tagged' => function($query) {
+                    $query->with('tag');
+                }])
+                ->first(); // eager load
 
 foreach($article->tagged as $tagged) {
 	echo $tagged->tag_name . ' with url slug of ' . $tagged->tag_slug;
