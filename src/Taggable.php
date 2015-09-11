@@ -195,7 +195,6 @@ trait Taggable {
 		}
 		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
-		sd($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
