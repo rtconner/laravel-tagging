@@ -38,7 +38,7 @@ trait Taggable {
 	 */
 	public function tagged()
 	{
-		return $this->morphMany('Conner\Tagging\Model\Tagged', 'taggable');
+		return $this->morphMany('Conner\Tagging\Model\Tagged', 'taggable')->with('tag');
 	}
 
 	/**
