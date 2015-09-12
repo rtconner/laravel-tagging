@@ -65,6 +65,11 @@ trait Taggable {
 	 */
 	public function tag($tagNames)
 	{
+		if(!is_array($tagNames)) {
+			$tagNames = func_get_args();
+			array_shift($tagNames);
+		}
+		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
@@ -139,6 +144,11 @@ trait Taggable {
 	 */
 	public function retag($tagNames)
 	{
+		if(!is_array($tagNames)) {
+			$tagNames = func_get_args();
+			array_shift($tagNames);
+		}
+		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		$currentTagNames = $this->tagNames();
 		
