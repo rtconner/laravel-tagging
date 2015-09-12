@@ -13,6 +13,8 @@ foreach($article->tags as $tag) {
 }
 
 $article->tag('Gardening'); // attach the tag
+$article->tag('Gardening, Floral'); // attach the tag
+$article->tag(['Gardening', 'Floral']); // attach the tag
 
 $article->untag('Cooking'); // remove Cooking tag
 $article->untag(); // remove all tags
