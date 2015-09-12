@@ -27,8 +27,8 @@ $tags = $article->tags; // return Collection the actual tags (is slower than usi
 $article->tagNames(); // get array of related tag names	
 
 Article::withAnyTag('Gardening, Cooking')->get(); // fetch articles with any tag listed
-Article::withAnyTag(['Gardening','Cooking'])->get(); // different sytax, same result as above
-Article::withAnyTag('Gardening','Cooking')->get(); // different sytax, same result as above
+Article::withAnyTag(['Gardening','Cooking'])->get(); // different syntax, same result as above
+Article::withAnyTag('Gardening','Cooking')->get(); // different syntax, same result as above
 
 Article::withAllTags('Gardening, Cooking')->get(); // only fetch articles with all the tags
 Article::withAllTags(['Gardening', 'Cooking'])->get();
