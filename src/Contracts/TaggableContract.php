@@ -16,15 +16,6 @@ interface TaggableContract {
 	public function tagged();
 
 	/**
-	 * Return collection of tags related to the tagged model
-	 * TODO : I'm sure there is a faster way to build this, but
-	 * If anyone knows how to do that, me love you long time.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Collection
-	 */
-	public function getTagsAttribute();
-
-	/**
 	 * Perform the action of tagging the model with the given string
 	 *
 	 * @param $tagName string or array
