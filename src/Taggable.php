@@ -101,14 +101,9 @@ trait Taggable {
 	 */
 	public function tagSlugs()
 	{
-		$tagSlugs = array();
-		$tagged = $this->tagged;
-
-		foreach($tagged as $tagged) {
-			$tagSlugs[] = $tagged->tag_slug;
-		}
-		
-		return $tagSlugs;
+		return $this->tagged->map(function($item){
+			return $item->tag_slug;
+		})->toArray();
 	}
 	
 	/**
