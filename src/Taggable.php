@@ -50,12 +50,9 @@ trait Taggable {
 	 */
 	public function getTagsAttribute()
 	{
-		$tags = new Collection();
-		foreach($this->tagged as $tagged) {
-			$tags->add($tagged->tag);
-		}
-		
-		return $tags;
+		return $this->tagged->map(function($item){
+			return $item->tag;
+		});
 	}
 	
 	/**
