@@ -7,8 +7,8 @@
  *
  * Copyright (C) 2015 Robert Conner
  */
-interface TaggingUtility {
-	
+interface TaggingUtility
+{
 	/**
 	 * Converts input into array
 	 *
@@ -50,9 +50,15 @@ interface TaggingUtility {
 	/**
 	 * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
 	 * Does not delete tags where 'suggest' is true
-	 * 
+	 *
 	 * @return int
 	 */
 	public function deleteUnusedTags();
 	
+	/**
+	 * Return string with full namespace of the Tag model
+	 *
+	 * @return string
+	 */
+	public function tagModelString();
 }
