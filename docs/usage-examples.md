@@ -36,7 +36,7 @@ Article::withAllTags('Gardening, Cooking')->get(); // only fetch articles with a
 Article::withAllTags(['Gardening', 'Cooking'])->get();
 Article::withAllTags('Gardening', 'Cooking')->get();
 
-Conner\Tagging\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
+Conner\Tagging\Model\Tag::where('count', '>', 2)->get(); // return all tags used more than twice
 
 Article::existingTags(); // return collection of all existing tags on any articles
 ```

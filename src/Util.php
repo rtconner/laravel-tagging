@@ -1,7 +1,6 @@
 <?php namespace Conner\Tagging;
 
 use Conner\Tagging\Contracts\TaggingUtility;
-use Conner\Tagging\Model\Tag;
 
 /**
  * Utility functions to help with various tagging functionality.
@@ -10,15 +9,15 @@ use Conner\Tagging\Model\Tag;
  *
  * Copyright (C) 2014 Robert Conner
  */
-class Util implements TaggingUtility {
-	
+class Util implements TaggingUtility
+{
 	/**
 	 * Converts input into array
 	 *
 	 * @param $tagName string or array
 	 * @return array
 	 */
-	public function makeTagArray($tagNames) 
+	public function makeTagArray($tagNames)
 	{
 		if(is_array($tagNames) && count($tagNames) == 1) {
 			$tagNames = $tagNames[0];
@@ -161,8 +160,9 @@ class Util implements TaggingUtility {
 	public function incrementCount($tagString, $tagSlug, $count)
 	{
 		if($count <= 0) { return; }
+		$model = $this->tagModelString();
 		
-		$tag = Tag::where('slug', '=', $tagSlug)->first();
+		$tag = $model::where('slug', '=', $tagSlug)->first();
 
 		if(!$tag) {
 			$tag = new Tag;
@@ -185,14 +185,15 @@ class Util implements TaggingUtility {
 	public function decrementCount($tagString, $tagSlug, $count)
 	{
 		if($count <= 0) { return; }
+		$model = $this->tagModelString();
 		
-		$tag = Tag::where('slug', '=', $tagSlug)->first();
+		$tag = $model::where('slug', '=', $tagSlug)->first();
 	
 		if($tag) {
 			$tag->count = $tag->count - $count;
 			if($tag->count < 0) {
 				$tag->count = 0;
-				\Log::warning("The \Conner\Tagging\Model\Tag count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
+				\Log::warning("The '.$model.' count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
 			}
 			$tag->save();
 		}
@@ -201,12 +202,20 @@ class Util implements TaggingUtility {
 	/**
 	 * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
 	 * Does not delete tags where 'suggest' is true
-	 * 
+	 *
 	 * @return int
 	 */
 	public function deleteUnusedTags()
 	{
-		return Tag::deleteUnused();
+		$model = $this->tagModelString();
+		return $model::deleteUnused();
 	}
-	
+
+	/**
+	 * @return string
+	 */
+	public static function tagModelString()
+	{
+		return config('tagging.tag_model', '\Conner\Tagging\Model\Tag');
+	}
 }
