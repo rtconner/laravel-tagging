@@ -1,5 +1,6 @@
 <?php namespace Conner\Tagging\Model;
 
+use Conner\Tagging\Contracts\TaggingUtility;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -11,6 +12,15 @@ class Tagged extends Eloquent
 	public $timestamps = false;
 	protected $fillable = ['tag_name', 'tag_slug'];
 
+	public function __construct(array $attributes = array())
+	{
+		parent::__construct($attributes);
+		
+		if(function_exists('app')) {
+			$this->taggingUtility = app(TaggingUtility::class);
+		}
+	}
+	
 	/**
 	 * Morph to the tag
 	 *
@@ -28,7 +38,7 @@ class Tagged extends Eloquent
 	 */
 	public function tag()
 	{
-		$model = Util::tagModelString();
+		$model = $this->taggingUtility->tagModelString();
 		return $this->belongsTo($model, 'tag_slug', 'slug');
 	}
 

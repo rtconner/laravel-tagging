@@ -1,8 +1,7 @@
 <?php namespace Conner\Tagging\Model;
 
-use Conner\Tagging\Util;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Contracts\TaggingUtility;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -62,8 +61,8 @@ class Tag extends Eloquent {
 	}
 	
 	/**
-	 * Set the name of the tag : $tag->name = 'myname'; 
-	 * 
+	 * Set the name of the tag : $tag->name = 'myname';
+	 *
 	 * @param string $value
 	 */
 	public function setNameAttribute($value)
@@ -77,7 +76,7 @@ class Tag extends Eloquent {
 	/**
 	 * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
 	 * Does not delete tags where 'suggest'value is true
-	 * 
+	 *
 	 * @return int
 	 */
 	public static function deleteUnused()
