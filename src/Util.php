@@ -165,7 +165,7 @@ class Util implements TaggingUtility
 		$tag = $model::where('slug', '=', $tagSlug)->first();
 
 		if(!$tag) {
-			$tag = new Tag;
+			$tag = new $model;
 			$tag->name = $tagString;
 			$tag->slug = $tagSlug;
 			$tag->suggest = false;
@@ -214,7 +214,7 @@ class Util implements TaggingUtility
 	/**
 	 * @return string
 	 */
-	public static function tagModelString()
+	public function tagModelString()
 	{
 		return config('tagging.tag_model', '\Conner\Tagging\Model\Tag');
 	}

@@ -1,11 +1,11 @@
 <?php namespace Conner\Tagging;
 
-use Illuminate\Support\Facades\Config;
-use Illuminate\Database\Eloquent\Collection;
-use Conner\Tagging\Model\Tagged;
 use Conner\Tagging\Contracts\TaggingUtility;
-use Conner\Tagging\Events\TagRemoved;
 use Conner\Tagging\Events\TagAdded;
+use Conner\Tagging\Events\TagRemoved;
+use Conner\Tagging\Model\Tagged;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Config;
 
 /**
  * Copyright (C) 2014 Robert Conner
