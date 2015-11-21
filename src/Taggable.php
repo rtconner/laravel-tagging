@@ -101,11 +101,7 @@ trait Taggable {
 	public function untag($tagNames=null)
 	{
 		if(is_null($tagNames)) {
-			$currentTagNames = $this->tagNames();
-			foreach($currentTagNames as $tagName) {
-				$this->removeTag($tagName);
-			}
-			return;
+			$tagNames = $this->tagNames();
 		}
 		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
