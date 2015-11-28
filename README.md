@@ -89,5 +89,5 @@ Alternatively you can override Model::$morphClass on your model class to match t
  - Robert Conner - http://smartersoftware.net
 
 #### Further Reading
-
- - 3rd Party Posting on installation with Twitter Bootstrap 2.3 : http://blog.stickyrice.net/archives/2015/laravel-tagging-bootstrap-tags-input-rtconner/
+ - [Laravel News article on tagging with this library](https://laravel-news.com/2015/10/how-to-add-tagging-to-your-laravel-app/)
+ - [3rd Party Posting on installation with Twitter Bootstrap 2.3](http://blog.stickyrice.net/archives/2015/laravel-tagging-bootstrap-tags-input-rtconner)
