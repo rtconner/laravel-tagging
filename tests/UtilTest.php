@@ -13,6 +13,12 @@ class UtilTest extends PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals($tagStrings, $first);
 		$this->assertEquals($tagStrings, $second);
+
+		$result = $util->makeTagArray([1=>'tag1', 3=>'tag2']);
+		$this->assertEquals(['tag1', 'tag2'], $result);
+
+		$result = $util->makeTagArray([1=>'tag1']);
+		$this->assertEquals(['tag1'], $result);
 	}
 
 	public function test_make_tag_array_single()

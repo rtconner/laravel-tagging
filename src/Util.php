@@ -31,7 +31,7 @@ class Util implements TaggingUtility
 		
 		$tagNames = array_map('trim', $tagNames);
 
-		return $tagNames;
+		return array_values($tagNames);
 	}
 
 	/**
