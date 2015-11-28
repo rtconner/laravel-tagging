@@ -14,17 +14,31 @@ class UtilTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($tagStrings, $first);
 		$this->assertEquals($tagStrings, $second);
 	}
-	
-	public function test_make_tag_array_from_string()
+
+	public function test_make_tag_array_single()
 	{
 		$util = new Util;
-		$tagStrings = array('One, Two, Three');
-	
+		$tagStrings = ['tag'];
+
 		$result = $util->makeTagArray($tagStrings);
-	
+
+		$this->assertEquals($result, ['tag']);
+	}
+
+	public function test_make_tag_array_from_strings()
+	{
+		$util = new Util;
+
+		$result = $util->makeTagArray('tag');
+		$this->assertEquals($result, ['tag']);
+
+		$result = $util->makeTagArray('tag1,tag2');
+		$this->assertEquals($result, ['tag1', 'tag2']);
+
+		$result = $util->makeTagArray('One, Two, Three');
 		$this->assertEquals($result, ['One', 'Two', 'Three']);
 	}
-	
+
 	public function test_slug()
 	{
 		$util = new Util;

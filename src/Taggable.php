@@ -128,7 +128,7 @@ trait Taggable {
 		$deletions = array_diff($currentTagNames, $tagNames);
 		$additions = array_diff($tagNames, $currentTagNames);
 		
-        $this->untag($deletions);
+		$this->untag($deletions);
 
 		foreach($additions as $tagName) {
 			$this->addTag($tagName);
