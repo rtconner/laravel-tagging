@@ -22,13 +22,14 @@ class Util implements TaggingUtility
 		if(is_array($tagNames) && count($tagNames) == 1) {
 			$tagNames = reset($tagNames);
 		}
-		
+
 		if(is_string($tagNames)) {
-			$tagNames = explode(',', $tagNames);
+			$delimiter_rexp = config('tagging.delimiter', '/[,]+/');
+			$tagNames = preg_split($delimiter_rexp, $tagNames);
 		} elseif(!is_array($tagNames)) {
 			$tagNames = array(null);
 		}
-		
+
 		$tagNames = array_map('trim', $tagNames);
 
 		return array_values($tagNames);
@@ -50,7 +51,7 @@ class Util implements TaggingUtility
 	{
 		// Make sure string is in UTF-8 and strip invalid UTF-8 characters
 		$str = mb_convert_encoding((string)$str, 'UTF-8');
-	
+
 		$options = array(
 			'delimiter' => '-',
 			'limit' => '255',
@@ -58,7 +59,7 @@ class Util implements TaggingUtility
 			'replacements' => array(),
 			'transliterate' => true,
 		);
-	
+
 		$char_map = array(
 				// Latin
 				'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'AE', 'Ç' => 'C',
@@ -71,10 +72,10 @@ class Util implements TaggingUtility
 				'ð' => 'd', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ő' => 'o',
 				'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'ű' => 'u', 'ý' => 'y', 'þ' => 'th',
 				'ÿ' => 'y',
-	
+
 				// Latin symbols
 				'©' => '(c)',
-	
+
 				// Greek
 				'Α' => 'A', 'Β' => 'B', 'Γ' => 'G', 'Δ' => 'D', 'Ε' => 'E', 'Ζ' => 'Z', 'Η' => 'H', 'Θ' => '8',
 				'Ι' => 'I', 'Κ' => 'K', 'Λ' => 'L', 'Μ' => 'M', 'Ν' => 'N', 'Ξ' => '3', 'Ο' => 'O', 'Π' => 'P',
@@ -86,11 +87,11 @@ class Util implements TaggingUtility
 				'ρ' => 'r', 'σ' => 's', 'τ' => 't', 'υ' => 'y', 'φ' => 'f', 'χ' => 'x', 'ψ' => 'ps', 'ω' => 'w',
 				'ά' => 'a', 'έ' => 'e', 'ί' => 'i', 'ό' => 'o', 'ύ' => 'y', 'ή' => 'h', 'ώ' => 'w', 'ς' => 's',
 				'ϊ' => 'i', 'ΰ' => 'y', 'ϋ' => 'y', 'ΐ' => 'i',
-	
+
 				// Turkish
 				'Ş' => 'S', 'İ' => 'I', 'Ç' => 'C', 'Ü' => 'U', 'Ö' => 'O', 'Ğ' => 'G',
 				'ş' => 's', 'ı' => 'i', 'ç' => 'c', 'ü' => 'u', 'ö' => 'o', 'ğ' => 'g',
-	
+
 				// Russian
 				'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', 'Ж' => 'Zh',
 				'З' => 'Z', 'И' => 'I', 'Й' => 'J', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O',
@@ -102,55 +103,55 @@ class Util implements TaggingUtility
 				'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c',
 				'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sh', 'ъ' => '', 'ы' => 'y', 'ь' => '', 'э' => 'e', 'ю' => 'yu',
 				'я' => 'ya',
-	
+
 				// Ukrainian
 				'Є' => 'Ye', 'І' => 'I', 'Ї' => 'Yi', 'Ґ' => 'G',
 				'є' => 'ye', 'і' => 'i', 'ї' => 'yi', 'ґ' => 'g',
-	
+
 				// Czech
 				'Č' => 'C', 'Ď' => 'D', 'Ě' => 'E', 'Ň' => 'N', 'Ř' => 'R', 'Š' => 'S', 'Ť' => 'T', 'Ů' => 'U',
 				'Ž' => 'Z',
 				'č' => 'c', 'ď' => 'd', 'ě' => 'e', 'ň' => 'n', 'ř' => 'r', 'š' => 's', 'ť' => 't', 'ů' => 'u',
 				'ž' => 'z',
-	
+
 				// Polish
 				'Ą' => 'A', 'Ć' => 'C', 'Ę' => 'e', 'Ł' => 'L', 'Ń' => 'N', 'Ó' => 'o', 'Ś' => 'S', 'Ź' => 'Z',
 				'Ż' => 'Z',
 				'ą' => 'a', 'ć' => 'c', 'ę' => 'e', 'ł' => 'l', 'ń' => 'n', 'ó' => 'o', 'ś' => 's', 'ź' => 'z',
 				'ż' => 'z',
-	
+
 				// Latvian
 				'Ā' => 'A', 'Č' => 'C', 'Ē' => 'E', 'Ģ' => 'G', 'Ī' => 'i', 'Ķ' => 'k', 'Ļ' => 'L', 'Ņ' => 'N',
 				'Š' => 'S', 'Ū' => 'u', 'Ž' => 'Z',
 				'ā' => 'a', 'č' => 'c', 'ē' => 'e', 'ģ' => 'g', 'ī' => 'i', 'ķ' => 'k', 'ļ' => 'l', 'ņ' => 'n',
 				'š' => 's', 'ū' => 'u', 'ž' => 'z',
-					
+
 				//Romanian
 				'Ă' => 'A', 'ă' => 'a', 'Ș' => 'S', 'ș' => 's', 'Ț' => 'T', 'ț' => 't'
 		);
-	
+
 		// Make custom replacements
 		$str = preg_replace(array_keys($options['replacements']), $options['replacements'], $str);
-	
+
 		// Transliterate characters to ASCII
 		if ($options['transliterate']) {
 			$str = str_replace(array_keys($char_map), $char_map, $str);
 		}
 		// Replace non-alphanumeric characters with our delimiter
 		$str = preg_replace('/[^\p{L}\p{Nd}]+/u', $options['delimiter'], $str);
-	
+
 		// Remove duplicate delimiters
 		$str = preg_replace('/(' . preg_quote($options['delimiter'], '/') . '){2,}/', '$1', $str);
-	
+
 		// Truncate slug to max. characters
 		$str = mb_substr($str, 0, ($options['limit'] ? $options['limit'] : mb_strlen($str, 'UTF-8')), 'UTF-8');
-	
+
 		// Remove delimiter from ends
 		$str = trim($str, $options['delimiter']);
-	
+
 		return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
 	}
-	
+
 	/**
 	 * Private! Please do not call this function directly, just let the Tag library use it.
 	 * Increment count of tag by one. This function will create tag record if it does not exist.
@@ -161,7 +162,7 @@ class Util implements TaggingUtility
 	{
 		if($count <= 0) { return; }
 		$model = $this->tagModelString();
-		
+
 		$tag = $model::where('slug', '=', $tagSlug)->first();
 
 		if(!$tag) {
@@ -171,11 +172,11 @@ class Util implements TaggingUtility
 			$tag->suggest = false;
 			$tag->save();
 		}
-		
+
 		$tag->count = $tag->count + $count;
 		$tag->save();
 	}
-	
+
 	/**
 	 * Private! Please do not call this function directly, let the Tag library use it.
 	 * Decrement count of tag by one. This function will create tag record if it does not exist.
@@ -186,9 +187,9 @@ class Util implements TaggingUtility
 	{
 		if($count <= 0) { return; }
 		$model = $this->tagModelString();
-		
+
 		$tag = $model::where('slug', '=', $tagSlug)->first();
-	
+
 		if($tag) {
 			$tag->count = $tag->count - $count;
 			if($tag->count < 0) {
@@ -198,7 +199,7 @@ class Util implements TaggingUtility
 			$tag->save();
 		}
 	}
-	
+
 	/**
 	 * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
 	 * Does not delete tags where 'suggest' is true
