@@ -14,6 +14,14 @@ trait Taggable {
 
 	/** @var \Conner\Tagging\Contracts\TaggingUtility **/
 	static $taggingUtility;
+
+    /**
+     * Temp storage for auto tag
+     *
+     * @var mixed
+     * @access protected
+     */
+    protected $autoTagTmp;
 	
 	/**
 	 * Boot the soft taggable trait for a model.
@@ -27,6 +35,16 @@ trait Taggable {
 				$model->untag();
 			});
 		}
+
+        if(static::autoTagFromProp()) {
+            static::saving(function ($model) {
+                $model->autoTagPreSave();
+            });
+
+            static::saved(function ($model) {
+                $model->autoTagPostSave();
+            });
+        }
 		
 		static::$taggingUtility = app(TaggingUtility::class);
 	}
@@ -276,4 +294,54 @@ trait Taggable {
 		return Config::get('tagging.delete_unused_tags');
 	}
 
+    /**
+     * Get Auto-Tag Property
+     *
+     * Should automatically tag model based on value of specified property
+     *
+     * @return string | false
+     *
+     * @access public
+     * @static
+     */
+    public static function autoTagFromProp()
+    {
+		return isset(static::$autoTagFromProp)
+			? static::$autoTagFromProp
+			: Config::get('tagging.auto_tag_from_prop');
+    }
+
+    /**
+     * AutoTag pre-save hook
+     *
+     * Stores tags in temporary property
+     *
+     * @return void
+     *
+     * @access public
+     */
+    public function autoTagPreSave()
+    {
+        $prop = static::autoTagFromProp();
+        $this->autoTagTmp = $this->$prop;
+        unset($this->$prop);
+    }
+
+    /**
+     * AutoTag post-save hook
+     *
+     * Tags model based on data stored in tmp property, or untags if false
+     *
+     * @return void
+     *
+     * @access public
+     */
+    public function autoTagPostSave()
+    {
+        if ($this->autoTagTmp) {
+            $this->retag($this->autoTagTmp);
+        } else {
+            $this->untag();
+        }
+    }
 }

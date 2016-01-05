@@ -20,7 +20,11 @@ return array(
 		
 	// Auto-delete unused tags from the 'tags' database table (when they are used zero times)
 	'delete_unused_tags'=>true,
-		
+
+    // Auto-tag from property. Eg. set to 'tag_names' and set that property (ie.
+    // by using a text input in a form)
+    'auto_tag_from_prop' => false,
+
 	// Model to use to store the tags in the database
 	'tag_model'=>'\Conner\Tagging\Model\Tag',
 );
