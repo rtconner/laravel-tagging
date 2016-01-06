@@ -1,4 +1,6 @@
-<?php namespace Conner\Tagging;
+<?php
+
+namespace Conner\Tagging;
 
 use Conner\Tagging\Contracts\TaggingUtility;
 use Conner\Tagging\Events\TagAdded;
