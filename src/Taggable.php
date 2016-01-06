@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Config;
 /**
  * Copyright (C) 2014 Robert Conner
  */
-trait Taggable {
-
+trait Taggable
+{
 	/** @var \Conner\Tagging\Contracts\TaggingUtility **/
 	static $taggingUtility;
 	
@@ -53,6 +53,16 @@ trait Taggable {
 		return $this->tagged->map(function($item){
 			return $item->tag;
 		});
+	}
+	
+	/**
+	 * Set the tag names via attribute, example $model->tag_names = 'foo, bar';
+	 *
+	 * @param string $value
+	 */
+	public function setTagNamesAttribute($value)
+	{
+		$this->retag($value);
 	}
 	
 	/**
@@ -163,7 +173,8 @@ trait Taggable {
 				->where('taggable_type', $className)
 				->lists('taggable_id');
 		
-			$query->whereIn($this->getTable().'.id', $tags);
+			$primaryKey = $this->getKeyName();
+			$query->whereIn($this->getTable().'.'.$primaryKey, $tags);
 		}
 		
 		return $query;
@@ -193,7 +204,8 @@ trait Taggable {
 			->where('taggable_type', $className)
 			->lists('taggable_id');
 		
-		return $query->whereIn($this->getTable().'.id', $tags);
+		$primaryKey = $this->getKeyName();
+		return $query->whereIn($this->getTable().'.'.$primaryKey, $tags);
 	}
 	
 	/**
