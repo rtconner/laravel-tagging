@@ -20,7 +20,7 @@ class Util implements TaggingUtility
 	public function makeTagArray($tagNames)
 	{
 		if(is_array($tagNames) && count($tagNames) == 1) {
-			$tagNames = $tagNames[0];
+			$tagNames = reset($tagNames);
 		}
 		
 		if(is_string($tagNames)) {
@@ -31,7 +31,7 @@ class Util implements TaggingUtility
 		
 		$tagNames = array_map('trim', $tagNames);
 
-		return $tagNames;
+		return array_values($tagNames);
 	}
 
 	/**
