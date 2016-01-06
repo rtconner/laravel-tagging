@@ -60,9 +60,9 @@ trait Taggable
 	 *
 	 * @param string $value
 	 */
-	public function setTagNamesAttribute($value)
+	public function getTagNamesAttribute($value)
 	{
-		$this->retag($value);
+		return implode(', ', $this->tagNames());
 	}
 	
 	/**

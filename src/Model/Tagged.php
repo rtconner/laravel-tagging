@@ -17,9 +17,7 @@ class Tagged extends Eloquent
 	{
 		parent::__construct($attributes);
 		
-		if(function_exists('app')) {
-			$this->taggingUtility = app(TaggingUtility::class);
-		}
+		$this->taggingUtility = app(TaggingUtility::class);
 	}
 	
 	/**

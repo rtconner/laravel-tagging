@@ -25,9 +25,7 @@ class Tag extends Eloquent
 			$this->connection = $connection;
 		}
 		
-		if(function_exists('app')) {
-			$this->taggingUtility = app(TaggingUtility::class);
-		}
+		$this->taggingUtility = app(TaggingUtility::class);
 	}
 	
 	/**

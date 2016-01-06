@@ -2,8 +2,15 @@
 
 use Conner\Tagging\Util;
 
-class UtilTest extends PHPUnit_Framework_TestCase {
-
+class UtilTest extends PHPUnit_Framework_TestCase
+{
+	public function setUp()
+	{
+		$app = new Illuminate\Foundation\Application(
+			realpath(__DIR__.'/../')
+		);
+	}
+	
 	public function test_make_tag_array()
 	{
 		$util = new Util;
