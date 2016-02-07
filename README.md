@@ -25,7 +25,7 @@ The service provider does not load on every page load, so it should not slow dow
 
 ```php
 'providers' => array(
-	'Conner\Tagging\Providers\TaggingServiceProvider',
+	\Conner\Tagging\Providers\TaggingServiceProvider::class,
 );
 ```
 ```bash

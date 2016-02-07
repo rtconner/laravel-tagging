@@ -1,4 +1,6 @@
-<?php namespace Conner\Tagging\Providers;
+<?php
+
+namespace Conner\Tagging\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Conner\Tagging\Contracts\TaggingUtility;
@@ -20,10 +22,12 @@ class TaggingServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__.'/../../config/tagging.php' => config_path('tagging.php'),
-			__DIR__.'/../../migrations/2014_01_07_073615_create_tagged_table.php' => $this->app->databasePath().('/migrations/2014_01_07_073615_create_tagged_table.php'),
-			__DIR__.'/../../migrations/2014_01_07_073615_create_tags_table.php' => $this->app->databasePath().('/migrations/2014_01_07_073615_create_tags_table.php'),
-		]);
+			__DIR__.'/../config/tagging.php' => config_path('tagging.php')
+		], 'config');
+		
+		$this->publishes([
+			__DIR__.'/../migrations/' => database_path('migrations')
+		], 'migrations');
 	}
 	
 	/**
@@ -31,7 +35,7 @@ class TaggingServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function register() 
+	public function register()
 	{
 		$this->app->singleton(TaggingUtility::class, function () {
 			return new Util;
@@ -46,14 +50,4 @@ class TaggingServiceProvider extends ServiceProvider {
 	{
 		return [TaggingUtility::class];
 	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \Illuminate\Support\ServiceProvider::when()
-	 */
-	public function when()
-	{
-		return array('artisan.start');
-	}
-	
 }
