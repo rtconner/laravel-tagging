@@ -9,8 +9,8 @@ use Conner\Tagging\Util;
 /**
  * Copyright (C) 2014 Robert Conner
  */
-class TaggingServiceProvider extends ServiceProvider {
-
+class TaggingServiceProvider extends ServiceProvider
+{
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 */
@@ -22,11 +22,11 @@ class TaggingServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__.'/../config/tagging.php' => config_path('tagging.php')
+			__DIR__.'/../../config/tagging.php' => config_path('tagging.php')
 		], 'config');
 		
 		$this->publishes([
-			__DIR__.'/../migrations/' => database_path('migrations')
+			__DIR__.'/../../migrations/' => database_path('migrations')
 		], 'migrations');
 	}
 	
