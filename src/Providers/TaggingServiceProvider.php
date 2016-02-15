@@ -12,11 +12,6 @@ use Conner\Tagging\Util;
 class TaggingServiceProvider extends ServiceProvider
 {
 	/**
-	 * Indicates if loading of the provider is deferred.
-	 */
-	protected $defer = true;
-
-	/**
 	 * Bootstrap the application events.
 	 */
 	public function boot()
