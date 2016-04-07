@@ -33,9 +33,9 @@ php artisan vendor:publish --provider="Conner\Tagging\Providers\TaggingServicePr
 php artisan migrate
 ```
 
-###### lumen
+###### Lumen 5 Installation
 
-Laravel does not have a vendor:publish command, so you will need to create or copy the provided migrations and config file into their respective directory.
+Lumen does not have a vendor:publish command, so you will need to create or copy the provided migrations and config file into their respective directory.
 
 In app\bootstrap\app.php
 
