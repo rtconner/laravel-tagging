@@ -7,7 +7,6 @@ use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
 use Conner\Tagging\Model\Tagged;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Config;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -301,7 +300,7 @@ trait Taggable
 	{
 		return isset(static::$untagOnDelete)
 			? static::$untagOnDelete
-			: Config::get('tagging.untag_on_delete');
+			: config('tagging.untag_on_delete');
 	}
 	
 	/**
@@ -309,7 +308,7 @@ trait Taggable
 	 */
 	public static function shouldDeleteUnused()
 	{
-		return Config::get('tagging.delete_unused_tags');
+		return config('tagging.delete_unused_tags');
 	}
 
     /**
