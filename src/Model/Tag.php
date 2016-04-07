@@ -34,7 +34,7 @@ class Tag extends Eloquent
 	 */
 	public function save(array $options = array())
 	{
-		$validator = \Validator::make(
+		$validator = app('validator')->make(
 			array('name' => $this->name),
 			array('name' => 'required|min:1')
 		);

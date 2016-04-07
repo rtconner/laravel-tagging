@@ -10,10 +10,10 @@ This package is not meant to handle javascript or html in any way. This package 
 
 There are no real limits on what characters can be used in a tag. It uses a slug transform to determine if two tags are identical ("sugar-free" and "Sugar Free" would be treated as the same tag). Tag display names are run through Str::title()
 
-[Laravel 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)  
+[Laravel/Lumen 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)  
 [Laravel 4 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-4)
 
-#### Composer Install (for Laravel 5)
+#### Composer Install (for Laravel/Lumen 5)
 	
 ```shell
 composer require rtconner/laravel-tagging "~2.0"
@@ -32,6 +32,22 @@ The service provider does not load on every page load, so it should not slow dow
 php artisan vendor:publish --provider="Conner\Tagging\Providers\TaggingServiceProvider"
 php artisan migrate
 ```
+
+###### lumen
+
+Laravel does not have a vendor:publish command, so you will need to create or copy the provided migrations and config file into their respective directory.
+
+In app\bootstrap\app.php
+
+```php
+// Add this line in your config section
+$app->configure('tagging');
+// Add this line in your service provider section
+$app->register(Conner\Tagging\Providers\LumenTaggingServiceProvider::class);
+```
+
+Done. Eloquent is required, Facades are not.
+
 
 After these two steps are done, you can edit config/tagging.php with your prefered settings.
 	
