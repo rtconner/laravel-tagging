@@ -16,7 +16,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 #### Composer Install (for Laravel/Lumen 5)
 	
 ```shell
-composer require rtconner/laravel-tagging "~2.0"
+composer require rtconner/laravel-tagging "~2.1"
 ```
 
 #### Install and then Run the migrations
@@ -45,9 +45,6 @@ $app->configure('tagging');
 // Add this line in your service provider section
 $app->register(Conner\Tagging\Providers\LumenTaggingServiceProvider::class);
 ```
-
-Done. Eloquent is required, Facades are not.
-
 
 After these two steps are done, you can edit config/tagging.php with your prefered settings.
 	
