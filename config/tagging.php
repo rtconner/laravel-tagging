@@ -23,4 +23,7 @@ return array(
 
 	// Model to use to store the tags in the database
 	'tag_model'=>'\Conner\Tagging\Model\Tag',
+
+	// custom added: to determine what model to use for relations
+	'tagged_model' => '\Conner\Tagging\Model\Tagged',
 );
