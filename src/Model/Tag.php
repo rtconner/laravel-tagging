@@ -49,13 +49,35 @@ class Tag extends Eloquent
 			throw new \Exception('Tag Name is required');
 		}
 	}
-	
+
+	/**
+	 * Tag group relationship
+	 */
+	public function group()
+	{
+		return $this->belongsTo('\Conner\Tagging\Model\TagGroup', 'tag_group_id');
+	}
+
+
 	/**
 	 * Get suggested tags
 	 */
 	public function scopeSuggested($query)
 	{
 		return $query->where('suggest', true);
+	}
+
+
+	/**
+	 * Get suggested tags
+	 */
+	public function scopeInGroup($query, $group_name)
+	{
+		$group_slug = $this->taggingUtility->slug($group_name);
+
+		return $query->whereHas('group', function ($query) use($group_slug) {
+			$query->where('slug', $group_slug);
+		});
 	}
 	
 	/**
