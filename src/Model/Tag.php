@@ -50,6 +50,19 @@ class Tag extends Eloquent
 		}
 	}
 
+
+	/**
+	 * Tag group helper function
+	 */
+	public function isInGroup($group_name)
+	{
+		if($this->group->slug == $this->taggingUtility->slug($group_name)){
+			return true;
+		}
+		return false;
+	}
+
+
 	/**
 	 * Tag group relationship
 	 */
