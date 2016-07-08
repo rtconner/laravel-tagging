@@ -84,6 +84,34 @@ Article::existingTags(); // return collection of all existing tags on any articl
 
 [More examples in the documentation](docs/usage-examples.md)
 
+
+### Tag Groups
+
+You can create groups with the following artisan command
+
+```php
+php artisan tagging:create-group MyTagGroup
+```
+
+Set the tag group for a tag
+
+```php
+$tag->setGroup('MyTagGroup');
+```
+
+To get all the tags in a certain group
+
+```php
+Tag::inGroup('MyTagGroup')->get()
+```
+
+Check if a tag is in a group
+
+```php
+$tag->isInGroup('MyTagGroup');
+```
+
+
 ### Configure
 
 [See config/tagging.php](config/tagging.php) for configuration options.

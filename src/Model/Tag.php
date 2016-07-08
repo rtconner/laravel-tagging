@@ -50,6 +50,25 @@ class Tag extends Eloquent
 		}
 	}
 
+	/**
+	 * Tag group setter
+	 */
+	public function setGroup($group_name)
+	{
+		$tagGroup = TagGroup::where('slug', $this->taggingUtility->slug($group_name))->first();
+
+		if($tagGroup){
+			$this->group()->associate($tagGroup);
+			$this->save();
+
+			return $this;
+		}else{
+			throw new \Exception('No Tag Group found');
+		}
+
+	}
+
+
 
 	/**
 	 * Tag group helper function
