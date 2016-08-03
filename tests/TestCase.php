@@ -8,12 +8,12 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
 	{
 	    return [TaggingServiceProvider::class];
 	}
-	
+
 	public function setUp()
 	{
 		parent::setUp();
 	}
-	
+
 	/**
 	 * Assert that two arrays are equal. This helper method will sort the two arrays before comparing them if
 	 * necessary. This only works for one-dimensional arrays, if you need multi-dimension support, you will
@@ -26,7 +26,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
 	protected function assertArraysEqual(array $expected, array $actual, $regard_order = false, $check_keys = false) {
 	    // check length first
 	    $this->assertEquals(count($expected), count($actual), 'Failed to assert that two arrays have the same length.');
-	
+
 	    // sort arrays if order is irrelevant
 	    if (!$regard_order) {
 	        if ($check_keys) {
@@ -37,8 +37,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
 	            $this->assertTrue(sort($actual), 'Failed to sort array.');
 	        }
 	    }
-	
+
 	    $this->assertEquals($expected, $actual);
 	}
-	
 }
