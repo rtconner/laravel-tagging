@@ -11,6 +11,12 @@ use Conner\Tagging\Util;
  */
 class TaggingServiceProvider extends ServiceProvider
 {
+
+	protected $commands = [
+		\Conner\Tagging\Console\Commands\GenerateTagGroup::class
+	];
+
+
 	/**
 	 * Bootstrap the application events.
 	 */
@@ -32,6 +38,9 @@ class TaggingServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
+
+		$this->commands($this->commands);
+
 		$this->app->singleton(TaggingUtility::class, function () {
 			return new Util;
 		});
