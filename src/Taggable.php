@@ -292,6 +292,23 @@ trait Taggable
 			->orderBy('tag_slug', 'ASC')
 			->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
 	}
+
+	/**
+     	* Return an array of all of the tags that are in use by this model
+      	* @param $groups Array with groups names
+     	* @return Collection
+ 	*/
+ 	public static function existingTagsInGroups(Array $groups)
+ 	{
+ 		return Tagged::distinct()
+ 			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
+ 			->join('tagging_tag_groups', 'tag_group_id', '=', 'tagging_tag_groups.id')
+ 			->where('taggable_type', '=', (new static)->getMorphClass())
+ 			->whereIn('tagging_tag_groups.name',$groups)
+ 			->orderBy('tag_slug', 'ASC')
+			->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
+ 	}
+ 	
 	
 	/**
 	 * Should untag on delete
