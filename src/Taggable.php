@@ -59,7 +59,7 @@ trait Taggable
 	 */
 	public function tagged()
 	{
-		return $this->morphMany('Conner\Tagging\Model\Tagged', 'taggable')->with('tag');
+		return $this->morphMany(config('tagging.tagged_model', 'Conner\Tagging\Model\Tagged'), 'taggable')->with('tag');
 	}
 
 	/**
