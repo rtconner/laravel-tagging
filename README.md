@@ -13,7 +13,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 [Laravel/Lumen 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)  
 [Laravel 4 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-4)
 
-#### Composer Install (for Laravel/Lumen 5)
+#### Composer Install (for Laravel 5.3/Lumen 5)
 	
 ```shell
 composer require rtconner/laravel-tagging "~2.2"
