@@ -1,15 +1,11 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Conner\Tagging\Taggable;
-use Illuminate\Database\Capsule\Manager as DB;
-
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\TagGroup;
 
 class TagGroupTest extends TestCase
 {
-
     public function setUp()
     {
         parent::setUp();
