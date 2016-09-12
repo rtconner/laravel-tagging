@@ -52,7 +52,7 @@ class Util implements TaggingUtility
 		$str = mb_convert_encoding((string)$str, 'UTF-8');
 	
 		$options = array(
-			'delimiter' => '-',
+			'delimiter' => config('taggable.delimiter'),
 			'limit' => '255',
 			'lowercase' => true,
 			'replacements' => array(),
