@@ -8,20 +8,21 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  */
 class TagGroup extends Eloquent
 {
-    protected $table = 'tagging_tag_groups';
     public $timestamps = false;
-    protected $softDelete = false;
     public $fillable = ['name'];
+    protected $table = 'tagging_tag_groups';
+    protected $softDelete = false;
     protected $taggingUtility;
 
     /**
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
-        if (function_exists('config') && $connection = config('tagging.connection')) {
+        $connection = config('tagging.connection', null);
+        if (!is_null($connection)) {
             $this->connection = $connection;
         }
 
@@ -41,7 +42,7 @@ class TagGroup extends Eloquent
     /**
      * sets the slug when setting the group name
      *
-     * @return void
+     * @param string $value
      */
     public function setNameAttribute($value)
     {
