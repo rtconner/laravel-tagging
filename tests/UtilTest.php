@@ -10,7 +10,7 @@ class UtilTest extends TestCase
 		$tagStrings = array('First Tag', '2nd Tag', 'Tag #3', 'tag #3', 'TAG #3');
 		$first = $util->makeTagArray($tagStrings);
 		$second = $util->makeTagArray(implode(', ', $tagStrings));
-		
+
 		$this->assertEquals($tagStrings, $first);
 		$this->assertEquals($tagStrings, $second);
 
@@ -65,5 +65,5 @@ class UtilTest extends TestCase
 		$str = '&=*!$&&,';
 		$this->assertNotEquals($util->slug($str), $str);
 	}
-	
+
 }
