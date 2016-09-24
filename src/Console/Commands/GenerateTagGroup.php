@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 
 /**
  * Class GenerateTagGroup
- * @package Conner\Tagging\Console\Commands
+ * @package Conner\Tagging
  */
 class GenerateTagGroup extends Command
 {
