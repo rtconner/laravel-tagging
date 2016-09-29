@@ -150,7 +150,7 @@ class Util implements TaggingUtility
 	
 		return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
 	}
-	
+
 	/**
 	 * Private! Please do not call this function directly, just let the Tag library use it.
 	 * Increment count of tag by one. This function will create tag record if it does not exist.

@@ -128,6 +128,7 @@ Alternatively you can override Model::$morphClass on your model class to match t
 #### Credits
 
  - Robert Conner - http://smartersoftware.net
+ - Jarrad Salmon - https://twitter.com/jbardnz
 
 #### Further Reading
  - [Laravel News article on tagging with this library](https://laravel-news.com/2015/10/how-to-add-tagging-to-your-laravel-app/)

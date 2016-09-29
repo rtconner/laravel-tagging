@@ -5,7 +5,9 @@ namespace Conner\Tagging;
 use Conner\Tagging\Contracts\TaggingUtility;
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
+use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\Tagged;
+use Conner\Tagging\Model\TagGroup;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -90,15 +92,17 @@ trait Taggable
 	 * Perform the action of tagging the model with the given string
 	 *
 	 * @param $tagName string or array
+	 * @param $groupName string
 	 */
-	public function tag($tagNames)
+	public function tag($tagNames, $groupName = '')
 	{
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
-			$this->addTag($tagName);
+			$this->addTag($tagName, $groupName);
 		}
 	}
+
 	
 	/**
 	 * Return array of the tag names related to the current model
@@ -129,7 +133,7 @@ trait Taggable
 	 *
 	 * @param $tagName string or array (or null to remove all tags)
 	 */
-	public function untag($tagNames=null)
+	public function untag($tagNames = null, $groupName = '')
 	{
 		if(is_null($tagNames)) {
 			$tagNames = $this->tagNames();
@@ -138,7 +142,7 @@ trait Taggable
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		foreach($tagNames as $tagName) {
-			$this->removeTag($tagName);
+			$this->removeTag($tagName, $groupName);
 		}
 		
 		if(static::shouldDeleteUnused()) {
@@ -150,8 +154,9 @@ trait Taggable
 	 * Replace the tags from this model
 	 *
 	 * @param $tagName string or array
+	 * @param $groupName string
 	 */
-	public function retag($tagNames)
+	public function retag($tagNames, $groupName = '')
 	{
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		$currentTagNames = $this->tagNames();
@@ -159,6 +164,28 @@ trait Taggable
 		$deletions = array_diff($currentTagNames, $tagNames);
 		$additions = array_diff($tagNames, $currentTagNames);
 		
+		$this->untag($deletions, $groupName);
+
+		foreach($additions as $tagName) {
+			$this->addTag($tagName, $groupName);
+		}
+	}
+
+
+	/**
+	 * Replace the tags from this model and updates tag group
+	 *
+	 * @param $tagName string or array
+	 * @param $groupName string
+	 */
+	public function retagWithGoup($tagNames)
+	{
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
+		$currentTagNames = $this->tagNames();
+
+		$deletions = array_diff($currentTagNames, $tagNames);
+		$additions = array_diff($tagNames, $currentTagNames);
+
 		$this->untag($deletions);
 
 		foreach($additions as $tagName) {
@@ -229,10 +256,10 @@ trait Taggable
 	 *
 	 * @param $tagName string
 	 */
-	private function addTag($tagName)
+	private function addTag($tagName, $groupName = '')
 	{
 		$tagName = trim($tagName);
-		
+
 		$normalizer = config('tagging.normalizer');
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 
@@ -248,13 +275,19 @@ trait Taggable
 			'tag_name'=>call_user_func($displayer, $tagName),
 			'tag_slug'=>$tagSlug,
 		));
-		
+
 		$this->tagged()->save($tagged);
 
 		static::$taggingUtility->incrementCount($tagName, $tagSlug, 1);
-		
+
 		unset($this->relations['tagged']);
 		event(new TagAdded($this));
+
+
+		//update the group if we have one
+		if(strlen($groupName) > 0){
+			$tagged->tag->setGroup($groupName);
+		}
 	}
 	
 	/**
@@ -262,7 +295,7 @@ trait Taggable
 	 *
 	 * @param $tagName string
 	 */
-	private function removeTag($tagName)
+	private function removeTag($tagName, $groupName = '')
 	{
 		$tagName = trim($tagName);
 		
@@ -270,6 +303,11 @@ trait Taggable
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 		
 		$tagSlug = call_user_func($normalizer, $tagName);
+
+		$group = null;
+		if(strlen($groupName) > 0){
+			$group = TagGroup::where('slug', $this->taggingUtility->slug($groupName))->first();
+		}
 		
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
 			static::$taggingUtility->decrementCount($tagName, $tagSlug, $count);
