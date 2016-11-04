@@ -214,7 +214,7 @@ trait Taggable
 		foreach($tagNames as $tagSlug) {
 			$tags = Tagged::where('tag_slug', call_user_func($normalizer, $tagSlug))
 				->where('taggable_type', $className)
-				->pluck('taggable_id');
+				->get()->pluck('taggable_id');
 		
 			$primaryKey = $this->getKeyName();
 			$query->whereIn($this->getTable().'.'.$primaryKey, $tags);
@@ -245,7 +245,7 @@ trait Taggable
 		
 		$tags = Tagged::whereIn('tag_slug', $tagNames)
 			->where('taggable_type', $className)
-			->pluck('taggable_id');
+			->get()->pluck('taggable_id');
 		
 		$primaryKey = $this->getKeyName();
 		return $query->whereIn($this->getTable().'.'.$primaryKey, $tags);
