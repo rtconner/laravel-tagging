@@ -306,7 +306,8 @@ trait Taggable
 
 		$group = null;
 		if(strlen($groupName) > 0){
-			$group = TagGroup::where('slug', $this->taggingUtility->slug($groupName))->first();
+			$groupSlug = static::$taggingUtility->slug($groupName);
+			$group = TagGroup::where('slug', $groupSlug)->first();
 		}
 		
 		if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
