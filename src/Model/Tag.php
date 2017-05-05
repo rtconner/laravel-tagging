@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  */
 class Tag extends Eloquent
 {
+    use ConnectionTrait;
+
     protected $table = 'tagging_tags';
     public $timestamps = false;
     protected $softDelete = false;
@@ -20,10 +22,7 @@ class Tag extends Eloquent
     public function __construct(array $attributes = array())
     {
         parent::__construct($attributes);
-
-        if (function_exists('config') && $connection = config('tagging.connection')) {
-            $this->connection = $connection;
-        }
+        $this->reSetConnection();
 
         $this->taggingUtility = app(TaggingUtility::class);
     }
