@@ -16,10 +16,14 @@ class Tagged extends Eloquent
 	public function __construct(array $attributes = array())
 	{
 		parent::__construct($attributes);
-		
+
+		if (function_exists('config') && $connection = config('tagging.connection')) {
+			$this->connection = $connection;
+		}
+
 		$this->taggingUtility = app(TaggingUtility::class);
 	}
-	
+
 	/**
 	 * Morph to the tag
 	 *
@@ -29,7 +33,7 @@ class Tagged extends Eloquent
 	{
 		return $this->morphTo();
 	}
-	
+
 	/**
 	 * Get instance of tag linked to the tagged value
 	 *
