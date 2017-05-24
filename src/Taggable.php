@@ -173,11 +173,6 @@ trait Taggable
 	 */
 	public function scopeWithAllTags($query, $tagNames)
 	{
-		if(!is_array($tagNames)) {
-			$tagNames = func_get_args();
-			array_shift($tagNames);
-		}
-		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
@@ -203,11 +198,6 @@ trait Taggable
 	 */
 	public function scopeWithAnyTag($query, $tagNames)
 	{
-		if(!is_array($tagNames)) {
-			$tagNames = func_get_args();
-			array_shift($tagNames);
-		}
-		
 		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 		
 		$normalizer = config('tagging.normalizer');
