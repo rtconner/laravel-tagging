@@ -1,34 +1,39 @@
 {
-	"name": "rtconner/laravel-tagging",
-	"description": "Use PHP traits to extend Laravel Eloquent Models to allow Tags. Models can be marked as Taggable.",
-	"license": "MIT",
-	"homepage": "https://smartersoftware.net/packages/laravel-tagging-taggable",
-	"keywords": ["tag", "tags", "tagging", "laravel", "taggable", "tagged", "eloquent", "laravel5"],
-	"authors": [
-		{
-			"name": "Robert Conner",
-			"email": "rtconner@smarter.bz"
-		}
-	],
-	"require": {
-		"php": ">=5.5.0",
-		"illuminate/database": ">= 5.0",
-		"illuminate/support": ">= 5.0"
-	},
-	"require-dev": {
-		"orchestra/testbench": "~3.0",
-		"phpunit/phpunit": "~4.0",
-		"mockery/mockery": "~0.9",
-		"vlucas/phpdotenv": "~2.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Conner\\Tagging\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"classmap": [
-			"tests/TestCase.php"
-		]
-	}
+    "name": "rtconner/laravel-tagging",
+    "description": "Use PHP traits to extend Laravel Eloquent Models to allow Tags. Models can be marked as Taggable.",
+    "license": "MIT",
+    "homepage": "https://smartersoftware.net/packages/laravel-tagging-taggable",
+    "keywords": ["tag", "tags", "tagging", "laravel", "taggable", "tagged", "eloquent", "laravel5"],
+    "authors": [{
+        "name": "Robert Conner",
+        "email": "rtconner@smarter.bz"
+    }],
+    "require": {
+        "php": ">=5.5.0",
+        "illuminate/database": ">= 5.0",
+        "illuminate/support": ">= 5.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.9",
+        "vlucas/phpdotenv": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Conner\\Tagging\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Conner\\Tagging\\Providers\\TaggingServiceProvider"
+            ]
+        }
+    }
 }
