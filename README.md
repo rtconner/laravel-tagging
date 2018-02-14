@@ -10,24 +10,27 @@ This package is not meant to handle javascript or html in any way. This package 
 
 There are no real limits on what characters can be used in a tag. It uses a slug transform to determine if two tags are identical ("sugar-free" and "Sugar Free" would be treated as the same tag). Tag display names are run through Str::title()
 
-[Laravel/Lumen 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)  
+[Laravel/Lumen 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)
 [Laravel 4 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-4)
 
-#### Composer Install (for Laravel 5.3/Lumen 5)
-	
+#### Composer Install (for Laravel 5+/Lumen 5)
+
 ```shell
 composer require rtconner/laravel-tagging "~2.2"
 ```
 
 #### Install and then Run the migrations
 
-The service provider does not load on every page load, so it should not slow down your app.
+The service provider does not load on every page load, so it should not slow down your app. In `config/app.php` You may add the the `TaggingServiceProvider` in the providers array as follows:
+
+> If you're using Laravel 5.5+ let the package auto discovery make this for you.
 
 ```php
-'providers' => array(
+'providers' => [
 	\Conner\Tagging\Providers\TaggingServiceProvider::class,
-);
+];
 ```
+Then publish the configurations and migrations by:
 ```bash
 php artisan vendor:publish --provider="Conner\Tagging\Providers\TaggingServiceProvider"
 php artisan migrate
@@ -47,7 +50,7 @@ $app->register(Conner\Tagging\Providers\LumenTaggingServiceProvider::class);
 ```
 
 After these two steps are done, you can edit config/tagging.php with your prefered settings.
-	
+
 #### Setup your models
 ```php
 class Article extends \Illuminate\Database\Eloquent\Model {
@@ -71,7 +74,7 @@ $article->untag(); // remove all tags
 
 $article->retag(array('Fruit', 'Fish')); // delete current tags and save new tags
 
-$article->tagNames(); // get array of related tag names	
+$article->tagNames(); // get array of related tag names
 
 Article::withAnyTag(['Gardening','Cooking'])->get(); // fetch articles with any tag listed
 
