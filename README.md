@@ -21,7 +21,7 @@ composer require rtconner/laravel-tagging "~2.2"
 
 #### Install and then Run the migrations
 
-The service provider does not load on every page load, so it should not slow down your app. In `config/app.php` You may add the the `TaggingServiceProvider` in the providers array as follows:
+The service provider does not load on every page load, so it should not slow down your app. In `config/app.php` You may add the `TaggingServiceProvider` in the providers array as follows:
 
 > If you're using Laravel 5.5+ let the package auto discovery make this for you.
 
