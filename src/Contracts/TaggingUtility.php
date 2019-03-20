@@ -1,11 +1,10 @@
 <?php namespace Conner\Tagging\Contracts;
 
 /**
- * Intergace of utility functions to help with various tagging functionality.
+ * Interface of utility functions to help with various tagging functionality.
  *
+ * @copyright Copyright (C) 2015 Robert Conner
  * @author Rob Conner <rtconner+gh@gmail.com>
- *
- * Copyright (C) 2015 Robert Conner
  */
 interface TaggingUtility
 {
@@ -19,13 +18,7 @@ interface TaggingUtility
 
 	/**
 	 * Create a web friendly URL slug from a string.
-	 *
-	 * Although supported, transliteration is discouraged because
-	 * 1) most web browsers support UTF-8 characters in URLs
-	 * 2) transliteration causes a loss of information
-	 *
-	 * @author Sean Murphy <sean@iamseanmurphy.com>
-	 *
+     *
 	 * @param string $str
 	 * @return string
 	 */

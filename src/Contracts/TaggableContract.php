@@ -18,7 +18,7 @@ interface TaggableContract {
 	/**
 	 * Perform the action of tagging the model with the given string
 	 *
-	 * @param $tagName string or array
+	 * @param string|array $tagNames
 	 */
 	public function tag($tagNames);
 	
@@ -39,28 +39,30 @@ interface TaggableContract {
 	/**
 	 * Remove the tag from this model
 	 *
-	 * @param $tagName string or array (or null to remove all tags)
+	 * @param string|array|null $tagNames string or array (or null to remove all tags)
 	 */
-	public function untag($tagNames=null);
+	public function untag($tagNames = null);
 	
 	/**
 	 * Replace the tags from this model
 	 *
-	 * @param $tagName string or array
+	 * @param string|array $tagNames
 	 */
 	public function retag($tagNames);
 
 	/**
 	 * Filter model to subset with the given tags
 	 *
-	 * @param $tagNames array|string
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tagNames
 	 */
 	public function scopeWithAllTags($query, $tagNames);
 
 	/**
 	 * Filter model to subset with the given tags
 	 *
-	 * @param $tagNames array|string
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tagNames
 	 */
 	public function scopeWithAnyTag($query, $tagNames);
 	

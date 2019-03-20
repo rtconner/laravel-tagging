@@ -6,7 +6,6 @@ use Conner\Tagging\Contracts\TaggingUtility;
 use Conner\Tagging\Model\TagGroup;
 use Illuminate\Console\Command;
 
-
 class GenerateTagGroup extends Command
 {
     /**
@@ -23,10 +22,8 @@ class GenerateTagGroup extends Command
      */
     protected $description = 'Create a laravel tag group';
 
-
+    /** @var TaggingUtility $taggingUtility */
 	protected $taggingUtility;
-
-
 
 	public function __construct(TaggingUtility $taggingUtility)
 	{
@@ -34,8 +31,6 @@ class GenerateTagGroup extends Command
 
 		$this->taggingUtility = $taggingUtility;
 	}
-
-
 
 	/**
      * Execute the console command.
@@ -51,7 +46,6 @@ class GenerateTagGroup extends Command
 		$tag_group->slug = $this->taggingUtility->slug($group_name);
 
 		$tag_group->save();
-
 
         $this->info('Created tag group: ' . $group_name);
     }
