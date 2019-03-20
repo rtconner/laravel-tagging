@@ -376,7 +376,7 @@ trait Taggable
      */
     public static function shouldDeleteUnused(): bool
     {
-        return config('tagging.delete_unused_tags', true);
+        return config('tagging.delete_unused_tags', false);
     }
 
     /**
