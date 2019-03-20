@@ -118,7 +118,7 @@ trait Taggable
      *
      * @return array
      */
-    public function tagSlugs(): array 
+    public function tagSlugs(): array
     {
         return $this->tagged->map(function($item){
             return $item->tag_slug;

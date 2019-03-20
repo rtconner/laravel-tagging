@@ -16,7 +16,7 @@ There are no real limits on what characters can be used in a tag. It uses a slug
 #### Composer Install (for Laravel 5+/Lumen 5)
 
 ```shell
-composer require rtconner/laravel-tagging "~2.2"
+composer require rtconner/laravel-tagging "~3.1"
 ```
 
 #### Install and then Run the migrations
