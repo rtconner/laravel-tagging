@@ -5,6 +5,7 @@ namespace Conner\Tagging;
 use Conner\Tagging\Contracts\TaggingUtility;
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
+use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\Tagged;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,7 +13,9 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Copyright (C) 2014 Robert Conner
  *
- * @property Collection tagged
+ * @property Collection|Tagged[] tagged
+ * @property Collection|Tag[] tags
+ * @property array tag_names
  */
 trait Taggable
 {
@@ -25,7 +28,7 @@ trait Taggable
      * @var mixed
      * @access protected
      */
-    protected $autoTagTmp;
+    protected $autoTagValue;
 
     /**
      * Track if auto tag has been manually set
@@ -62,7 +65,8 @@ trait Taggable
      */
     public function tagged()
     {
-        return $this->morphMany(config('tagging.tagged_model', 'Conner\Tagging\Model\Tagged'), 'taggable')->with('tag');
+        return $this->morphMany(config('tagging.tagged_model', 'Conner\Tagging\Model\Tagged'), 'taggable')
+            ->with('tag');
     }
 
     /**
@@ -70,11 +74,11 @@ trait Taggable
      * TODO : I'm sure there is a faster way to build this, but
      * If anyone knows how to do that, me love you long time.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return Illuminate\Database\Eloquent\Collection|Tagged[]
      */
     public function getTagsAttribute()
     {
-        return $this->tagged->map(function($item){
+        return $this->tagged->map(function(Tagged $item){
             return $item->tag;
         });
     }
@@ -82,9 +86,9 @@ trait Taggable
     /**
      * Get the tag names via attribute, example $model->tag_names
      */
-    public function getTagNamesAttribute()
+    public function getTagNamesAttribute(): array
     {
-        return implode(', ', $this->tagNames());
+        return $this->tagNames();
     }
 
     /**
@@ -170,11 +174,11 @@ trait Taggable
     /**
      * Filter model to subset with the given tags
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param array|string $tagNames
      * @return mixed
      */
-    public function scopeWithAllTags($query, $tagNames)
+    public function scopeWithAllTags(Builder $query, $tagNames): Builder
     {
         if(!is_array($tagNames)) {
             $tagNames = func_get_args();
@@ -204,11 +208,11 @@ trait Taggable
     /**
      * Filter model to subset with the given tags
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param array|string $tagNames
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function scopeWithAnyTag($query, $tagNames)
+    public function scopeWithAnyTag(Builder $query, $tagNames): Builder
     {
         if(!is_array($tagNames)) {
             $tagNames = func_get_args();
@@ -238,9 +242,9 @@ trait Taggable
      *
      * @param Builder $query
      * @param array|string $tagNames
-     * @return Builder|\Illuminate\Database\Query\Builder
+     * @return Builder
      */
-    public function scopeWithoutTags($query, $tagNames)
+    public function scopeWithoutTags(Builder $query, $tagNames)
     {
         if(!is_array($tagNames)) {
             $tagNames = func_get_args();
@@ -325,7 +329,7 @@ trait Taggable
      *
      * @return Collection|Tagged[]
      */
-    public static function existingTags()
+    public static function existingTags(): Collection
     {
         return Tagged::query()
             ->distinct()
@@ -340,7 +344,7 @@ trait Taggable
      * @param array $groups
      * @return Collection|Tagged[]
      */
-    public static function existingTagsInGroups($groups)
+    public static function existingTagsInGroups($groups): Collection
     {
         return Tagged::query()
             ->distinct()
@@ -366,23 +370,19 @@ trait Taggable
     /**
      * Delete tags that are not used anymore
      */
-    public static function shouldDeleteUnused()
+    public static function shouldDeleteUnused(): bool
     {
-        return config('tagging.delete_unused_tags');
+        return config('tagging.delete_unused_tags', true);
     }
 
     /**
      * Set tag names to be set on save
      *
      * @param mixed $value Data for retag
-     *
-     * @return void
-     *
-     * @access public
      */
     public function setTagNamesAttribute($value)
     {
-        $this->autoTagTmp = $value;
+        $this->autoTagValue = $value;
         $this->autoTagSet = true;
     }
 
@@ -390,17 +390,13 @@ trait Taggable
      * AutoTag post-save hook
      *
      * Tags model based on data stored in tmp property, or untags if manually
-     * set to falsey value
-     *
-     * @return void
-     *
-     * @access public
+     * set to false value
      */
     public function autoTagPostSave()
     {
         if ($this->autoTagSet) {
-            if ($this->autoTagTmp) {
-                $this->retag($this->autoTagTmp);
+            if ($this->autoTagValue) {
+                $this->retag($this->autoTagValue);
             } else {
                 $this->untag();
             }

@@ -54,12 +54,14 @@ class CommonUsageTest extends TestCase
 
     public function test_retag()
     {
+        /** @var Stub $stub */
         $stub = Stub::create(['name'=>123]);
 
         $stub->tag('first');
         $stub->tag('second');
 
         $stub->retag('foo, bar, another');
+
         $this->assertEquals(['foo', 'bar', 'another'], $stub->tagSlugs());
     }
 
@@ -71,8 +73,62 @@ class CommonUsageTest extends TestCase
 
         $this->assertEquals(['Foo', 'Bar'], $stub->tagNames());
     }
+
+    public function test_the_tagged_property()
+    {
+        /** @var Stub $stub */
+        $stub = Stub::create(['name'=>123]);
+
+        $stub->tag('first');
+        $stub->tag('second');
+
+        $tagged = $stub->tagged;
+
+        $this->assertCount(2, $tagged);
+        $this->assertEquals('first', $tagged[0]->tag_slug);
+        $this->assertEquals('First', $tagged[0]->tag_name);
+    }
+
+    public function test_calling_tagNames_as_a_property()
+    {
+        /** @var Stub $stub */
+        $stub = Stub::create(['name'=>123]);
+
+        $stub->tag('first');
+        $stub->tag('second');
+
+        $this->assertArraysEqual(['First', 'Second'], $stub->tagNames);
+        $this->assertArraysEqual(['First', 'Second'], $stub->tag_names);
+    }
+
+    public function test_get_tags()
+    {
+        /** @var Stub $stub */
+        $stub = Stub::create(['name'=>123]);
+
+        $stub->tag('first');
+        $stub->tag('second');
+
+        $this->assertEquals('First', $stub->tags[0]->name);
+    }
+
+    public function test_setting_tag_names_array()
+    {
+        $stub = new Stub();
+        $stub->name = 'test';
+        $stub->tag_names = ['foo', 'bar'];
+        $stub->save();
+
+        $tags = $stub->tags;
+
+        $this->assertCount(2, $tags);
+        $this->assertEquals('Foo', $stub->tags[0]->name);
+    }
 }
 
+/**
+ * @property string name
+ */
 class Stub extends Eloquent
 {
     use Taggable;

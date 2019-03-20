@@ -81,6 +81,6 @@ interface TaggableContract {
     /**
      * Delete tags that are not used anymore
      */
-    public static function shouldDeleteUnused();
+    public static function shouldDeleteUnused(): bool;
 
 }
