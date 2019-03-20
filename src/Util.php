@@ -55,7 +55,7 @@ class Util implements TaggingUtility
 			'delimiter' => config('taggable.delimiter', '-'),
 			'limit' => '255',
 			'lowercase' => true,
-			'replacements' => array(),
+			'replacements' => [],
 			'transliterate' => true,
 		);
 	

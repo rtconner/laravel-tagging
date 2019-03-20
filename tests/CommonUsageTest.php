@@ -2,41 +2,27 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Taggable;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class CommonUsageTest extends TestCase
 {
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
-		
-		Eloquent::unguard();
 
-		$this->artisan('migrate', [
-		    '--database' => 'testbench',
-		    '--realpath' => realpath(__DIR__.'/../migrations'),
-		]);
+        \Schema::create('books', function ($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+		Eloquent::unguard();
 	}
-	
-	protected function getEnvironmentSetUp($app)
-	{
-	    $app['config']->set('database.default', 'testbench');
-	    $app['config']->set('database.connections.testbench', [
-	        'driver'   => 'sqlite',
-	        'database' => ':memory:',
-	        'prefix'   => '',
-	    ]);
-	    
-		\Schema::create('books', function ($table) {
-			$table->increments('id');
-			$table->string('name');
-			$table->timestamps();
-		});
-	}
-	
-	public function tearDown()
+
+	public function tearDown(): void
 	{
 		\Schema::drop('books');
+
+		parent::tearDown();
 	}
 
 	public function test_tag_call()
@@ -91,7 +77,7 @@ class Stub extends Eloquent
 {
 	use Taggable;
 	
-	protected $connection = 'testbench';
+	protected $connection = 'testing';
 	
 	public $table = 'books';
 }

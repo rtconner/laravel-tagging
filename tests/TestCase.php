@@ -9,10 +9,33 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
 	    return [TaggingServiceProvider::class];
 	}
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
+
+		$this->artisan('migrate', [
+            '--database' => 'testing',
+            '--path' => realpath(__DIR__.'/../migrations'),
+            '--realpath' => true,
+        ]);
 	}
+
+    /**
+     * Define environment setup.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('database.default', 'testing');
+        $app['config']->set('database.connections.testing', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+    }
 
 	/**
 	 * Assert that two arrays are equal. This helper method will sort the two arrays before comparing them if

@@ -5,6 +5,12 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * Copyright (C) 2014 Robert Conner
+ * @package Conner\Tagging\Model
+ * @property string id
+ * @property string name
+ * @property string slug
+ * @property bool suggest
+ * @property integer count
  */
 class Tag extends Eloquent
 {
@@ -17,7 +23,7 @@ class Tag extends Eloquent
     /**
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -32,7 +38,7 @@ class Tag extends Eloquent
      * (non-PHPdoc)
      * @see \Illuminate\Database\Eloquent\Model::save()
      */
-    public function save(array $options = array())
+    public function save(array $options = [])
     {
         $validator = app('validator')->make(
             array('name' => $this->name),

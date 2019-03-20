@@ -2,9 +2,14 @@
 
 use Conner\Tagging\Contracts\TaggingUtility;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Str;
 
 /**
  * Copyright (C) 2014 Robert Conner
+ * @package Conner\Tagging\Model
+ * @property string id
+ * @property string slug
+ * @property string name
  */
 class TagGroup extends Eloquent
 {
@@ -17,7 +22,7 @@ class TagGroup extends Eloquent
     /**
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -46,6 +51,6 @@ class TagGroup extends Eloquent
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = str_slug($value);
+        $this->attributes['slug'] = Str::slug($value);
     }
 }

@@ -5,6 +5,12 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * Copyright (C) 2014 Robert Conner
+ * @package Conner\Tagging\Model
+ * @property integer id
+ * @property string taggable_id
+ * @property string taggable_type
+ * @property string tag_name
+ * @property string tag_slug
  */
 class Tagged extends Eloquent
 {
@@ -13,7 +19,7 @@ class Tagged extends Eloquent
 	protected $fillable = ['tag_name', 'tag_slug'];
 	protected $taggingUtility;
 
-	public function __construct(array $attributes = array())
+	public function __construct(array $attributes = [])
 	{
 		parent::__construct($attributes);
 		

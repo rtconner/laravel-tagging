@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Copyright (C) 2014 Robert Conner
+ *
+ * @property Collection tagged
  */
 trait Taggable
 {
@@ -77,11 +79,9 @@ trait Taggable
 	}
 	
 	/**
-	 * Set the tag names via attribute, example $model->tag_names = 'foo, bar';
-	 *
-	 * @param string $value
+	 * Get the tag names via attribute, example $model->tag_names
 	 */
-	public function getTagNamesAttribute($value)
+	public function getTagNamesAttribute()
 	{
 		return implode(', ', $this->tagNames());
 	}
@@ -89,7 +89,7 @@ trait Taggable
 	/**
 	 * Perform the action of tagging the model with the given string
 	 *
-	 * @param $tagName string or array
+	 * @param string|array $tagNames
 	 */
 	public function tag($tagNames)
 	{
@@ -127,7 +127,7 @@ trait Taggable
 	/**
 	 * Remove the tag from this model
 	 *
-	 * @param $tagName string or array (or null to remove all tags)
+	 * @param string|array|null $tagNames (or null to remove all tags)
 	 */
 	public function untag($tagNames=null)
 	{
@@ -149,7 +149,7 @@ trait Taggable
 	/**
 	 * Replace the tags from this model
 	 *
-	 * @param $tagName string or array
+	 * @param string|array $tagNames
 	 */
 	public function retag($tagNames)
 	{
@@ -165,12 +165,14 @@ trait Taggable
 			$this->addTag($tagName);
 		}
 	}
-	
-	/**
-	 * Filter model to subset with the given tags
-	 *
-	 * @param $tagNames array|string
-	 */
+
+    /**
+     * Filter model to subset with the given tags
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tagNames
+     * @return mixed
+     */
 	public function scopeWithAllTags($query, $tagNames)
 	{
 		if(!is_array($tagNames)) {
@@ -195,12 +197,14 @@ trait Taggable
 		
 		return $query;
 	}
-		
-	/**
-	 * Filter model to subset with the given tags
-	 *
-	 * @param $tagNames array|string
-	 */
+
+    /**
+     * Filter model to subset with the given tags
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tagNames
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
 	public function scopeWithAnyTag($query, $tagNames)
 	{
 		if(!is_array($tagNames)) {
@@ -227,7 +231,7 @@ trait Taggable
 	/**
 	 * Adds a single tag
 	 *
-	 * @param $tagName string
+	 * @param string $tagName
 	 */
 	private function addTag($tagName)
 	{
@@ -282,7 +286,7 @@ trait Taggable
 	/**
 	 * Return an array of all of the tags that are in use by this model
 	 *
-	 * @return Collection
+	 * @return Collection|Tagged[]
 	 */
 	public static function existingTags()
 	{
@@ -295,10 +299,10 @@ trait Taggable
 
 	/**
      	* Return an array of all of the tags that are in use by this model
-      	* @param $groups Array with groups names
-     	* @return Collection
+      	* @param array $groups
+     	* @return Collection|Tagged[]
  	*/
- 	public static function existingTagsInGroups(Array $groups)
+ 	public static function existingTagsInGroups($groups)
  	{
  		return Tagged::distinct()
  			->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')

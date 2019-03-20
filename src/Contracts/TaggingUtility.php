@@ -12,7 +12,7 @@ interface TaggingUtility
 	/**
 	 * Converts input into array
 	 *
-	 * @param $tagName string or array
+	 * @param string|array $tagNames
 	 * @return array
 	 */
 	public function makeTagArray($tagNames);
@@ -30,21 +30,25 @@ interface TaggingUtility
 	 * @return string
 	 */
 	public static function slug($str);
-		
-	/**
-	 * Private! Please do not call this function directly, just let the Tag library use it.
-	 * Increment count of tag by one. This function will create tag record if it does not exist.
-	 *
-	 * @param string $tagString
-	 */
+
+    /**
+     * Private! Please do not call this function directly, just let the Tag library use it.
+     * Increment count of tag by one. This function will create tag record if it does not exist.
+     *
+     * @param string $tagString
+     * @param string $tagSlug
+     * @param integer $count
+     */
 	public function incrementCount($tagString, $tagSlug, $count);
-	
-	/**
-	 * Private! Please do not call this function directly, let the Tag library use it.
-	 * Decrement count of tag by one. This function will create tag record if it does not exist.
-	 *
-	 * @param string $tagString
-	 */
+
+    /**
+     * Private! Please do not call this function directly, let the Tag library use it.
+     * Decrement count of tag by one. This function will create tag record if it does not exist.
+     *
+     * @param string $tagString
+     * @param string $tagSlug
+     * @param integer $count
+     */
 	public function decrementCount($tagString, $tagSlug, $count);
 	
 	/**

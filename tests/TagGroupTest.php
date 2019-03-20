@@ -6,47 +6,11 @@ use Conner\Tagging\Model\TagGroup;
 
 class TagGroupTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Eloquent::unguard();
-
-        $this->artisan('migrate', [
-            '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__.'/../migrations'),
-        ]);
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
-    }
-
-    private function createTagGroup($group_name = 'MyTagGroup')
-    {
-        return TagGroup::create([
-            'name' => $group_name
-            ]);
-        $tag_group->name = $group_name;
-        // $tag_group->slug = str_slug($group_name);
-        $tag_group->save();
-
-        return $tag_group;
-    }
-
-    private function createTag($name = 'Test Tag')
-    {
-        $tag = new Tag();
-        $tag->name = $name;
-        $tag->save();
-
-        return $tag;
     }
 
     public function test_create_group()
@@ -115,5 +79,26 @@ class TagGroupTest extends TestCase
         $this->assertNull($tag->group, 'The group should not exist on the tag after it is deleted');
 
         $this->assertFalse($tag->isInGroup('MyTagGroup'), 'The tag should not belong to a deleted group');
+    }
+
+    private function createTagGroup($group_name = 'MyTagGroup')
+    {
+        return TagGroup::create([
+            'name' => $group_name
+        ]);
+        $tag_group->name = $group_name;
+        // $tag_group->slug = Str::slug($group_name);
+        $tag_group->save();
+
+        return $tag_group;
+    }
+
+    private function createTag($name = 'Test Tag')
+    {
+        $tag = new Tag();
+        $tag->name = $name;
+        $tag->save();
+
+        return $tag;
     }
 }
