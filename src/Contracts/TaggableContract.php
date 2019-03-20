@@ -27,14 +27,14 @@ interface TaggableContract {
      *
      * @return array
      */
-    public function tagNames();
+    public function tagNames(): array;
 
     /**
      * Return array of the tag slugs related to the current model
      *
      * @return array
      */
-    public function tagSlugs();
+    public function tagSlugs(): array;
 
     /**
      * Remove the tag from this model
