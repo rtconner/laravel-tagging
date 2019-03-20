@@ -8,21 +8,21 @@
  */
 interface TaggingUtility
 {
-	/**
-	 * Converts input into array
-	 *
-	 * @param string|array $tagNames
-	 * @return array
-	 */
-	public function makeTagArray($tagNames);
-
-	/**
-	 * Create a web friendly URL slug from a string.
+    /**
+     * Converts input into array
      *
-	 * @param string $str
-	 * @return string
-	 */
-	public static function slug($str);
+     * @param string|array $tagNames
+     * @return array
+     */
+    public function makeTagArray($tagNames);
+
+    /**
+     * Create a web friendly URL slug from a string.
+     *
+     * @param string $str
+     * @return string
+     */
+    public static function slug($str);
 
     /**
      * Private! Please do not call this function directly, just let the Tag library use it.
@@ -32,7 +32,7 @@ interface TaggingUtility
      * @param string $tagSlug
      * @param integer $count
      */
-	public function incrementCount($tagString, $tagSlug, $count);
+    public function incrementCount($tagString, $tagSlug, $count);
 
     /**
      * Private! Please do not call this function directly, let the Tag library use it.
@@ -42,20 +42,20 @@ interface TaggingUtility
      * @param string $tagSlug
      * @param integer $count
      */
-	public function decrementCount($tagString, $tagSlug, $count);
-	
-	/**
-	 * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
-	 * Does not delete tags where 'suggest' is true
-	 *
-	 * @return int
-	 */
-	public function deleteUnusedTags();
-	
-	/**
-	 * Return string with full namespace of the Tag model
-	 *
-	 * @return string
-	 */
-	public function tagModelString();
+    public function decrementCount($tagString, $tagSlug, $count);
+
+    /**
+     * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
+     * Does not delete tags where 'suggest' is true
+     *
+     * @return int
+     */
+    public function deleteUnusedTags();
+
+    /**
+     * Return string with full namespace of the Tag model
+     *
+     * @return string
+     */
+    public function tagModelString();
 }

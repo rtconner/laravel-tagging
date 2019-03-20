@@ -52,7 +52,7 @@ class Tag extends Eloquent
             $this->slug = call_user_func($normalizer, $this->name);
             return parent::save($options);
         } else {
-            throw new \Exception('Tag Name is required');
+            throw new \RuntimeException('Tag Name is required');
         }
     }
 
@@ -69,7 +69,7 @@ class Tag extends Eloquent
 
             return $this;
         } else {
-            throw new \Exception('No Tag Group found');
+            throw new \RuntimeException('No Tag Group found');
         }
     }
 
@@ -86,7 +86,7 @@ class Tag extends Eloquent
 
             return $this;
         } else {
-            throw new \Exception('No Tag Group found');
+            throw new \RuntimeException('No Tag Group found');
         }
     }
 

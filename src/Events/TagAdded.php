@@ -5,19 +5,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class TagAdded
 {
-	use SerializesModels;
+    use SerializesModels;
 
-	/** @var \Illuminate\Database\Eloquent\Model **/
-	public $model;
+    /** @var \Illuminate\Database\Eloquent\Model **/
+    public $model;
 
-	/**
-	 * Create a new event instance.
-	 *
-	 * @param  Model  $model
-	 * @return void
-	 */
-	public function __construct(Model $model)
-	{
-		$this->model = $model;
-	}
+    /**
+     * Create a new event instance.
+     *
+     * @param  Model  $model
+     * @return void
+     */
+    public function __construct(Model $model)
+    {
+        $this->model = $model;
+    }
 }

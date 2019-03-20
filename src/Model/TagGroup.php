@@ -2,6 +2,7 @@
 
 use Conner\Tagging\Contracts\TaggingUtility;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
  * @property string id
  * @property string slug
  * @property string name
+ * @property-read Collection|Tag[] tags
  */
 class TagGroup extends Eloquent
 {
@@ -17,6 +19,8 @@ class TagGroup extends Eloquent
     public $timestamps = false;
     protected $softDelete = false;
     public $fillable = ['name'];
+
+    /** @var TaggingUtility $taggingUtility */
     protected $taggingUtility;
 
     /**

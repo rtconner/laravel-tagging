@@ -12,44 +12,44 @@ use Conner\Tagging\Util;
  */
 class TaggingServiceProvider extends ServiceProvider
 {
-	protected $commands = [
-		GenerateTagGroup::class
-	];
+    protected $commands = [
+        GenerateTagGroup::class
+    ];
 
-	/**
-	 * Bootstrap the application events.
-	 */
-	public function boot()
-	{
-		$this->publishes([
-			__DIR__.'/../../config/tagging.php' => config_path('tagging.php')
-		], 'config');
-		
-		$this->publishes([
-			__DIR__.'/../../migrations/' => database_path('migrations')
-		], 'migrations');
-	}
-	
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->commands($this->commands);
+    /**
+     * Bootstrap the application events.
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__.'/../../config/tagging.php' => config_path('tagging.php')
+        ], 'config');
 
-		$this->app->singleton(TaggingUtility::class, function () {
-			return new Util;
-		});
-	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \Illuminate\Support\ServiceProvider::provides()
-	 */
-	public function provides()
-	{
-		return [TaggingUtility::class];
-	}
+        $this->publishes([
+            __DIR__.'/../../migrations/' => database_path('migrations')
+        ], 'migrations');
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->commands($this->commands);
+
+        $this->app->singleton(TaggingUtility::class, function () {
+            return new Util;
+        });
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Illuminate\Support\ServiceProvider::provides()
+     */
+    public function provides()
+    {
+        return [TaggingUtility::class];
+    }
 }

@@ -23,29 +23,29 @@ class GenerateTagGroup extends Command
     protected $description = 'Create a laravel tag group';
 
     /** @var TaggingUtility $taggingUtility */
-	protected $taggingUtility;
+    protected $taggingUtility;
 
-	public function __construct(TaggingUtility $taggingUtility)
-	{
-		parent::__construct();
+    public function __construct(TaggingUtility $taggingUtility)
+    {
+        parent::__construct();
 
-		$this->taggingUtility = $taggingUtility;
-	}
+        $this->taggingUtility = $taggingUtility;
+    }
 
-	/**
+    /**
      * Execute the console command.
      *
      * @return mixed
      */
     public function handle()
     {
-		$group_name = $this->argument('group_name');
+        $group_name = $this->argument('group_name');
 
-		$tag_group = new TagGroup();
-		$tag_group->name = $group_name;
-		$tag_group->slug = $this->taggingUtility->slug($group_name);
+        $tag_group = new TagGroup();
+        $tag_group->name = $group_name;
+        $tag_group->slug = $this->taggingUtility->slug($group_name);
 
-		$tag_group->save();
+        $tag_group->save();
 
         $this->info('Created tag group: ' . $group_name);
     }
