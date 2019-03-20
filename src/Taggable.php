@@ -278,6 +278,10 @@ trait Taggable
     {
         $tagName = trim($tagName);
 
+        if(strlen($tagName) == 0) {
+            return;
+        }
+
         $normalizer = config('tagging.normalizer');
         $normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 

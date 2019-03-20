@@ -1,6 +1,7 @@
 <?php namespace Conner\Tagging\Model;
 
 use Conner\Tagging\Contracts\TaggingUtility;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @property string slug
  * @property bool suggest
  * @property integer count
+ * @property TagGroup group
  */
 class Tag extends Eloquent
 {
@@ -34,34 +36,27 @@ class Tag extends Eloquent
         $this->taggingUtility = app(TaggingUtility::class);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Illuminate\Database\Eloquent\Model::save()
-     */
     public function save(array $options = [])
     {
-        $validator = app('validator')->make(
-            array('name' => $this->name),
-            array('name' => 'required|min:1')
-        );
-
-        if ($validator->passes()) {
-            $normalizer = config('tagging.normalizer');
-            $normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
-
-            $this->slug = call_user_func($normalizer, $this->name);
-            return parent::save($options);
-        } else {
-            throw new \RuntimeException('Tag Name is required');
+        if(strlen($this->name) < 1) {
+            throw new \RuntimeException('Cannot save a tag with an empty name');
         }
+
+        $normalizer = config('tagging.normalizer');
+        $normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
+
+        $this->slug = call_user_func($normalizer, $this->name);
+        return parent::save($options);
     }
 
     /**
      * Tag group setter
+     * @param string $groupName
+     * @return Tag
      */
-    public function setGroup($group_name)
+    public function setGroup($groupName)
     {
-        $tagGroup = TagGroup::where('slug', $this->taggingUtility->slug($group_name))->first();
+        $tagGroup = TagGroup::where('slug', $this->taggingUtility->slug($groupName))->first();
 
         if ($tagGroup) {
             $this->group()->associate($tagGroup);
@@ -69,16 +64,18 @@ class Tag extends Eloquent
 
             return $this;
         } else {
-            throw new \RuntimeException('No Tag Group found');
+            throw new \RuntimeException('No Tag Group found: '. $groupName);
         }
     }
 
     /**
      * Tag group remove
+     * @param string $groupName
+     * @return Tag
      */
-    public function removeGroup($group_name)
+    public function removeGroup(string $groupName)
     {
-        $tagGroup = TagGroup::where('slug', $this->taggingUtility->slug($group_name))->first();
+        $tagGroup = TagGroup::query()->where('slug', $this->taggingUtility->slug($groupName))->first();
 
         if ($tagGroup) {
             $this->group()->dissociate($tagGroup);
@@ -86,16 +83,18 @@ class Tag extends Eloquent
 
             return $this;
         } else {
-            throw new \RuntimeException('No Tag Group found');
+            throw new \RuntimeException('No Tag Group found: '. $groupName);
         }
     }
 
     /**
      * Tag group helper function
+     * @param string $groupName
+     * @return bool
      */
-    public function isInGroup($group_name)
+    public function isInGroup($groupName): bool
     {
-        if ($this->group && ($this->group->slug == $this->taggingUtility->slug($group_name))) {
+        if ($this->group && ($this->group->slug == $this->taggingUtility->slug($groupName))) {
             return true;
         }
         return false;
@@ -106,7 +105,7 @@ class Tag extends Eloquent
      */
     public function group()
     {
-        return $this->belongsTo('\Conner\Tagging\Model\TagGroup', 'tag_group_id');
+        return $this->belongsTo(TagGroup::class, 'tag_group_id');
     }
 
     /**
@@ -119,13 +118,16 @@ class Tag extends Eloquent
 
     /**
      * Get suggested tags
+     * @param Builder $query
+     * @param $groupName
+     * @return
      */
-    public function scopeInGroup($query, $group_name)
+    public function scopeInGroup(Builder $query, $groupName)
     {
-        $group_slug = $this->taggingUtility->slug($group_name);
+        $groupSlug = $this->taggingUtility->slug($groupName);
 
-        return $query->whereHas('group', function ($query) use ($group_slug) {
-            $query->where('slug', $group_slug);
+        return $query->whereHas('group', function (Builder $query) use ($groupSlug) {
+            $query->where('slug', $groupSlug);
         });
     }
 
@@ -134,7 +136,7 @@ class Tag extends Eloquent
      *
      * @param string $value
      */
-    public function setNameAttribute($value)
+    public function setNameAttribute(string $value)
     {
         $displayer = config('tagging.displayer');
         $displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;

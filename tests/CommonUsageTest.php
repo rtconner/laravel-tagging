@@ -124,6 +124,18 @@ class CommonUsageTest extends TestCase
         $this->assertCount(2, $tags);
         $this->assertEquals('Foo', $stub->tags[0]->name);
     }
+
+    public function test_tagging_with_empty_tags()
+    {
+        /** @var Stub $stub */
+        $stub = Stub::create(['name'=>123]);
+
+        $tagName = "Japan, Asia, Economy, , , , , ";
+
+        $stub->retag($tagName);
+
+        $this->assertEquals(['Japan', 'Asia', 'Economy'], $stub->tag_names);
+    }
 }
 
 /**
