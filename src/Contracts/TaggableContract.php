@@ -20,7 +20,7 @@ interface TaggableContract {
      *
      * @param string|array $tagNames
      */
-    public function tag($tagNames);
+    public function tag($tagNames, $locale);
 
     /**
      * Return array of the tag names related to the current model

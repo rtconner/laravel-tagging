@@ -96,14 +96,14 @@ trait Taggable
      *
      * @param string|array $tagNames
      */
-    public function tag($tagNames)
-    {
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
+    public function tag($tagNames, $locale)
+	{
+		$tagNames = static::$taggingUtility->makeTagArray($tagNames);
 
-        foreach($tagNames as $tagName) {
-            $this->addTag($tagName);
-        }
-    }
+		foreach($tagNames as $tagName) {
+			$this->addTag($tagName, $locale);
+		}
+	}
 
     /**
      * Return array of the tag names related to the current model

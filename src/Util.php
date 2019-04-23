@@ -143,11 +143,12 @@ class Util implements TaggingUtility
                 'ỹ' => 'y', 'Ỹ' => 'Y', 'ỵ' => 'y', 'Ỵ' => 'Y',
             
                 //Kurdish
-				'ا' => 'a', 'ب' => 'b', 'ج' => 'c', 'د' => 'd', 'ێ' => 'ee', 'ف' => 'f', 'گ' => 'g',
+				'ا' => 'a', 'ب' => 'b', 'ج' => 'c', 'د' => 'd', 'ێ' => 'e', 'ف' => 'f', 'گ' => 'g',
 				'ژ' => 'j', 'ک' => 'k', 'ل' => 'l', 'م' => 'm', 'ن' => 'n', 'ۆ' => 'o',
-				'پ' => 'p', 'ق' => 'q', 'ر' => 'r', 'س' => 's', 'ت' => 't', 'ڤ' => 'v', 'و' => 'w',
-				'خ' => 'x', 'ی' => 'y', 'ز' => 'z', 'ڕ' => 'rr', 'ە' => 'e', 'ح' => 'hh', 'ع' => 'a', 'ش' => 'sh', 'غ' => 'gh', 'ك' => 'k',
-				'ڵ' => 'll', 'چ' => 'ch', 'ھ' => 'h', "ئ" => ''
+				'پ' => 'p', 'ق' => 'q', 'ر' => 'r', 'س' => 's', 'ت' => 't', 'ڤ' => 'v','وو' => 'u', 'و' => 'w',
+				'خ' => 'x', 'ی' => 'y', 'ز' => 'z', 'ڕ' => 'rr', 'ە' => 'e', 'ح' => 'hh', 'ع' => '', 'ش' => 'sh', 'غ' => 'gh', 'ك' => 'k',
+                'ڵ' => 'll', 'چ' => 'ch', 'ھ' => 'h', "ئ" => '', 'ه' => 'e', 'ه' => 'h', 'ص' => 's', 'ي' => 'y',
+                'ة' => 'e', 'ط' => 't', 'ذ' => 'z', 'ؤ' => 'u', 'ظ' => 'dh', 'ض' => 'dh', 'ث' => 's',
         );
 
         // Make custom replacements
@@ -180,21 +181,22 @@ class Util implements TaggingUtility
      * @param $tagSlug
      * @param $count
      */
-    public function incrementCount($tagString, $tagSlug, $count)
+    public function incrementCount($tagString, $tagSlug, $count, $locale)
     {
         if($count <= 0) { return; }
         $model = $this->tagModelString();
-
+        
         $tag = $model::where('slug', '=', $tagSlug)->first();
-
+        
         if(!$tag) {
             $tag = new $model;
             $tag->name = $tagString;
             $tag->slug = $tagSlug;
+            $tag->locale = $locale;
             $tag->suggest = false;
             $tag->save();
         }
-
+        
         $tag->count = $tag->count + $count;
         $tag->save();
     }

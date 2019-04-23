@@ -32,7 +32,7 @@ interface TaggingUtility
      * @param string $tagSlug
      * @param integer $count
      */
-    public function incrementCount($tagString, $tagSlug, $count);
+    public function incrementCount($tagString, $tagSlug, $count, $locale);
 
     /**
      * Private! Please do not call this function directly, let the Tag library use it.
