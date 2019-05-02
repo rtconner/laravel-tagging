@@ -176,7 +176,7 @@ trait Taggable
      *
      * @param Builder $query
      * @param array|string $tagNames
-     * @return mixed
+     * @return Builder
      */
     public function scopeWithAllTags(Builder $query, $tagNames): Builder
     {
@@ -244,7 +244,7 @@ trait Taggable
      * @param array|string $tagNames
      * @return Builder
      */
-    public function scopeWithoutTags(Builder $query, $tagNames)
+    public function scopeWithoutTags(Builder $query, $tagNames): Builder
     {
         if(!is_array($tagNames)) {
             $tagNames = func_get_args();
@@ -331,7 +331,7 @@ trait Taggable
     /**
      * Return an array of all of the tags that are in use by this model
      *
-     * @return Collection|Tagged[]
+     * @return Collection
      */
     public static function existingTags(): Collection
     {
