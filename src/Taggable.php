@@ -274,7 +274,12 @@ trait Taggable
      *
      * @param string $tagName
      */
-    private function addTag($tagName)
+    /**
+     * Adds a single tag
+     *
+     * @param string $tagName
+     */
+    private function addTag($tagName, $locale)
     {
         $tagName = trim($tagName);
 
@@ -300,7 +305,7 @@ trait Taggable
 
         $this->tagged()->save($tagged);
 
-        static::$taggingUtility->incrementCount($tagName, $tagSlug, 1);
+        static::$taggingUtility->incrementCount($tagName, $tagSlug, 1, $locale);
 
         unset($this->relations['tagged']);
         event(new TagAdded($this));
