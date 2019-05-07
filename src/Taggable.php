@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Copyright (C) 2014 Robert Conner
  *
+ * @method withAllTags(array)
+ * @method withAnyTags(array)
+ * @method withoutTags(array)
  * @property Collection|Tagged[] tagged
  * @property Collection|Tag[] tags
  * @property array tag_names
@@ -266,6 +269,7 @@ trait Taggable
             ->pluck('taggable_id');
 
         $primaryKey = $this->getKeyName();
+
         return $query->whereNotIn($this->getTable().'.'.$primaryKey, $tags);
     }
 
@@ -331,7 +335,7 @@ trait Taggable
     /**
      * Return an array of all of the tags that are in use by this model
      *
-     * @return Collection
+     * @return Collection|Tagged[]
      */
     public static function existingTags(): Collection
     {
