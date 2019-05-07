@@ -1,6 +1,7 @@
 <?php namespace Conner\Tagging\Contracts;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -11,7 +12,7 @@ interface TaggableContract {
     /**
      * Return collection of tagged rows related to the tagged model
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function tagged();
 
@@ -55,23 +56,34 @@ interface TaggableContract {
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array|string $tagNames
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithAllTags($query, $tagNames);
+    public function scopeWithAllTags(Builder $query, $tagNames): Builder;
 
     /**
      * Filter model to subset with the given tags
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array|string $tagNames
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithAnyTag($query, $tagNames);
+    public function scopeWithAnyTag(Builder $query, $tagNames): Builder;
+
+    /**
+     * Filter model to subset without the given tags
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string $tagNames
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithoutTags(Builder $query, $tagNames): Builder;
 
     /**
      * Return an array of all of the tags that are in use by this model
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public static function existingTags();
+    public static function existingTags(): Collection;
 
     /**
      * Should untag on delete
