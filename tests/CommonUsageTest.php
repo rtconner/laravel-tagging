@@ -2,14 +2,20 @@
 
 namespace Tests;
 
+use Conner\Tagging\Contracts\TaggableContract;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Taggable;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Collection;
 
 class CommonUsageTest extends TestCase
 {
+    use WithFaker;
+
     public function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
 
         \Schema::create('books', function ($table) {
             $table->increments('id');
@@ -29,7 +35,7 @@ class CommonUsageTest extends TestCase
 
     public function test_tag_call()
     {
-        $stub = Stub::create(['name'=>123]);
+        $stub = $this->book();
 
         $stub->tag('test123');
         $stub->tag('456');
@@ -40,7 +46,7 @@ class CommonUsageTest extends TestCase
 
     public function test_untag_call()
     {
-        $stub = Stub::create(['name'=>'Stub']);
+        $stub = $this->book();
 
         $stub->tag('one');
         $stub->tag('two');
@@ -56,8 +62,7 @@ class CommonUsageTest extends TestCase
 
     public function test_retag()
     {
-        /** @var Stub $stub */
-        $stub = Stub::create(['name'=>123]);
+        $stub = $this->book();
 
         $stub->tag('first');
         $stub->tag('second');
@@ -69,7 +74,7 @@ class CommonUsageTest extends TestCase
 
     public function test_tag_names_attribute()
     {
-        $stub = Stub::create(['name'=>123, 'tag_names'=>'foo, bar']);
+        $stub = $this->book(['tag_names'=>'foo, bar']);
 
         $stub->save();
 
@@ -78,8 +83,7 @@ class CommonUsageTest extends TestCase
 
     public function test_the_tagged_property()
     {
-        /** @var Stub $stub */
-        $stub = Stub::create(['name'=>123]);
+        $stub = $this->book();
 
         $stub->tag('first');
         $stub->tag('second');
@@ -93,8 +97,7 @@ class CommonUsageTest extends TestCase
 
     public function test_calling_tagNames_as_a_property()
     {
-        /** @var Stub $stub */
-        $stub = Stub::create(['name'=>123]);
+        $stub = $this->book();
 
         $stub->tag('first');
         $stub->tag('second');
@@ -105,8 +108,7 @@ class CommonUsageTest extends TestCase
 
     public function test_get_tags()
     {
-        /** @var Stub $stub */
-        $stub = Stub::create(['name'=>123]);
+        $stub = $this->book();
 
         $stub->tag('first');
         $stub->tag('second');
@@ -116,7 +118,7 @@ class CommonUsageTest extends TestCase
 
     public function test_setting_tag_names_array()
     {
-        $stub = new Stub();
+        $stub = new Book();
         $stub->name = 'test';
         $stub->tag_names = ['foo', 'bar'];
         $stub->save();
@@ -129,8 +131,7 @@ class CommonUsageTest extends TestCase
 
     public function test_tagging_with_empty_tags()
     {
-        /** @var Stub $stub */
-        $stub = Stub::create(['name'=>123]);
+        $stub = $this->book();
 
         $tagName = "Japan, Asia, Economy, , , , , ";
 
@@ -138,12 +139,71 @@ class CommonUsageTest extends TestCase
 
         $this->assertEquals(['Japan', 'Asia', 'Economy'], $stub->tag_names);
     }
+
+    function test_withAllTags()
+    {
+        $one = $this->book();
+        $two = $this->book();
+        $three = $this->book();
+
+        $one->tag(['one']);
+        $two->tag(['b', 'two']);
+        $three->tag(['one', 'two']);
+
+        $list = Book::withAllTags(['one', 'two'])->get();
+
+        $this->assertCount(1, $list);
+        $this->assertEquals($three->id, $list[0]->id);
+    }
+
+    function test_withAnyTags()
+    {
+        $one = $this->book();
+        $two = $this->book();
+        $three = $this->book();
+
+        $one->tag(['one']);
+        $two->tag(['b', 'two']);
+
+        /** @var Collection $list */
+        $list = Book::withAnyTag(['one', 'two'])->get();
+
+        $this->assertCount(2, $list);
+        $indexed = $list->keyBy('id');
+        $this->assertNotEmpty($indexed[$one->id]);
+        $this->assertNotEmpty($indexed[$two->id]);
+    }
+
+    function test_withoutTags()
+    {
+        $one = $this->book();
+        $two = $this->book();
+        $three = $this->book();
+
+        $one->tag(['one']);
+        $two->tag(['b', 'two']);
+
+        /** @var Collection $list */
+        $list = Book::withoutTags(['one', 'two'])->get();
+
+        $this->assertCount(1, $list);
+        $this->assertEquals($three->id, $list[0]->id);
+    }
+
+
+    private function book($attributes = []): Book
+    {
+        $attributes = array_merge(['name'=>$this->faker->name], $attributes);
+
+        return Book::create($attributes);
+    }
 }
+
 
 /**
  * @property string name
  */
-class Stub extends Eloquent
+class Book extends Eloquent implements TaggableContract
 {
     use Taggable;
 

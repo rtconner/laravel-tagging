@@ -6,11 +6,16 @@ use Conner\Tagging\Model\Tagged;
 
 class TaggedTest extends TestCase
 {
-    public function test_instantiation()
+    public function test_saving_a_tag_model()
     {
         Tagged::unguard();
 
-        $tagged = new Tagged(['taggable_id'=>'123', 'tag_slug'=> 'foo', 'tag_name'=>'Foo', 'taggable_type'=>'bar']);
+        $tagged = new Tagged([
+            'taggable_id'=>'123',
+            'tag_slug'=> 'foo',
+            'tag_name'=>'Foo',
+            'taggable_type'=>'bar',
+        ]);
 
         $tagged->save();
 

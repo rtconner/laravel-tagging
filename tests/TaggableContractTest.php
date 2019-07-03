@@ -11,6 +11,7 @@ class TaggableContractTest extends TestCase
     public function test_is_implemented_by_taggable_trait()
     {
         $implementation = new TraitImplementation();
+
         $this->assertNotNull($implementation);
     }
 }

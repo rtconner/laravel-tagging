@@ -16,9 +16,7 @@ class TagGroup extends Model
 {
     protected $table = 'tagging_tag_groups';
     public $timestamps = false;
-
-    /** @var TaggingUtility $taggingUtility */
-    protected $taggingUtility;
+    protected $fillable = ['name'];
 
     /**
      * @param array $attributes

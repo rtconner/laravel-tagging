@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Conner\Tagging\TaggingUtility;
+use Illuminate\Support\Str;
 
 class TaggingUtilityTest extends TestCase
 {
@@ -68,6 +69,17 @@ class TaggingUtilityTest extends TestCase
         $this->assertEquals(TaggingUtility::slug('Sugar Free'), TaggingUtility::normalize('Sugar Free'));
         $this->assertEquals(TaggingUtility::slug('ÐŸÐ§Ñ�Ð¦Ñ‰'), TaggingUtility::normalize('ÐŸÐ§Ñ�Ð¦Ñ‰'));
         $this->assertEquals(TaggingUtility::slug('quiÃ©nsÃ­'), TaggingUtility::normalize('quiÃ©nsÃ­'));
+
+        config(['tagging.normalizer' => function($str) { return 'aaa'; }]);
+        $this->assertEquals('aaa', TaggingUtility::normalize('some string'));
     }
 
+    public function test_displayize()
+    {
+        $this->assertEquals('Sugar Free', TaggingUtility::displayize('sugar free'));
+        $this->assertEquals(Str::title('ÐŸÐ§Ñ�Ð¦Ñ‰'), TaggingUtility::displayize('ÐŸÐ§Ñ�Ð¦Ñ‰'));
+
+        config(['tagging.displayer' => function($str) { return 'bbb'; }]);
+        $this->assertEquals('bbb', TaggingUtility::displayize('some string'));
+    }
 }

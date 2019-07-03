@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @package Conner\Tagging
- * @method withAllTags(array)
- * @method withAnyTags(array)
- * @method withoutTags(array)
+ * @method static withAllTags(array $tags)
+ * @method static withAnyTag(array $tags)
+ * @method static withoutTags(array $tags)
  * @property Collection|Tagged[] tagged
  * @property Collection|Tag[] tags
  * @property string[] tag_names
@@ -181,14 +181,13 @@ trait Taggable
             array_shift($tagNames);
         }
 
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
+        $tagNames = TaggingUtility::makeTagArray($tagNames);
 
-        $normalizer = [static::$taggingUtility, 'normalizer'];
         $className = $query->getModel()->getMorphClass();
 
         foreach($tagNames as $tagSlug) {
             $tags = Tagged::query()
-                ->where('tag_slug', call_user_func($normalizer, $tagSlug))
+                ->where('tag_slug', TaggingUtility::normalize($tagSlug))
                 ->where('taggable_type', $className)
                 ->get()
                 ->pluck('taggable_id');
@@ -366,7 +365,7 @@ trait Taggable
 
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
-        $normalizer = [TaggingUtility::class, 'normalizer'];
+        $normalizer = [TaggingUtility::class, 'normalize'];
 
         $tagNames = array_map($normalizer, $tagNames);
         $className = $query->getModel()->getMorphClass();
