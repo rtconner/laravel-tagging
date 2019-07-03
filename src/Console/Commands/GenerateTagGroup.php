@@ -2,7 +2,7 @@
 
 namespace Conner\Tagging\Console\Commands;
 
-use Conner\Tagging\Contracts\TaggingUtility;
+use Conner\Tagging\TaggingUtility;
 use Conner\Tagging\Model\TagGroup;
 use Illuminate\Console\Command;
 
@@ -22,16 +22,6 @@ class GenerateTagGroup extends Command
      */
     protected $description = 'Create a laravel tag group';
 
-    /** @var TaggingUtility $taggingUtility */
-    protected $taggingUtility;
-
-    public function __construct(TaggingUtility $taggingUtility)
-    {
-        parent::__construct();
-
-        $this->taggingUtility = $taggingUtility;
-    }
-
     /**
      * Execute the console command.
      *
@@ -39,14 +29,14 @@ class GenerateTagGroup extends Command
      */
     public function handle()
     {
-        $group_name = $this->argument('group_name');
+        $groupName = $this->argument('group_name');
 
-        $tag_group = new TagGroup();
-        $tag_group->name = $group_name;
-        $tag_group->slug = $this->taggingUtility->slug($group_name);
+        $tagGroup = new TagGroup();
+        $tagGroup->name = $groupName;
+        $tagGroup->slug = TaggingUtility::normalize($groupName);
 
-        $tag_group->save();
+        $tagGroup->save();
 
-        $this->info('Created tag group: ' . $group_name);
+        $this->info('Created tag group: ' . $groupName);
     }
 }

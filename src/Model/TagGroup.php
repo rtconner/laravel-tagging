@@ -1,24 +1,21 @@
 <?php namespace Conner\Tagging\Model;
 
-use Conner\Tagging\Contracts\TaggingUtility;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Conner\Tagging\TaggingUtility;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 /**
- * Copyright (C) 2014 Robert Conner
  * @package Conner\Tagging\Model
+ *
  * @property string id
  * @property string slug
  * @property string name
  * @property-read Collection|Tag[] tags
  */
-class TagGroup extends Eloquent
+class TagGroup extends Model
 {
     protected $table = 'tagging_tag_groups';
     public $timestamps = false;
-    protected $softDelete = false;
-    public $fillable = ['name'];
 
     /** @var TaggingUtility $taggingUtility */
     protected $taggingUtility;
@@ -30,11 +27,7 @@ class TagGroup extends Eloquent
     {
         parent::__construct($attributes);
 
-        if (function_exists('config') && $connection = config('tagging.connection')) {
-            $this->connection = $connection;
-        }
-
-        $this->taggingUtility = app(TaggingUtility::class);
+        $this->connection = config('tagging.connection');
     }
 
     /**
@@ -42,19 +35,17 @@ class TagGroup extends Eloquent
      */
     public function tags()
     {
-        $model = $this->taggingUtility->tagModelString();
+        $model = TaggingUtility::tagModelString();
 
         return $this->hasMany($model, 'tag_group_id');
     }
 
     /**
-     * sets the slug when setting the group name
-     *
-     * @return void
+     * @param $value
      */
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
+        $this->attributes['slug'] = TaggingUtility::normalize($value);
     }
 }

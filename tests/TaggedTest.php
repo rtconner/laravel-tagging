@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Conner\Tagging\Model\Tagged;
 
 class TaggedTest extends TestCase

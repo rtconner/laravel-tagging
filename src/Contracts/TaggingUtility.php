@@ -1,10 +1,12 @@
-<?php namespace Conner\Tagging\Contracts;
+<?php
+
+namespace Conner\Tagging\Contracts;
 
 /**
  * Interface of utility functions to help with various tagging functionality.
  *
  * @copyright Copyright (C) 2015 Robert Conner
- * @author Rob Conner <rtconner+gh@gmail.com>
+ * @author Robert Conner <rtconner+gh@gmail.com>
  */
 interface TaggingUtility
 {
@@ -17,12 +19,20 @@ interface TaggingUtility
     public function makeTagArray($tagNames);
 
     /**
-     * Create a web friendly URL slug from a string.
+     * Normalize a tag string
      *
-     * @param string $str
+     * @param string $string
      * @return string
      */
-    public static function slug($str);
+    public static function normalize($string);
+
+    /**
+     * Create a web friendly URL slug from a string
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function slug($string);
 
     /**
      * Private! Please do not call this function directly, just let the Tag library use it.
@@ -45,7 +55,7 @@ interface TaggingUtility
     public function decrementCount($tagString, $tagSlug, $count);
 
     /**
-     * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
+     * Look at the tags table and delete any tags that are no longer in use by any taggable database rows.
      * Does not delete tags where 'suggest' is true
      *
      * @return int
@@ -57,5 +67,5 @@ interface TaggingUtility
      *
      * @return string
      */
-    public function tagModelString();
+    public static function tagModelString();
 }

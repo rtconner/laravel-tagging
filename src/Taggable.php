@@ -2,7 +2,6 @@
 
 namespace Conner\Tagging;
 
-use Conner\Tagging\Contracts\TaggingUtility;
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
 use Conner\Tagging\Model\Tag;
@@ -11,20 +10,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Copyright (C) 2014 Robert Conner
- *
+ * @package Conner\Tagging
  * @method withAllTags(array)
  * @method withAnyTags(array)
  * @method withoutTags(array)
  * @property Collection|Tagged[] tagged
  * @property Collection|Tag[] tags
- * @property array tag_names
+ * @property string[] tag_names
  */
 trait Taggable
 {
-    /** @var \Conner\Tagging\Contracts\TaggingUtility **/
-    static $taggingUtility;
-
     /**
      * Temp storage for auto tag
      *
@@ -57,18 +52,16 @@ trait Taggable
         static::saved(function ($model) {
             $model->autoTagPostSave();
         });
-
-        static::$taggingUtility = app(TaggingUtility::class);
     }
 
     /**
      * Return collection of tagged rows related to the tagged model
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function tagged()
     {
-        return $this->morphMany(config('tagging.tagged_model', 'Conner\Tagging\Model\Tagged'), 'taggable')
+        return $this->morphMany(TaggingUtility::taggedModelString(), 'taggable')
             ->with('tag');
     }
 
@@ -77,7 +70,7 @@ trait Taggable
      * TODO : I'm sure there is a faster way to build this, but
      * If anyone knows how to do that, me love you long time.
      *
-     * @return Illuminate\Database\Eloquent\Collection|Tagged[]
+     * @return \Illuminate\Database\Eloquent\Collection|Tagged[]
      */
     public function getTagsAttribute()
     {
@@ -101,7 +94,7 @@ trait Taggable
      */
     public function tag($tagNames)
     {
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
+        $tagNames = TaggingUtility::makeTagArray($tagNames);
 
         foreach($tagNames as $tagName) {
             $this->addTag($tagName);
@@ -143,14 +136,14 @@ trait Taggable
             $tagNames = $this->tagNames();
         }
 
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
+        $tagNames = TaggingUtility::makeTagArray($tagNames);
 
         foreach($tagNames as $tagName) {
             $this->removeTag($tagName);
         }
 
         if(static::shouldDeleteUnused()) {
-            static::$taggingUtility->deleteUnusedTags();
+            TaggingUtility::deleteUnusedTags();
         }
     }
 
@@ -161,7 +154,7 @@ trait Taggable
      */
     public function retag($tagNames)
     {
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
+        $tagNames = TaggingUtility::makeTagArray($tagNames);
         $currentTagNames = $this->tagNames();
 
         $deletions = array_diff($currentTagNames, $tagNames);
@@ -190,8 +183,7 @@ trait Taggable
 
         $tagNames = static::$taggingUtility->makeTagArray($tagNames);
 
-        $normalizer = config('tagging.normalizer');
-        $normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
+        $normalizer = [static::$taggingUtility, 'normalizer'];
         $className = $query->getModel()->getMorphClass();
 
         foreach($tagNames as $tagSlug) {
@@ -217,27 +209,9 @@ trait Taggable
      */
     public function scopeWithAnyTag(Builder $query, $tagNames): Builder
     {
-        if(!is_array($tagNames)) {
-            $tagNames = func_get_args();
-            array_shift($tagNames);
-        }
+        $tags = $this->assembleTagsForScoping($query, $tagNames);
 
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
-
-        $normalizer = config('tagging.normalizer');
-        $normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
-
-        $tagNames = array_map($normalizer, $tagNames);
-        $className = $query->getModel()->getMorphClass();
-
-        $tags = Tagged::query()
-            ->whereIn('tag_slug', $tagNames)
-            ->where('taggable_type', $className)
-            ->get()
-            ->pluck('taggable_id');
-
-        $primaryKey = $this->getKeyName();
-        return $query->whereIn($this->getTable().'.'.$primaryKey, $tags);
+        return $query->whereIn($this->getTable().'.'.$this->getKeyName(), $tags);
     }
 
     /**
@@ -249,28 +223,9 @@ trait Taggable
      */
     public function scopeWithoutTags(Builder $query, $tagNames): Builder
     {
-        if(!is_array($tagNames)) {
-            $tagNames = func_get_args();
-            array_shift($tagNames);
-        }
+        $tags = $this->assembleTagsForScoping($query, $tagNames);
 
-        $tagNames = static::$taggingUtility->makeTagArray($tagNames);
-
-        $normalizer = config('tagging.normalizer');
-        $normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
-
-        $tagNames = array_map($normalizer, $tagNames);
-        $className = $query->getModel()->getMorphClass();
-
-        $tags = Tagged::query()
-            ->whereIn('tag_slug', $tagNames)
-            ->where('taggable_type', $className)
-            ->get()
-            ->pluck('taggable_id');
-
-        $primaryKey = $this->getKeyName();
-
-        return $query->whereNotIn($this->getTable().'.'.$primaryKey, $tags);
+        return $query->whereNotIn($this->getTable().'.'.$this->getKeyName(), $tags);
     }
 
     /**
@@ -286,25 +241,19 @@ trait Taggable
             return;
         }
 
-        $normalizer = config('tagging.normalizer');
-        $normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
-
-        $tagSlug = call_user_func($normalizer, $tagName);
+        $tagSlug = TaggingUtility::normalize($tagName);
 
         $previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
         if($previousCount >= 1) { return; }
 
-        $displayer = config('tagging.displayer');
-        $displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;
-
-        $tagged = new Tagged(array(
-            'tag_name'=>call_user_func($displayer, $tagName),
-            'tag_slug'=>$tagSlug,
-        ));
+        $tagged = new Tagged([
+            'tag_name' => TaggingUtility::displayize($tagName),
+            'tag_slug' => $tagSlug,
+        ]);
 
         $this->tagged()->save($tagged);
 
-        static::$taggingUtility->incrementCount($tagName, $tagSlug, 1);
+        TaggingUtility::incrementCount($tagName, $tagSlug, 1);
 
         unset($this->relations['tagged']);
         event(new TagAdded($this));
@@ -319,13 +268,10 @@ trait Taggable
     {
         $tagName = trim($tagName);
 
-        $normalizer = config('tagging.normalizer');
-        $normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
-
-        $tagSlug = call_user_func($normalizer, $tagName);
+        $tagSlug = TaggingUtility::normalize($tagName);
 
         if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
-            static::$taggingUtility->decrementCount($tagName, $tagSlug, $count);
+            TaggingUtility::decrementCount($tagName, $tagSlug, $count);
         }
 
         unset($this->relations['tagged']);
@@ -344,7 +290,7 @@ trait Taggable
             ->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
             ->where('taggable_type', '=', (new static)->getMorphClass())
             ->orderBy('tag_slug', 'ASC')
-            ->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
+            ->get(['tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count']);
     }
 
     /**
@@ -359,7 +305,7 @@ trait Taggable
             ->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
             ->join('tagging_tag_groups', 'tag_group_id', '=', 'tagging_tag_groups.id')
             ->where('taggable_type', '=', (new static)->getMorphClass())
-            ->whereIn('tagging_tag_groups.name',$groups)
+            ->whereIn('tagging_tag_groups.name', $groups)
             ->orderBy('tag_slug', 'ASC')
             ->get(array('tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count'));
     }
@@ -410,4 +356,28 @@ trait Taggable
             }
         }
     }
+
+    private function assembleTagsForScoping($query, $tagNames)
+    {
+        if(!is_array($tagNames)) {
+            $tagNames = func_get_args();
+            array_shift($tagNames);
+        }
+
+        $tagNames = TaggingUtility::makeTagArray($tagNames);
+
+        $normalizer = [TaggingUtility::class, 'normalizer'];
+
+        $tagNames = array_map($normalizer, $tagNames);
+        $className = $query->getModel()->getMorphClass();
+
+        $tags = Tagged::query()
+            ->whereIn('tag_slug', $tagNames)
+            ->where('taggable_type', $className)
+            ->get()
+            ->pluck('taggable_id');
+
+        return $tags;
+    }
+
 }

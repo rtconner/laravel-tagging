@@ -4,8 +4,6 @@ namespace Conner\Tagging\Providers;
 
 use Conner\Tagging\Console\Commands\GenerateTagGroup;
 use Illuminate\Support\ServiceProvider;
-use Conner\Tagging\Contracts\TaggingUtility;
-use Conner\Tagging\Util;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -38,18 +36,5 @@ class TaggingServiceProvider extends ServiceProvider
     public function register()
     {
         $this->commands($this->commands);
-
-        $this->app->singleton(TaggingUtility::class, function () {
-            return new Util;
-        });
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Illuminate\Support\ServiceProvider::provides()
-     */
-    public function provides()
-    {
-        return [TaggingUtility::class];
     }
 }

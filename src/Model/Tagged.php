@@ -1,11 +1,11 @@
 <?php namespace Conner\Tagging\Model;
 
-use Conner\Tagging\Contracts\TaggingUtility;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Conner\Tagging\TaggingUtility;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Copyright (C) 2014 Robert Conner
  * @package Conner\Tagging\Model
+ *
  * @property integer id
  * @property string taggable_id
  * @property string taggable_type
@@ -13,24 +13,17 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @property string tag_slug
  * @property Tag tag
  */
-class Tagged extends Eloquent
+class Tagged extends Model
 {
     protected $table = 'tagging_tagged';
     public $timestamps = false;
     protected $fillable = ['tag_name', 'tag_slug'];
 
-    /** @var TaggingUtility $taggingUtility */
-    protected $taggingUtility;
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
-        if (function_exists('config') && $connection = config('tagging.connection')) {
-            $this->connection = $connection;
-        }
-
-        $this->taggingUtility = app(TaggingUtility::class);
+        $this->connection = config('tagging.connection');
     }
 
     /**
@@ -50,7 +43,7 @@ class Tagged extends Eloquent
      */
     public function tag()
     {
-        $model = $this->taggingUtility->tagModelString();
+        $model = TaggingUtility::tagModelString();
         return $this->belongsTo($model, 'tag_slug', 'slug');
     }
 

@@ -1,8 +1,10 @@
 <?php
 
+namespace Tests;
+
 use Conner\Tagging\Contracts\TaggableContract;
 use Conner\Tagging\Taggable;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 class TaggableContractTest extends TestCase
 {
@@ -13,7 +15,7 @@ class TaggableContractTest extends TestCase
     }
 }
 
-class TraitImplementation extends Eloquent implements TaggableContract
+class TraitImplementation extends Model implements TaggableContract
 {
     use Taggable;
 }

@@ -1,22 +1,25 @@
-<?php namespace Conner\Tagging\Events;
+<?php
 
-use Illuminate\Queue\SerializesModels;
+namespace Conner\Tagging\Events;
+
+use Conner\Tagging\Taggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Queue\SerializesModels;
 
 class TagRemoved
 {
     use SerializesModels;
 
-    /** @var \Illuminate\Database\Eloquent\Model **/
+    /** @var \Conner\Tagging\Taggable **/
     public $model;
 
     /**
      * Create a new event instance.
      *
-     * @param  Model  $model
+     * @param Taggable|Model $model
      * @return void
      */
-    public function __construct(Model $model)
+    public function __construct($model)
     {
         $this->model = $model;
     }

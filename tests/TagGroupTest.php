@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\TagGroup;
@@ -15,7 +17,7 @@ class TagGroupTest extends TestCase
 
     public function test_create_group()
     {
-        $tag_group = $this->createTagGroup('MyTagGroup');
+        $tagGroup = $this->createTagGroup('MyTagGroup');
 
         $this->assertCount(1, TagGroup::all());
     }
@@ -86,11 +88,6 @@ class TagGroupTest extends TestCase
         return TagGroup::create([
             'name' => $group_name
         ]);
-        $tag_group->name = $group_name;
-        // $tag_group->slug = Str::slug($group_name);
-        $tag_group->save();
-
-        return $tag_group;
     }
 
     private function createTag($name = 'Test Tag')

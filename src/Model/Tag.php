@@ -1,11 +1,12 @@
-<?php namespace Conner\Tagging\Model;
+<?php
 
-use Conner\Tagging\Contracts\TaggingUtility;
+namespace Conner\Tagging\Model;
+
+use Conner\Tagging\TaggingUtility;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Copyright (C) 2014 Robert Conner
  * @package Conner\Tagging\Model
  * @property string id
  * @property string name
@@ -13,14 +14,14 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @property bool suggest
  * @property integer count
  * @property TagGroup group
+ * @method static suggested()
+ * @method static inGroup(string $groupName)
  */
-class Tag extends Eloquent
+class Tag extends Model
 {
     protected $table = 'tagging_tags';
     public $timestamps = false;
-    protected $softDelete = false;
     public $fillable = ['name'];
-    protected $taggingUtility;
 
     /**
      * @param array $attributes
@@ -29,23 +30,20 @@ class Tag extends Eloquent
     {
         parent::__construct($attributes);
 
-        if (function_exists('config') && $connection = config('tagging.connection')) {
-            $this->connection = $connection;
-        }
-
-        $this->taggingUtility = app(TaggingUtility::class);
+        $this->connection = config('tagging.connection');
     }
 
+    /**
+     * @inheritDoc
+     */
     public function save(array $options = [])
     {
         if(strlen($this->name) < 1) {
             throw new \RuntimeException('Cannot save a tag with an empty name');
         }
 
-        $normalizer = config('tagging.normalizer');
-        $normalizer = $normalizer ?: [$this->taggingUtility, 'slug'];
+        $this->slug = TaggingUtility::normalize($this->name);
 
-        $this->slug = call_user_func($normalizer, $this->name);
         return parent::save($options);
     }
 
@@ -56,7 +54,9 @@ class Tag extends Eloquent
      */
     public function setGroup($groupName)
     {
-        $tagGroup = TagGroup::where('slug', $this->taggingUtility->slug($groupName))->first();
+        $tagGroup = TagGroup::query()
+            ->where('slug', TaggingUtility::normalize($groupName))
+            ->first();
 
         if ($tagGroup) {
             $this->group()->associate($tagGroup);
@@ -75,7 +75,7 @@ class Tag extends Eloquent
      */
     public function removeGroup(string $groupName)
     {
-        $tagGroup = TagGroup::query()->where('slug', $this->taggingUtility->slug($groupName))->first();
+        $tagGroup = TagGroup::query()->where('slug', TaggingUtility::normalize($groupName))->first();
 
         if ($tagGroup) {
             $this->group()->dissociate($tagGroup);
@@ -94,9 +94,10 @@ class Tag extends Eloquent
      */
     public function isInGroup($groupName): bool
     {
-        if ($this->group && ($this->group->slug == $this->taggingUtility->slug($groupName))) {
+        if ($this->group && ($this->group->slug == TaggingUtility::normalize($groupName))) {
             return true;
         }
+
         return false;
     }
 
@@ -120,11 +121,11 @@ class Tag extends Eloquent
      * Get suggested tags
      * @param Builder $query
      * @param $groupName
-     * @return
+     * @return Builder
      */
     public function scopeInGroup(Builder $query, $groupName)
     {
-        $groupSlug = $this->taggingUtility->slug($groupName);
+        $groupSlug = TaggingUtility::normalize($groupName);
 
         return $query->whereHas('group', function (Builder $query) use ($groupSlug) {
             $query->where('slug', $groupSlug);
@@ -138,21 +139,18 @@ class Tag extends Eloquent
      */
     public function setNameAttribute(string $value)
     {
-        $displayer = config('tagging.displayer');
-        $displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;
-
-        $this->attributes['name'] = call_user_func($displayer, $value);
+        $this->attributes['name'] = TaggingUtility::displayize($value);
     }
 
     /**
-     * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
-     * Does not delete tags where 'suggest'value is true
+     * Look at the tags table and delete any tags that are no longer in use by any taggable database rows.
+     * Does not delete tags where 'suggest' value is true
      *
-     * @return int
+     * @return mixed
      */
     public static function deleteUnused()
     {
-        return (new static )->newQuery()
+        return (new static)->newQuery()
             ->where('count', '=', 0)
             ->where('suggest', false)
             ->delete();

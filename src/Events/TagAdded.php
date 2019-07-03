@@ -1,5 +1,6 @@
 <?php namespace Conner\Tagging\Events;
 
+use Conner\Tagging\Taggable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,10 +14,10 @@ class TagAdded
     /**
      * Create a new event instance.
      *
-     * @param  Model  $model
+     * @param Taggable|Model $model
      * @return void
      */
-    public function __construct(Model $model)
+    public function __construct($model)
     {
         $this->model = $model;
     }

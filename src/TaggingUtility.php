@@ -1,6 +1,6 @@
-<?php namespace Conner\Tagging;
+<?php
 
-use Conner\Tagging\Contracts\TaggingUtility;
+namespace Conner\Tagging;
 
 /**
  * Utility functions to help with various tagging functionality.
@@ -8,7 +8,7 @@ use Conner\Tagging\Contracts\TaggingUtility;
  * @author Rob Conner <rtconner@gmail.com>
  * @copyright Copyright (C) 2014 Robert Conner
  */
-class Util implements TaggingUtility
+class TaggingUtility
 {
     /**
      * Converts input into array
@@ -16,7 +16,7 @@ class Util implements TaggingUtility
      * @param string|array $tagNames
      * @return array
      */
-    public function makeTagArray($tagNames)
+    public static function makeTagArray($tagNames)
     {
         if(is_array($tagNames) && count($tagNames) == 1) {
             $tagNames = reset($tagNames);
@@ -33,14 +33,28 @@ class Util implements TaggingUtility
         return array_values($tagNames);
     }
 
+    public static function displayize($string)
+    {
+        $displayer = config('tagging.displayer');
+        $displayer = empty($displayer) ? '\Illuminate\Support\Str::title' : $displayer;
+
+        return call_user_func($displayer, $string);
+    }
+
+    public static function normalize($string)
+    {
+        $normalizer = config('tagging.normalizer');
+        $normalizer = $normalizer ?: self::class.'::slug';
+
+        return call_user_func($normalizer, $string);
+    }
+
     /**
-     * Create a web friendly URL slug from a string.
+     * Create normalize string slug.
      *
      * Although supported, transliteration is discouraged because
      * 1) most web browsers support UTF-8 characters in URLs
      * 2) transliteration causes a loss of information
-     *
-     * @author Sean Murphy <sean@iamseanmurphy.com>
      *
      * @param string $str
      * @return string
@@ -50,15 +64,15 @@ class Util implements TaggingUtility
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
         $str = mb_convert_encoding((string)$str, 'UTF-8');
 
-        $options = array(
+        $options = [
             'delimiter' => config('taggable.delimiter', '-'),
             'limit' => '255',
             'lowercase' => true,
             'replacements' => [],
             'transliterate' => true,
-        );
+        ];
 
-        $char_map = array(
+        $char_map = [
                 // Latin
                 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'AE', 'Ç' => 'C',
                 'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
@@ -87,8 +101,8 @@ class Util implements TaggingUtility
                 'ϊ' => 'i', 'ΰ' => 'y', 'ϋ' => 'y', 'ΐ' => 'i',
 
                 // Turkish
-                'Ş' => 'S', 'İ' => 'I', 'Ç' => 'C', 'Ü' => 'U', 'Ö' => 'O', 'Ğ' => 'G',
-                'ş' => 's', 'ı' => 'i', 'ç' => 'c', 'ü' => 'u', 'ö' => 'o', 'ğ' => 'g',
+                'Ş' => 'S', 'İ' => 'I', 'Ğ' => 'G',
+                'ş' => 's', 'ı' => 'i', 'ğ' => 'g',
 
                 // Russian
                 'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', 'Ж' => 'Zh',
@@ -113,16 +127,14 @@ class Util implements TaggingUtility
                 'ž' => 'z',
 
                 // Polish
-                'Ą' => 'A', 'Ć' => 'C', 'Ę' => 'e', 'Ł' => 'L', 'Ń' => 'N', 'Ó' => 'o', 'Ś' => 'S', 'Ź' => 'Z',
+                'Ą' => 'A', 'Ć' => 'C', 'Ę' => 'e', 'Ł' => 'L', 'Ń' => 'N', 'Ś' => 'S', 'Ź' => 'Z',
                 'Ż' => 'Z',
-                'ą' => 'a', 'ć' => 'c', 'ę' => 'e', 'ł' => 'l', 'ń' => 'n', 'ó' => 'o', 'ś' => 's', 'ź' => 'z',
+                'ą' => 'a', 'ć' => 'c', 'ę' => 'e', 'ł' => 'l', 'ń' => 'n', 'ś' => 's', 'ź' => 'z',
                 'ż' => 'z',
 
                 // Latvian
-                'Ā' => 'A', 'Č' => 'C', 'Ē' => 'E', 'Ģ' => 'G', 'Ī' => 'i', 'Ķ' => 'k', 'Ļ' => 'L', 'Ņ' => 'N',
-                'Š' => 'S', 'Ū' => 'u', 'Ž' => 'Z',
-                'ā' => 'a', 'č' => 'c', 'ē' => 'e', 'ģ' => 'g', 'ī' => 'i', 'ķ' => 'k', 'ļ' => 'l', 'ņ' => 'n',
-                'š' => 's', 'ū' => 'u', 'ž' => 'z',
+                'Ā' => 'A', 'Ē' => 'E', 'Ģ' => 'G', 'Ī' => 'i', 'Ķ' => 'k', 'Ļ' => 'L', 'Ņ' => 'N', 'Ū' => 'u',
+                'ā' => 'a', 'ē' => 'e', 'ģ' => 'g', 'ī' => 'i', 'ķ' => 'k', 'ļ' => 'l', 'ņ' => 'n', 'ū' => 'u',
 
                 //Romanian
                 'Ă' => 'A', 'ă' => 'a', 'Ș' => 'S', 'ș' => 's', 'Ț' => 'T', 'ț' => 't',
@@ -148,7 +160,7 @@ class Util implements TaggingUtility
 				'پ' => 'p', 'ق' => 'q', 'ر' => 'r', 'س' => 's', 'ت' => 't', 'ڤ' => 'v', 'و' => 'w',
 				'خ' => 'x', 'ی' => 'y', 'ز' => 'z', 'ڕ' => 'rr', 'ە' => 'e', 'ح' => 'hh', 'ع' => 'a', 'ش' => 'sh', 'غ' => 'gh', 'ك' => 'k',
 				'ڵ' => 'll', 'چ' => 'ch', 'ھ' => 'h', "ئ" => ''
-        );
+        ];
 
         // Make custom replacements
         $str = preg_replace(array_keys($options['replacements']), $options['replacements'], $str);
@@ -177,13 +189,13 @@ class Util implements TaggingUtility
      * Increment count of tag by one. This function will create tag record if it does not exist.
      *
      * @param string $tagString
-     * @param $tagSlug
-     * @param $count
+     * @param string $tagSlug
+     * @param integer $count
      */
-    public function incrementCount($tagString, $tagSlug, $count)
+    public static function incrementCount($tagString, $tagSlug, $count)
     {
         if($count <= 0) { return; }
-        $model = $this->tagModelString();
+        $model = static::tagModelString();
 
         $tag = $model::where('slug', '=', $tagSlug)->first();
 
@@ -205,10 +217,10 @@ class Util implements TaggingUtility
      *
      * @param string $tagString
      */
-    public function decrementCount($tagString, $tagSlug, $count)
+    public static function decrementCount($tagString, $tagSlug, $count)
     {
         if($count <= 0) { return; }
-        $model = $this->tagModelString();
+        $model = static::tagModelString();
 
         $tag = $model::where('slug', '=', $tagSlug)->first();
 
@@ -228,17 +240,25 @@ class Util implements TaggingUtility
      *
      * @return int
      */
-    public function deleteUnusedTags()
+    public static function deleteUnusedTags()
     {
-        $model = $this->tagModelString();
+        $model = static::tagModelString();
         return $model::deleteUnused();
     }
 
     /**
      * @return string
      */
-    public function tagModelString()
+    public static function tagModelString()
     {
         return config('tagging.tag_model', '\Conner\Tagging\Model\Tag');
+    }
+
+    /**
+     * @return string
+     */
+    public static function taggedModelString()
+    {
+        return config('tagging.tagged_model', 'Conner\Tagging\Model\Tagged');
     }
 }
