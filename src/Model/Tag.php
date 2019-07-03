@@ -13,9 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string slug
  * @property bool suggest
  * @property integer count
+ * @property integer tag_group_id
  * @property TagGroup group
  * @method static suggested()
- * @method static inGroup(string $groupName)
+ * @method static inGroup(string $group)
  */
 class Tag extends Model
 {
@@ -49,13 +50,13 @@ class Tag extends Model
 
     /**
      * Tag group setter
-     * @param string $groupName
+     * @param string $group
      * @return Tag
      */
-    public function setGroup($groupName)
+    public function setGroup(string $group)
     {
         $tagGroup = TagGroup::query()
-            ->where('slug', TaggingUtility::normalize($groupName))
+            ->where('slug', TaggingUtility::normalize($group))
             ->first();
 
         if ($tagGroup) {
@@ -64,27 +65,20 @@ class Tag extends Model
 
             return $this;
         } else {
-            throw new \RuntimeException('No Tag Group found: '. $groupName);
+            throw new \RuntimeException('No Tag Group found: '. $group);
         }
     }
 
     /**
      * Tag group remove
-     * @param string $groupName
      * @return Tag
      */
-    public function removeGroup(string $groupName)
+    public function removeGroup()
     {
-        $tagGroup = TagGroup::query()->where('slug', TaggingUtility::normalize($groupName))->first();
+        $this->group()->dissociate();
+        $this->save();
 
-        if ($tagGroup) {
-            $this->group()->dissociate($tagGroup);
-            $this->save();
-
-            return $this;
-        } else {
-            throw new \RuntimeException('No Tag Group found: '. $groupName);
-        }
+        return $this;
     }
 
     /**

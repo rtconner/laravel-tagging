@@ -5,12 +5,16 @@ namespace Tests;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\TagGroup;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class TagGroupTest extends TestCase
 {
+    use WithFaker;
+
     public function setUp(): void
     {
         parent::setUp();
+        $this->setUpFaker();
 
         Eloquent::unguard();
     }
@@ -24,73 +28,87 @@ class TagGroupTest extends TestCase
 
     public function test_tag_group_tags_list()
     {
-        $tag_group = $this->createTagGroup('MyTagGroup');
+        $tagGroup = $this->createTagGroup('MyTagGroup');
 
         $tag = $this->createTag();
 
-        $tag->setGroup($tag_group->name);
+        $tag->setGroup($tagGroup->name);
 
-        $this->assertEquals(1, $tag_group->tags()->count());
+        $this->assertEquals(1, $tagGroup->tags()->count());
+        $this->assertEquals($tagGroup->id, $tag->tag_group_id);
     }
 
     public function test_add_group_to_tag()
     {
-        $tag_group = $this->createTagGroup('MyTagGroup');
+        $tagGroup = $this->createTagGroup('MyTagGroup');
 
         $tag = $this->createTag();
 
-        $tag->setGroup($tag_group->name);
+        $tag->setGroup($tagGroup->name);
 
-        $this->assertCount(1, Tag::inGroup($tag_group->name)->get());
+        $this->assertCount(1, Tag::inGroup($tagGroup->name)->get());
 
         $this->assertTrue($tag->isInGroup('MyTagGroup'));
     }
 
     public function test_delete_group_from_tag()
     {
-        $tag_group = $this->createTagGroup('MyTagGroup');
+        $tagGroup = $this->createTagGroup('MyTagGroup');
 
         $tag = $this->createTag();
 
-        $tag->setGroup($tag_group->name);
+        $tag->setGroup($tagGroup->name);
 
-        $this->assertCount(1, Tag::inGroup($tag_group->name)->get());
+        $this->assertCount(1, Tag::inGroup($tagGroup->name)->get());
+        $this->assertEquals($tagGroup->id, $tag->tag_group_id);
 
-        $tag->removeGroup($tag_group->name);
+        $tag->removeGroup();
 
-        $this->assertCount(0, Tag::inGroup($tag_group->name)->get());
+        $this->assertCount(0, Tag::inGroup($tagGroup->name)->get());
 
         $this->assertFalse($tag->isInGroup('MyTagGroup'));
     }
 
+    public function test_removeGroup_with_no_group()
+    {
+        $tag = $this->createTag();
+
+        $tag->removeGroup();
+
+        $this->assertTrue(true); // no exceptions thrown
+    }
+
     public function test_delete_group_tag()
     {
-        $tag_group = $this->createTagGroup('MyTagGroup');
+        $tagGroup = $this->createTagGroup('MyTagGroup');
 
         $tag = $this->createTag();
 
-        $tag->setGroup($tag_group->name);
+        $tag->setGroup($tagGroup->name);
 
-        $tag_group->delete();
+        $tagGroup->delete();
 
         // unless you refresh the tag, it will still think there is a relationship
         $tag = $tag->fresh();
 
-        $this->assertFalse($tag_group->exists);
+        $this->assertFalse($tagGroup->exists);
 
         $this->assertNull($tag->group, 'The group should not exist on the tag after it is deleted');
 
         $this->assertFalse($tag->isInGroup('MyTagGroup'), 'The tag should not belong to a deleted group');
     }
 
-    private function createTagGroup($group_name = 'MyTagGroup')
+    private function createTagGroup($name = null): TagGroup
     {
+        if(is_null($name)) {
+            $name = $this->faker->name;
+        }
         return TagGroup::create([
-            'name' => $group_name
+            'name' => $name
         ]);
     }
 
-    private function createTag($name = 'Test Tag')
+    private function createTag($name = 'Test Tag'): Tag
     {
         $tag = new Tag();
         $tag->name = $name;
