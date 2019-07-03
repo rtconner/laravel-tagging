@@ -9,7 +9,7 @@ class TagAdded
 {
     use SerializesModels;
 
-    /** @var Model **/
+    /** @var Taggable|Model **/
     public $model;
 
     /** @var string */
