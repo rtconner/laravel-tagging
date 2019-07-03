@@ -10,17 +10,21 @@ class TagRemoved
 {
     use SerializesModels;
 
-    /** @var \Conner\Tagging\Taggable **/
+    /** @var Taggable|Model **/
     public $model;
+
+    /*** @var string */
+    public $tagSlug;
 
     /**
      * Create a new event instance.
      *
      * @param Taggable|Model $model
-     * @return void
+     * @param string $tagSlug
      */
-    public function __construct($model)
+    public function __construct($model, string $tagSlug)
     {
         $this->model = $model;
+        $this->tagSlug = $tagSlug;
     }
 }

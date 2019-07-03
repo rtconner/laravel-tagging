@@ -255,7 +255,8 @@ trait Taggable
         TaggingUtility::incrementCount($tagName, $tagSlug, 1);
 
         unset($this->relations['tagged']);
-        event(new TagAdded($this));
+
+        event(new TagAdded($this, $tagSlug, $tagged));
     }
 
     /**
@@ -273,8 +274,9 @@ trait Taggable
             TaggingUtility::decrementCount($tagName, $tagSlug, $count);
         }
 
-        unset($this->relations['tagged']);
-        event(new TagRemoved($this));
+        unset($this->relations['tagged']); // clear the "cache"
+
+        event(new TagRemoved($this, $tagSlug));
     }
 
     /**

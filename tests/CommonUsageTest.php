@@ -3,8 +3,8 @@
 namespace Tests;
 
 use Conner\Tagging\Contracts\TaggableContract;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Taggable;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
 
@@ -74,7 +74,7 @@ class CommonUsageTest extends TestCase
 
     public function test_tag_names_attribute()
     {
-        $stub = $this->book(['tag_names'=>'foo, bar']);
+        $stub = $this->book(['tag_names' => 'foo, bar']);
 
         $stub->save();
 
@@ -118,7 +118,7 @@ class CommonUsageTest extends TestCase
 
     public function test_setting_tag_names_array()
     {
-        $stub = new Book();
+        $stub = $this->book();
         $stub->name = 'test';
         $stub->tag_names = ['foo', 'bar'];
         $stub->save();
@@ -190,8 +190,7 @@ class CommonUsageTest extends TestCase
         $this->assertEquals($three->id, $list[0]->id);
     }
 
-
-    private function book($attributes = []): Book
+    function book($attributes = []): Book
     {
         $attributes = array_merge(['name'=>$this->faker->name], $attributes);
 
@@ -208,6 +207,6 @@ class Book extends Eloquent implements TaggableContract
     use Taggable;
 
     protected $connection = 'testing';
-
+    protected static $unguarded = true;
     public $table = 'books';
 }
