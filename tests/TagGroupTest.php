@@ -2,23 +2,11 @@
 
 namespace Tests;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\TagGroup;
-use Illuminate\Foundation\Testing\WithFaker;
 
 class TagGroupTest extends TestCase
 {
-    use WithFaker;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->setUpFaker();
-
-        Eloquent::unguard();
-    }
-
     public function test_create_group()
     {
         $tagGroup = $this->createTagGroup('MyTagGroup');

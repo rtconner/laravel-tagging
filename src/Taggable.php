@@ -130,7 +130,7 @@ trait Taggable
      *
      * @param string|array|null $tagNames (or null to remove all tags)
      */
-    public function untag($tagNames=null)
+    public function untag($tagNames = null)
     {
         if(is_null($tagNames)) {
             $tagNames = $this->tagNames();
@@ -138,8 +138,10 @@ trait Taggable
 
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
+        dump($tagNames);
+
         foreach($tagNames as $tagName) {
-            $this->removeTag($tagName);
+            $this->removeSingleTag($tagName);
         }
 
         if(static::shouldDeleteUnused()) {
@@ -264,7 +266,7 @@ trait Taggable
      *
      * @param $tagName string
      */
-    private function removeTag($tagName)
+    private function removeSingleTag($tagName)
     {
         $tagName = trim($tagName);
 

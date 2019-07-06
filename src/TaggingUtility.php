@@ -242,7 +242,7 @@ class TaggingUtility
     }
 
     /**
-     * Look at the tags table and delete any tags that are no londer in use by any taggable database rows.
+     * Look at the tags table and delete any tags that are no longer in use by any taggable database rows.
      * Does not delete tags where 'suggest' is true
      *
      * @return int

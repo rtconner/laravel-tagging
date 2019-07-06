@@ -2,10 +2,16 @@
 
 namespace Tests;
 
+use Conner\Tagging\Contracts\TaggableContract;
 use Conner\Tagging\Providers\TaggingServiceProvider;
+use Conner\Tagging\Taggable;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Foundation\Testing\WithFaker;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+    use WithFaker;
+
     protected function getPackageProviders($app)
     {
         return [TaggingServiceProvider::class];
@@ -15,11 +21,19 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
+        $this->setUpFaker();
+
         $this->artisan('migrate', [
             '--database' => 'testing',
             '--path' => realpath(__DIR__.'/../migrations'),
             '--realpath' => true,
         ]);
+
+        \Schema::create('books', function ($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -65,4 +79,23 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    function book($attributes = []): Book
+    {
+        $attributes = array_merge(['name'=>$this->faker->name], $attributes);
+
+        return Book::create($attributes);
+    }
+}
+
+/**
+ * @property string name
+ */
+class Book extends Eloquent implements TaggableContract
+{
+    use Taggable;
+
+    protected $connection = 'testing';
+    protected static $unguarded = true;
+    public $table = 'books';
 }

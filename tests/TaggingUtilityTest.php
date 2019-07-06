@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Conner\Tagging\Model\Tag;
 use Conner\Tagging\TaggingUtility;
 use Illuminate\Support\Str;
 
@@ -101,5 +102,18 @@ class TaggingUtilityTest extends TestCase
 
         config(['tagging.displayer' => function($str) { return 'bbb'; }]);
         $this->assertEquals('bbb', TaggingUtility::displayize('some string'));
+    }
+
+    public function test_deleteUnusedTags()
+    {
+        config(['tagging.delete_unused_tags'=>false]);
+        $book = $this->book();
+
+        $book->tag(['tag1', 'tag2', 'tag3']);
+        $book->untag();
+
+        TaggingUtility::deleteUnusedTags();
+
+        $this->assertEmpty(Tag::all());
     }
 }

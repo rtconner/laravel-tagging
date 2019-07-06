@@ -2,30 +2,11 @@
 
 namespace Tests;
 
-use Conner\Tagging\Contracts\TaggableContract;
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
-use Conner\Tagging\Taggable;
-use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Foundation\Testing\WithFaker;
 
 class EventTests extends TestCase
 {
-    use WithFaker;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->setUpFaker();
-
-        \Schema::create('books', function ($table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->timestamps();
-        });
-    }
-
     function test_tag_added()
     {
         \Event::listen(TagAdded::class, function(TagAdded $event){
@@ -50,23 +31,4 @@ class EventTests extends TestCase
 
         $book->untag('Test');
     }
-
-    function book($attributes = []): Book
-    {
-        $attributes = array_merge(['name'=>$this->faker->name], $attributes);
-
-        return Book::create($attributes);
-    }
-}
-
-/**
- * @property string name
- */
-class Book extends Eloquent implements TaggableContract
-{
-    use Taggable;
-
-    protected $connection = 'testing';
-    protected static $unguarded = true;
-    public $table = 'books';
 }
