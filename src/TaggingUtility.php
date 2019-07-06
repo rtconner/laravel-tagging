@@ -2,6 +2,8 @@
 
 namespace Conner\Tagging;
 
+use Illuminate\Support\Str;
+
 /**
  * Utility functions to help with various tagging functionality.
  *
@@ -44,6 +46,11 @@ class TaggingUtility
     public static function normalize($string)
     {
         $normalizer = config('tagging.normalizer');
+
+        if(is_string($normalizer) && Str::contains($normalizer, 'Conner\Tagging\Util')) {
+            $normalizer = '\Conner\Tagging\TaggingUtility::slug';
+        }
+
         $normalizer = $normalizer ?: self::class.'::slug';
 
         return call_user_func($normalizer, $string);

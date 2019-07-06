@@ -74,6 +74,26 @@ class TaggingUtilityTest extends TestCase
         $this->assertEquals('aaa', TaggingUtility::normalize('some string'));
     }
 
+    public function test_normalizer_with_old_class()
+    {
+        $this->assertEquals(TaggingUtility::slug('Sugar Free'), TaggingUtility::normalize('Sugar Free'));
+        $this->assertEquals(TaggingUtility::slug('ÐŸÐ§Ñ�Ð¦Ñ‰'), TaggingUtility::normalize('ÐŸÐ§Ñ�Ð¦Ñ‰'));
+        $this->assertEquals(TaggingUtility::slug('quiÃ©nsÃ­'), TaggingUtility::normalize('quiÃ©nsÃ­'));
+
+        config(['tagging.normalizer' => '\Conner\Tagging\Util::slug']);
+        $this->assertEquals('some-string', TaggingUtility::normalize('some string'));
+    }
+
+    public function test_normalizer_with_new_class()
+    {
+        $this->assertEquals(TaggingUtility::slug('Sugar Free'), TaggingUtility::normalize('Sugar Free'));
+        $this->assertEquals(TaggingUtility::slug('ÐŸÐ§Ñ�Ð¦Ñ‰'), TaggingUtility::normalize('ÐŸÐ§Ñ�Ð¦Ñ‰'));
+        $this->assertEquals(TaggingUtility::slug('quiÃ©nsÃ­'), TaggingUtility::normalize('quiÃ©nsÃ­'));
+
+        config(['tagging.normalizer' => '\Conner\Tagging\TaggingUtility::slug']);
+        $this->assertEquals('some-string', TaggingUtility::normalize('some string'));
+    }
+
     public function test_displayize()
     {
         $this->assertEquals('Sugar Free', TaggingUtility::displayize('sugar free'));

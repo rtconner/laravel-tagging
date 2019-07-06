@@ -6,7 +6,7 @@ return [
 	'primary_keys_type' => 'integer', // 'string' or 'integer'
 		
 	// Value of are passed through this before save of tags
-	'normalizer' => '\Conner\Tagging\Util::slug',
+	'normalizer' => '\Conner\Tagging\TaggingUtility::slug',
 	
 	// Display value of tags are passed through (for front end display)
 	'displayer' => '\Illuminate\Support\Str::title',
