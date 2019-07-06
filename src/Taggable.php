@@ -138,8 +138,6 @@ trait Taggable
 
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
-        dump($tagNames);
-
         foreach($tagNames as $tagName) {
             $this->removeSingleTag($tagName);
         }
