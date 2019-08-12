@@ -1,4 +1,6 @@
-<?php namespace Conner\Tagging\Events;
+<?php
+
+namespace Conner\Tagging\Events;
 
 use Conner\Tagging\Model\Tagged;
 use Conner\Tagging\Taggable;

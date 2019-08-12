@@ -12,8 +12,8 @@
   ],
   "require": {
     "php": ">= 7.0",
-    "illuminate/database": "^5.0",
-    "illuminate/support": "^5.0"
+    "illuminate/database": ">= 5.0",
+    "illuminate/support": ">= 5.0"
   },
   "require-dev": {
     "orchestra/testbench": "~3.8",
@@ -28,7 +28,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "ConnerTests\\": "tests/"
     }
   },
   "extra": {

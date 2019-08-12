@@ -186,7 +186,10 @@ trait Taggable
         $className = $query->getModel()->getMorphClass();
 
         foreach($tagNames as $tagSlug) {
-            $tags = Tagged::query()
+
+            $model = TaggingUtility::taggedModelString();
+
+            $tags = $model::query()
                 ->where('tag_slug', TaggingUtility::normalize($tagSlug))
                 ->where('taggable_type', $className)
                 ->get()
@@ -245,7 +248,9 @@ trait Taggable
         $previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
         if($previousCount >= 1) { return; }
 
-        $tagged = new Tagged([
+        $model = TaggingUtility::taggedModelString();
+
+        $tagged = new $model([
             'tag_name' => TaggingUtility::displayize($tagName),
             'tag_slug' => $tagSlug,
         ]);
@@ -286,7 +291,9 @@ trait Taggable
      */
     public static function existingTags(): Collection
     {
-        return Tagged::query()
+        $model = TaggingUtility::taggedModelString();
+
+        return $model::query()
             ->distinct()
             ->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
             ->where('taggable_type', '=', (new static)->getMorphClass())
@@ -301,7 +308,9 @@ trait Taggable
      */
     public static function existingTagsInGroups($groups): Collection
     {
-        return Tagged::query()
+        $model = TaggingUtility::taggedModelString();
+
+        return $model::query()
             ->distinct()
             ->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
             ->join('tagging_tag_groups', 'tag_group_id', '=', 'tagging_tag_groups.id')
@@ -372,7 +381,9 @@ trait Taggable
         $tagNames = array_map($normalizer, $tagNames);
         $className = $query->getModel()->getMorphClass();
 
-        $tags = Tagged::query()
+        $model = TaggingUtility::taggedModelString();
+
+        $tags = $model::query()
             ->whereIn('tag_slug', $tagNames)
             ->where('taggable_type', $className)
             ->get()

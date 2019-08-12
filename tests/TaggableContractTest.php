@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace ConnerTests;
 
 use Conner\Tagging\Contracts\TaggableContract;
 use Conner\Tagging\Taggable;

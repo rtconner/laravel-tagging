@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace ConnerTests;
 
 use Conner\Tagging\Model\Tag;
 

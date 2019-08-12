@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace ConnerTests;
 
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace ConnerTests;
 
 use Illuminate\Support\Collection;
 
