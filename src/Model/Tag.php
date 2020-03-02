@@ -55,7 +55,9 @@ class Tag extends Model
      */
     public function setGroup(string $group)
     {
-        $tagGroup = TagGroup::query()
+        $model = TaggingUtility::tagGroupModelString();
+
+        $tagGroup = $model::query()
             ->where('slug', TaggingUtility::normalize($group))
             ->first();
 
@@ -100,7 +102,7 @@ class Tag extends Model
      */
     public function group()
     {
-        return $this->belongsTo(TagGroup::class, 'tag_group_id');
+        return $this->belongsTo(TaggingUtility::tagGroupModelString(), 'tag_group_id');
     }
 
     /**

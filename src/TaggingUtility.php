@@ -266,6 +266,14 @@ class TaggingUtility
      */
     public static function taggedModelString()
     {
-        return config('tagging.tagged_model', 'Conner\Tagging\Model\Tagged');
+        return config('tagging.tagged_model', '\Conner\Tagging\Model\Tagged');
+    }
+
+    /**
+     * @return string
+     */
+    public static function tagGroupModelString()
+    {
+        return config('tagging.tag_group_model', '\Conner\Tagging\Model\TagGroup');
     }
 }

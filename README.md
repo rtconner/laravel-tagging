@@ -7,6 +7,8 @@ Laravel Taggable Trait
 [![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=laravel-7)](https://travis-ci.org/rtconner/laravel-tagging)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/badges/quality-score.png?b=laravel-7)](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/?branch=laravel-7)
 
+
+
 This package is not meant to handle javascript or html in any way. This package handles database storage and read/writes only.
 
 There are no real limits on what characters can be used in a tag. It uses a slug transform to determine if two tags are identical ("sugar-free" and "Sugar Free" would be treated as the same tag). Tag display names are run through Str::title()

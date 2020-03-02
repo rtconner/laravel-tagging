@@ -3,7 +3,6 @@
 namespace Conner\Tagging\Console\Commands;
 
 use Conner\Tagging\TaggingUtility;
-use Conner\Tagging\Model\TagGroup;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -19,7 +18,7 @@ class GenerateTagGroup extends Command
     {
         $groupName = $this->argument('group');
 
-        $tagGroup = new TagGroup();
+        $tagGroup = new ${TaggingUtility::tagGroupModelString()};
         $tagGroup->name = $groupName;
         $tagGroup->slug = TaggingUtility::normalize($groupName);
 

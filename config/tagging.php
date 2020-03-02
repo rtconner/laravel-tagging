@@ -25,7 +25,10 @@ return [
 
 	// Delimiter used within tags
 	'delimiter' => '-',
-	
-	// Model to use for the relation between tags and tagged records
+
+    'tag_model' => '\Conner\Tagging\Model\Tag',
+
 	'tagged_model' => '\Conner\Tagging\Model\Tagged',
+
+    'tag_group_model' => '\Conner\Tagging\Model\TagGroup',
 ];

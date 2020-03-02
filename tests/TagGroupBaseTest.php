@@ -4,6 +4,7 @@ namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\TagGroup;
+use Conner\Tagging\TaggingUtility;
 
 class TagGroupBaseTest extends BaseTestCase
 {
@@ -91,7 +92,10 @@ class TagGroupBaseTest extends BaseTestCase
         if(is_null($name)) {
             $name = $this->faker->name;
         }
-        return TagGroup::create([
+
+        $model = TaggingUtility::tagGroupModelString();
+
+        return $model::create([
             'name' => $name
         ]);
     }
