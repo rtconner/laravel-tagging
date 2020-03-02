@@ -1,10 +1,10 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Model\Tag;
 
-class TagTest extends TestCase
+class TagBaseTest extends BaseTestCase
 {
     public function test_saving_a_tag()
     {

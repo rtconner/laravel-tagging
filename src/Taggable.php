@@ -58,6 +58,7 @@ trait Taggable
      * Return collection of tagged rows related to the tagged model
      *
      * @return \Illuminate\Database\Eloquent\Collection
+     * @access private
      */
     public function tagged()
     {
@@ -92,13 +93,23 @@ trait Taggable
      *
      * @param string|array $tagNames
      */
-    public function tag($tagNames)
+    public function addTags($tagNames)
     {
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
         foreach($tagNames as $tagName) {
-            $this->addTag($tagName);
+            $this->addSingleTag($tagName);
         }
+    }
+
+    /**
+     * Perform the action of tagging the model with the given string
+     *
+     * @param string|array $tagNames
+     */
+    public function tag($tagNames)
+    {
+        return $this->addTags($tagNames);
     }
 
     /**
@@ -163,7 +174,7 @@ trait Taggable
         $this->untag($deletions);
 
         foreach($additions as $tagName) {
-            $this->addTag($tagName);
+            $this->addSingleTag($tagName);
         }
     }
 
@@ -173,6 +184,7 @@ trait Taggable
      * @param Builder $query
      * @param array|string $tagNames
      * @return Builder
+     * @access private
      */
     public function scopeWithAllTags(Builder $query, $tagNames): Builder
     {
@@ -208,6 +220,7 @@ trait Taggable
      * @param Builder $query
      * @param array|string $tagNames
      * @return Builder
+     * @access private
      */
     public function scopeWithAnyTag(Builder $query, $tagNames): Builder
     {
@@ -222,6 +235,7 @@ trait Taggable
      * @param Builder $query
      * @param array|string $tagNames
      * @return Builder
+     * @access private
      */
     public function scopeWithoutTags(Builder $query, $tagNames): Builder
     {
@@ -235,7 +249,7 @@ trait Taggable
      *
      * @param string $tagName
      */
-    private function addTag($tagName)
+    private function addSingleTag($tagName)
     {
         $tagName = trim($tagName);
 

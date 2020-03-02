@@ -1,10 +1,10 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Model\Tagged;
 
-class TaggedTest extends TestCase
+class TaggedBaseTest extends BaseTestCase
 {
     public function test_saving_a_tag_model()
     {

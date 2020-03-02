@@ -23,9 +23,7 @@ class TaggingServiceProvider extends ServiceProvider
             __DIR__.'/../../config/tagging.php' => config_path('tagging.php')
         ], 'config');
 
-        $this->publishes([
-            __DIR__.'/../../migrations/' => database_path('migrations')
-        ], 'migrations');
+        $this->loadMigrationsFrom(realpath(__DIR__.'/../../migrations'));
     }
 
     /**

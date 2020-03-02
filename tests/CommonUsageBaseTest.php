@@ -1,10 +1,10 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Illuminate\Support\Collection;
 
-class CommonUsageTest extends TestCase
+class CommonUsageBaseTest extends BaseTestCase
 {
     public function test_tag_call()
     {

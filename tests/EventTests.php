@@ -1,11 +1,11 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
 
-class EventTests extends TestCase
+class EventTests extends BaseTestCase
 {
     function test_tag_added()
     {

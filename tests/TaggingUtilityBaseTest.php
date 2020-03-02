@@ -1,12 +1,12 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\TaggingUtility;
 use Illuminate\Support\Str;
 
-class TaggingUtilityTest extends TestCase
+class TaggingUtilityBaseTest extends BaseTestCase
 {
     public function test_make_tag_array()
     {

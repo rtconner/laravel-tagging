@@ -1,11 +1,11 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Model\Tag;
 use Conner\Tagging\Model\TagGroup;
 
-class TagGroupTest extends TestCase
+class TagGroupBaseTest extends BaseTestCase
 {
     public function test_create_group()
     {

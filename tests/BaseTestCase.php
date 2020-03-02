@@ -1,16 +1,19 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Contracts\TaggableContract;
 use Conner\Tagging\Providers\TaggingServiceProvider;
 use Conner\Tagging\Taggable;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Orchestra\Testbench\TestCase;
 
-abstract class TestCase extends \Orchestra\Testbench\TestCase
+abstract class BaseTestCase extends TestCase
 {
     use WithFaker;
+    use RefreshDatabase;
 
     protected function getPackageProviders($app)
     {
@@ -23,11 +26,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->setUpFaker();
 
-        $this->artisan('migrate', [
-            '--database' => 'testing',
-            '--path' => realpath(__DIR__.'/../migrations'),
-            '--realpath' => true,
-        ]);
+        $this->artisan('migrate')->run();
 
         \Schema::create('books', function ($table) {
             $table->increments('id');
@@ -44,7 +43,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
             'driver'   => 'sqlite',
@@ -91,7 +89,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 /**
  * @property string name
  */
-class Book extends Eloquent implements TaggableContract
+class Book extends Model implements TaggableContract
 {
     use Taggable;
 

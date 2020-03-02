@@ -1,10 +1,10 @@
 <?php
 
-namespace ConnerTests;
+namespace Conner\Tests\Tagging;
 
 use Conner\Tagging\Model\Tag;
 
-class ConfigTest extends TestCase
+class ConfigBaseTest extends BaseTestCase
 {
     public function test_delete_unused_tags_true()
     {
