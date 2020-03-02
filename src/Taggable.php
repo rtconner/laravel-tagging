@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @package Conner\Tagging
- * @method static withAllTags(array $tags)
- * @method static withAnyTag(array $tags)
- * @method static withoutTags(array $tags)
+ * @method static Builder withAllTags(array $tags)
+ * @method static Builder withAnyTag(array $tags)
+ * @method static Builder withoutTags(array $tags)
  * @property Collection|Tagged[] tagged
  * @property Collection|Tag[] tags
  * @property string[] tag_names
