@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer count
  * @property integer tag_group_id
  * @property TagGroup group
+ * @property string description
  * @method static suggested()
  * @method static inGroup(string $group)
  */
@@ -22,7 +23,7 @@ class Tag extends Model
 {
     protected $table = 'tagging_tags';
     public $timestamps = false;
-    public $fillable = ['name'];
+    public $fillable = ['name', 'description'];
 
     /**
      * @param array $attributes

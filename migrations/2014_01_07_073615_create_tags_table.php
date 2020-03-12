@@ -11,6 +11,7 @@ class CreateTagsTable extends Migration
 			$table->increments('id');
 			$table->string('slug', 125)->index();
 			$table->string('name', 125);
+			$table->text('description')->nullable();
 			$table->boolean('suggest')->default(false);
 			$table->integer('count')->unsigned()->default(0); // count of how many times this tag was used
             $table->integer('tag_group_id')->unsigned()->nullable();
