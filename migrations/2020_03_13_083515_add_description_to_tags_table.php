@@ -7,7 +7,7 @@ class AddDescriptionToTagsTable extends Migration {
 
     public function up()
     {
-        Schema::table('tags', function ($table) {
+        Schema::table('tagging_tags', function ($table) {
             $table->text('description')->nullable();
         });
 
@@ -16,7 +16,7 @@ class AddDescriptionToTagsTable extends Migration {
 
     public function down()
     {
-        Schema::table('tags', function ($table) {
+        Schema::table('tagging_tags', function ($table) {
             $table->dropColumn('description');
         });
     }
