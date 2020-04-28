@@ -18,7 +18,9 @@ class GenerateTagGroup extends Command
     {
         $groupName = $this->argument('group');
 
-        $tagGroup = new ${TaggingUtility::tagGroupModelString()};
+        $tagGroupModel = TaggingUtility::tagGroupModelString();
+
+        $tagGroup = new $tagGroupModel();
         $tagGroup->name = $groupName;
         $tagGroup->slug = TaggingUtility::normalize($groupName);
 
