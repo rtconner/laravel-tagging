@@ -4,22 +4,15 @@ Laravel Taggable Trait
 [![Latest Stable Version](https://poser.pugx.org/rtconner/laravel-tagging/v/stable.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
 [![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
 [![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
-[![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=laravel-7)](https://travis-ci.org/rtconner/laravel-tagging)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/badges/quality-score.png?b=laravel-7)](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/?branch=laravel-7)
-
-
+[![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=laravel-8)](https://travis-ci.org/rtconner/laravel-tagging)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/badges/quality-score.png?b=laravel-8)](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/?branch=laravel-8)
 
 This package is not meant to handle javascript or html in any way. This package handles database storage and read/writes only.
 
 There are no real limits on what characters can be used in a tag. It uses a slug transform to determine if two tags are identical ("sugar-free" and "Sugar Free" would be treated as the same tag). Tag display names are run through Str::title()
 
-[Laravel/Lumen 5 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-5)
-[Laravel 4 Documentation](https://github.com/rtconner/laravel-tagging/tree/laravel-4)
-
-#### Composer Install (for Laravel 5/6/7 and Lumen 5/6/7)
-
-```shell
-composer require rtconner/laravel-tagging "~4.0"
+```bash
+composer require rtconner/laravel-tagging
 ```
 
 #### Install and then Run the migrations
@@ -83,11 +76,6 @@ Article::existingTags(); // return collection of all existing tags on any articl
 ###### Lumen Installation
 
 [Documentation: Lumen](docs/lumen.md)
-
-#### Upgrading Laravel 4 to 5
-
-This library stores full model class names into the database. When you upgrade laravel and you add namespaces to your models, you will need to update the records stored in the database.
-Alternatively you can override Model::$morphClass on your model class to match the string stored in the database.
 
 #### Credits
 
