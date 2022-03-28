@@ -205,7 +205,8 @@ trait Taggable
                 ->where('tag_slug', TaggingUtility::normalize($tagSlug))
                 ->where('taggable_type', $className)
                 ->get()
-                ->pluck('taggable_id');
+                ->pluck('taggable_id')
+                ->unique();
 
             $primaryKey = $this->getKeyName();
             $query->whereIn($this->getTable().'.'.$primaryKey, $tags);
@@ -401,7 +402,8 @@ trait Taggable
             ->whereIn('tag_slug', $tagNames)
             ->where('taggable_type', $className)
             ->get()
-            ->pluck('taggable_id');
+            ->pluck('taggable_id')
+            ->unique();
 
         return $tags;
     }
