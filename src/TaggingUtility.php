@@ -72,7 +72,7 @@ class TaggingUtility
         $str = mb_convert_encoding((string)$str, 'UTF-8');
 
         $options = [
-            'delimiter' => config('taggable.delimiter', '-'),
+            'delimiter' => config('tagging.delimiter', '-'),
             'limit' => '255',
             'lowercase' => true,
             'replacements' => [],
