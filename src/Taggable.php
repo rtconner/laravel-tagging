@@ -93,12 +93,12 @@ trait Taggable
      *
      * @param string|array $tagNames
      */
-    public function addTags($tagNames)
+    public function addTags($tagNames, $locale)
     {
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
-        foreach($tagNames as $tagName) {
-            $this->addSingleTag($tagName);
+        foreach ($tagNames as $tagName) {
+            $this->addSingleTag($tagName, $locale);
         }
     }
 
@@ -107,9 +107,9 @@ trait Taggable
      *
      * @param string|array $tagNames
      */
-    public function tag($tagNames)
+    public function tag($tagNames, $locale = 'en')
     {
-        return $this->addTags($tagNames);
+        return $this->addTags($tagNames, $locale);
     }
 
     /**
@@ -250,29 +250,32 @@ trait Taggable
      *
      * @param string $tagName
      */
-    private function addSingleTag($tagName)
+    private function addSingleTag($tagName, $locale)
     {
         $tagName = trim($tagName);
 
-        if(strlen($tagName) == 0) {
+        if (strlen($tagName) == 0) {
             return;
         }
 
         $tagSlug = TaggingUtility::normalize($tagName);
 
         $previousCount = $this->tagged()->where('tag_slug', '=', $tagSlug)->take(1)->count();
-        if($previousCount >= 1) { return; }
+        if ($previousCount >= 1) {
+            return;
+        }
 
         $model = TaggingUtility::taggedModelString();
 
         $tagged = new $model([
             'tag_name' => TaggingUtility::displayize($tagName),
             'tag_slug' => $tagSlug,
+            'locale' => $locale,
         ]);
 
         $this->tagged()->save($tagged);
 
-        TaggingUtility::incrementCount($tagName, $tagSlug, 1);
+        TaggingUtility::incrementCount($tagName, $tagSlug, 1,  $locale);
 
         unset($this->relations['tagged']);
 

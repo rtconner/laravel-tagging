@@ -23,7 +23,7 @@ class Tag extends Model
 {
     protected $table = 'tagging_tags';
     public $timestamps = false;
-    public $fillable = ['name', 'description'];
+    public $fillable = ['name', 'description', 'locale'];
 
     /**
      * @param array $attributes
