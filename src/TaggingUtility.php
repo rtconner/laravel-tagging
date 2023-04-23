@@ -201,18 +201,21 @@ class TaggingUtility
      * @param string $tagSlug
      * @param integer $count
      */
-    public static function incrementCount($tagString, $tagSlug, $count)
+    public static function incrementCount($tagString, $tagSlug, $count, $locale)
     {
-        if($count <= 0) { return; }
+        if ($count <= 0) {
+            return;
+        }
         $model = static::tagModelString();
 
         $tag = $model::where('slug', '=', $tagSlug)->first();
 
-        if(!$tag) {
+        if (!$tag) {
             $tag = new $model;
             $tag->name = $tagString;
             $tag->slug = $tagSlug;
             $tag->suggest = false;
+            $tag->locale = $locale;
             $tag->save();
         }
 

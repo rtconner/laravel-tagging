@@ -12,7 +12,7 @@ interface TaggableContract {
      *
      * @param string|array $tagNames
      */
-    public function addTags($tagNames);
+    public function addTags($tagNames, $locale);
 
     /**
      * Return array of the tag names related to the current model
