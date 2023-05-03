@@ -6,9 +6,6 @@ use Illuminate\Support\Str;
 
 /**
  * Utility functions to help with various tagging functionality.
- *
- * @author Rob Conner <rtconner@gmail.com>
- * @copyright Copyright (C) 2014 Robert Conner
  */
 class TaggingUtility
 {
@@ -20,13 +17,13 @@ class TaggingUtility
      */
     public static function makeTagArray($tagNames)
     {
-        if(is_array($tagNames) && count($tagNames) == 1) {
+        if (is_array($tagNames) && count($tagNames) == 1) {
             $tagNames = reset($tagNames);
         }
 
-        if(is_string($tagNames)) {
+        if (is_string($tagNames)) {
             $tagNames = explode(',', $tagNames);
-        } elseif(!is_array($tagNames)) {
+        } elseif (!is_array($tagNames)) {
             $tagNames = array(null);
         }
 
@@ -47,7 +44,7 @@ class TaggingUtility
     {
         $normalizer = config('tagging.normalizer');
 
-        if(is_string($normalizer) && Str::contains($normalizer, 'Conner\Tagging\Util')) {
+        if (is_string($normalizer) && Str::contains($normalizer, 'Conner\Tagging\Util')) {
             $normalizer = '\Conner\Tagging\TaggingUtility::slug';
         }
 
@@ -162,7 +159,7 @@ class TaggingUtility
                 'ỹ' => 'y', 'Ỹ' => 'Y', 'ỵ' => 'y', 'Ỵ' => 'Y',
             
                 //Kurdish
-		'ا' => 'a', 'ب' => 'b', 'ج' => 'c', 'د' => 'd', 'ێ' => 'e', 'ف' => 'f', 'گ' => 'g', 'ژ' => 'j',
+        'ا' => 'a', 'ب' => 'b', 'ج' => 'c', 'د' => 'd', 'ێ' => 'e', 'ف' => 'f', 'گ' => 'g', 'ژ' => 'j',
                 'ک' => 'k', 'ل' => 'l', 'م' => 'm', 'ن' => 'n', 'ۆ' => 'o', 'پ' => 'p', 'ق' => 'q', 'ر' => 'r',
                 'س' => 's', 'ت' => 't', 'ڤ' => 'v','وو' => 'u', 'و' => 'w', 'خ' => 'x', 'ی' => 'y', 'ز' => 'z',
                 'ڕ' => 'rr', 'ە' => 'e', 'ح' => 'hh', 'ع' => '', 'ش' => 'sh', 'غ' => 'gh', 'ك' => 'k', 'ڵ' => 'll',
@@ -226,19 +223,21 @@ class TaggingUtility
     /**
      * Private! Please do not call this function directly, let the Tag library use it.
      * Decrement count of tag by one. This function will create tag record if it does not exist.
-     *
-     * @param string $tagString
      */
-    public static function decrementCount($tagString, $tagSlug, $count)
+    public static function decrementCount($tagSlug, $count)
     {
-        if($count <= 0) { return; }
+        if ($count <= 0) {
+            return;
+        }
+
+        /** @var \Conner\Tagging\Model\Tag $model */
         $model = static::tagModelString();
 
         $tag = $model::where('slug', '=', $tagSlug)->first();
 
-        if($tag) {
+        if ($tag) {
             $tag->count = $tag->count - $count;
-            if($tag->count < 0) {
+            if ($tag->count < 0) {
                 $tag->count = 0;
                 \Log::warning("The '.$model.' count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
             }
@@ -254,6 +253,7 @@ class TaggingUtility
      */
     public static function deleteUnusedTags()
     {
+        /** @var \Conner\Tagging\Model\Tag $model */
         $model = static::tagModelString();
         return $model::deleteUnused();
     }

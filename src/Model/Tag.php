@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @package Conner\Tagging\Model
+ * @package \Conner\Tagging\Model
  * @property string id
  * @property string name
  * @property string slug

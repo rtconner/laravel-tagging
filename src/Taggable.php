@@ -250,7 +250,7 @@ trait Taggable
      *
      * @param string $tagName
      */
-    private function addSingleTag($tagName, $locale)
+    private function addSingleTag($tagName, $locale = 'en')
     {
         $tagName = trim($tagName);
 
@@ -294,7 +294,7 @@ trait Taggable
         $tagSlug = TaggingUtility::normalize($tagName);
 
         if($count = $this->tagged()->where('tag_slug', '=', $tagSlug)->delete()) {
-            TaggingUtility::decrementCount($tagName, $tagSlug, $count);
+            TaggingUtility::decrementCount($tagSlug, $count);
         }
 
         unset($this->relations['tagged']); // clear the "cache"

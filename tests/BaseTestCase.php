@@ -60,7 +60,8 @@ abstract class BaseTestCase extends TestCase
      * @param bool $regard_order whether or not array elements may appear in any order, default is false
      * @param bool $check_keys whether or not to check the keys in an associative array
      */
-    protected function assertArraysEqual(array $expected, array $actual, $regard_order = false, $check_keys = false) {
+    protected function assertArraysEqual(array $expected, array $actual, $regard_order = false, $check_keys = false)
+    {
         // check length first
         $this->assertEquals(count($expected), count($actual), 'Failed to assert that two arrays have the same length.');
 
@@ -78,7 +79,7 @@ abstract class BaseTestCase extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    function book($attributes = []): Book
+    public function book($attributes = []): Book
     {
         $attributes = array_merge(['name'=>$this->faker->name], $attributes);
 

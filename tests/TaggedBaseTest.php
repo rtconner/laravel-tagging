@@ -24,4 +24,15 @@ class TaggedBaseTest extends BaseTestCase
 
         Tagged::reguard();
     }
+
+    public function test_withUppercaseTag()
+    {
+        config(['tagging.normalizer' => 'strtoupper']);
+
+        $book = $this->book();
+
+        $book->tag('test');
+
+        $this->assertArraysEqual(['TEST'], $book->tagSlugs());
+    }
 }

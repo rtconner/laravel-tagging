@@ -46,5 +46,4 @@ class Tagged extends Model
         $model = TaggingUtility::tagModelString();
         return $this->belongsTo($model, 'tag_slug', 'slug');
     }
-
 }
