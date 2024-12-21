@@ -5,7 +5,7 @@ Laravel Taggable Trait
 [![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
 [![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
 [![Build Status](https://travis-ci.org/rtconner/laravel-tagging.svg?branch=laravel-8)](https://travis-ci.org/rtconner/laravel-tagging)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/badges/quality-score.png?b=laravel-8)](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/?branch=laravel-8)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rtconner/laravel-tagging/?branch=master)
 
 This package is not meant to handle javascript or html in any way. This package handles database storage and read/writes only.
 
