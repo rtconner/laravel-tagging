@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 class LocaleUsageTest extends BaseTestCase
 {
-    public function test_tag_withLocale()
+    public function test_tag_with_locale()
     {
         $stub = $this->book();
 

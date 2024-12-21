@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddDescriptionToTagsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -18,4 +18,4 @@ class AddDescriptionToTagsTable extends Migration
             $table->dropColumn('description');
         });
     }
-}
+};

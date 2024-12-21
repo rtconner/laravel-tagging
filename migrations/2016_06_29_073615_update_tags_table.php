@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTagsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -19,4 +19,4 @@ class UpdateTagsTable extends Migration
             $table->dropForeign('tagging_tags_tag_group_id_foreign');
         });
     }
-}
+};
