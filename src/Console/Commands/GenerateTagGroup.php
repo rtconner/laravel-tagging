@@ -20,7 +20,7 @@ class GenerateTagGroup extends Command
 
         $tagGroupModel = TaggingUtility::tagGroupModelString();
 
-        $tagGroup = new $tagGroupModel();
+        $tagGroup = new $tagGroupModel;
         $tagGroup->name = $groupName;
         $tagGroup->slug = TaggingUtility::normalize($groupName);
 

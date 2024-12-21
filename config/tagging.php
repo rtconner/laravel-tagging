@@ -12,7 +12,7 @@ return [
     'displayer' => '\Illuminate\Support\Str::title',
 
     // Database connection for Conner\Taggable\Tag model to use
-// 	'connection' => 'mysql',
+    // 	'connection' => 'mysql',
 
     // When deleting a model, remove all the tags first
     'untag_on_delete' => true,

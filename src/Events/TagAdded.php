@@ -4,14 +4,14 @@ namespace Conner\Tagging\Events;
 
 use Conner\Tagging\Model\Tagged;
 use Conner\Tagging\Taggable;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Queue\SerializesModels;
 
 class TagAdded
 {
     use SerializesModels;
 
-    /** @var Taggable|Model **/
+    /** @var Taggable|Model * */
     public $model;
 
     /** @var string */
@@ -23,9 +23,7 @@ class TagAdded
     /**
      * Create a new event instance.
      *
-     * @param Taggable|Model $model
-     * @param string $tagSlug
-     * @param Tagged $tagged
+     * @param  Taggable|Model  $model
      */
     public function __construct($model, string $tagSlug, Tagged $tagged)
     {

@@ -21,7 +21,7 @@ class TagBaseTest extends BaseTestCase
         $description = 'Fooobar test description';
         $tag = new Tag([
             'name' => 'foobar',
-            'description' => $description
+            'description' => $description,
         ]);
 
         $tag->save();

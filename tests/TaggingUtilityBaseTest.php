@@ -10,17 +10,17 @@ class TaggingUtilityBaseTest extends BaseTestCase
 {
     public function test_make_tag_array()
     {
-        $tagStrings = array('First Tag', '2nd Tag', 'Tag #3', 'tag #3', 'TAG #3');
+        $tagStrings = ['First Tag', '2nd Tag', 'Tag #3', 'tag #3', 'TAG #3'];
         $first = TaggingUtility::makeTagArray($tagStrings);
         $second = TaggingUtility::makeTagArray(implode(', ', $tagStrings));
 
         $this->assertEquals($tagStrings, $first);
         $this->assertEquals($tagStrings, $second);
 
-        $result = TaggingUtility::makeTagArray([1=>'tag1', 3=>'tag2']);
+        $result = TaggingUtility::makeTagArray([1 => 'tag1', 3 => 'tag2']);
         $this->assertEquals(['tag1', 'tag2'], $result);
 
-        $result = TaggingUtility::makeTagArray([1=>'tag1']);
+        $result = TaggingUtility::makeTagArray([1 => 'tag1']);
         $this->assertEquals(['tag1'], $result);
     }
 
@@ -71,7 +71,9 @@ class TaggingUtilityBaseTest extends BaseTestCase
         $this->assertEquals(TaggingUtility::slug('ÐŸÐ§Ñ�Ð¦Ñ‰'), TaggingUtility::normalize('ÐŸÐ§Ñ�Ð¦Ñ‰'));
         $this->assertEquals(TaggingUtility::slug('quiÃ©nsÃ­'), TaggingUtility::normalize('quiÃ©nsÃ­'));
 
-        config(['tagging.normalizer' => function($str) { return 'aaa'; }]);
+        config(['tagging.normalizer' => function ($str) {
+            return 'aaa';
+        }]);
         $this->assertEquals('aaa', TaggingUtility::normalize('some string'));
     }
 
@@ -100,13 +102,15 @@ class TaggingUtilityBaseTest extends BaseTestCase
         $this->assertEquals('Sugar Free', TaggingUtility::displayize('sugar free'));
         $this->assertEquals(Str::title('ÐŸÐ§Ñ�Ð¦Ñ‰'), TaggingUtility::displayize('ÐŸÐ§Ñ�Ð¦Ñ‰'));
 
-        config(['tagging.displayer' => function($str) { return 'bbb'; }]);
+        config(['tagging.displayer' => function ($str) {
+            return 'bbb';
+        }]);
         $this->assertEquals('bbb', TaggingUtility::displayize('some string'));
     }
 
-    public function test_deleteUnusedTags()
+    public function test_delete_unused_tags()
     {
-        config(['tagging.delete_unused_tags'=>false]);
+        config(['tagging.delete_unused_tags' => false]);
         $book = $this->book();
 
         $book->tag(['tag1', 'tag2', 'tag3']);

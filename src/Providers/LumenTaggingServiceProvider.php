@@ -12,17 +12,12 @@ class LumenTaggingServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application events.
      */
-    public function boot()
-    {
-    }
+    public function boot() {}
 
     /**
      * Register the service provider.
      *
      * @return void
      */
-    public function register()
-    {
-
-    }
+    public function register() {}
 }

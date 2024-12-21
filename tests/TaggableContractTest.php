@@ -10,7 +10,7 @@ class TaggableContractTest extends BaseTestCase
 {
     public function test_is_implemented_by_taggable_trait()
     {
-        $implementation = new TraitImplementation();
+        $implementation = new TraitImplementation;
 
         $this->assertNotNull($implementation);
     }

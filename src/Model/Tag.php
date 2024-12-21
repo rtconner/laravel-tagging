@@ -5,29 +5,33 @@ namespace Conner\Tagging\Model;
 use Conner\Tagging\TaggingUtility;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 
 /**
- * @package \Conner\Tagging\Model
+ * @mixin Model
+ * @mixin Builder
+ *
  * @property string id
  * @property string name
  * @property string slug
  * @property bool suggest
- * @property integer count
- * @property integer tag_group_id
+ * @property string locale
+ * @property int count
+ * @property int tag_group_id
  * @property TagGroup group
  * @property string description
+ *
  * @method static suggested()
  * @method static inGroup(string $group)
  */
 class Tag extends Model
 {
     protected $table = 'tagging_tags';
+
     public $timestamps = false;
+
     public $fillable = ['name', 'description', 'locale'];
 
-    /**
-     * @param array $attributes
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -36,12 +40,12 @@ class Tag extends Model
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function save(array $options = [])
     {
-        if(strlen($this->name) < 1) {
-            throw new \RuntimeException('Cannot save a tag with an empty name');
+        if (strlen($this->name) < 1) {
+            throw new RuntimeException('Cannot save a tag with an empty name');
         }
 
         $this->slug = TaggingUtility::normalize($this->name);
@@ -51,7 +55,7 @@ class Tag extends Model
 
     /**
      * Tag group setter
-     * @param string $group
+     *
      * @return Tag
      */
     public function setGroup(string $group)
@@ -68,12 +72,13 @@ class Tag extends Model
 
             return $this;
         } else {
-            throw new \RuntimeException('No Tag Group found: '. $group);
+            throw new RuntimeException('No Tag Group found: '.$group);
         }
     }
 
     /**
      * Tag group remove
+     *
      * @return Tag
      */
     public function removeGroup()
@@ -86,8 +91,8 @@ class Tag extends Model
 
     /**
      * Tag group helper function
-     * @param string $groupName
-     * @return bool
+     *
+     * @param  string  $groupName
      */
     public function isInGroup($groupName): bool
     {
@@ -116,8 +121,7 @@ class Tag extends Model
 
     /**
      * Get suggested tags
-     * @param Builder $query
-     * @param $groupName
+     *
      * @return Builder
      */
     public function scopeInGroup(Builder $query, $groupName)
@@ -131,8 +135,6 @@ class Tag extends Model
 
     /**
      * Set the name of the tag : $tag->name = 'myname';
-     *
-     * @param string $value
      */
     public function setNameAttribute(string $value)
     {

@@ -12,14 +12,14 @@
   ],
   "require": {
     "php": "^7.3|^8.0",
-    "illuminate/database": ">=8.0",
-    "illuminate/support": ">=8.0"
+    "illuminate/database": ">=11.0",
+    "illuminate/support": ">=11.0"
   },
   "require-dev": {
-    "orchestra/testbench": "6.*",
-    "phpunit/phpunit": "9.*",
+    "orchestra/testbench": "^9.8.0",
+    "phpunit/phpunit": "11.5.2",
     "mockery/mockery": "1.*",
-    "squizlabs/php_codesniffer": "3.*"
+    "laravel/pint": "^1.18"
   },
   "autoload": {
     "psr-4": {
@@ -39,15 +39,7 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit --color=always",
-    "check": [
-      "php-cs-fixer fix --ansi --dry-run --diff .",
-      "phpcs --report-width=200 --report-summary  --report-full src/ tests/ --standard=PSR2 -n",
-      "phpmd src/,tests/ text ./phpmd.xml.dist"
-    ],
-    "fix": [
-      "php-cs-fixer fix --ansi ."
-    ]
+    "test": "vendor/bin/phpunit --color=always"
   },
   "minimum-stability": "dev",
   "prefer-stable": true

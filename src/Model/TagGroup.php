@@ -1,11 +1,15 @@
-<?php namespace Conner\Tagging\Model;
+<?php
+
+namespace Conner\Tagging\Model;
 
 use Conner\Tagging\TaggingUtility;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
- * @package Conner\Tagging\Model
+ * @mixin Model
+ * @mixin Builder
  *
  * @property string id
  * @property string slug
@@ -15,12 +19,11 @@ use Illuminate\Support\Collection;
 class TagGroup extends Model
 {
     protected $table = 'tagging_tag_groups';
+
     public $timestamps = false;
+
     protected $fillable = ['name'];
 
-    /**
-     * @param array $attributes
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -38,9 +41,6 @@ class TagGroup extends Model
         return $this->hasMany($model, 'tag_group_id');
     }
 
-    /**
-     * @param $value
-     */
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;

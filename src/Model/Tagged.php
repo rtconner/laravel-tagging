@@ -1,12 +1,18 @@
-<?php namespace Conner\Tagging\Model;
+<?php
+
+namespace Conner\Tagging\Model;
 
 use Conner\Tagging\TaggingUtility;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * @package Conner\Tagging\Model
+ * @mixin Model
+ * @mixin Builder
  *
- * @property integer id
+ * @property int id
  * @property string taggable_id
  * @property string taggable_type
  * @property string tag_name
@@ -16,7 +22,9 @@ use Illuminate\Database\Eloquent\Model;
 class Tagged extends Model
 {
     protected $table = 'tagging_tagged';
+
     public $timestamps = false;
+
     protected $fillable = ['tag_name', 'tag_slug'];
 
     public function __construct(array $attributes = [])
@@ -29,7 +37,7 @@ class Tagged extends Model
     /**
      * Morph to the tag
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
     public function taggable()
     {
@@ -39,11 +47,12 @@ class Tagged extends Model
     /**
      * Get instance of tag linked to the tagged value
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function tag()
     {
         $model = TaggingUtility::tagModelString();
+
         return $this->belongsTo($model, 'tag_slug', 'slug');
     }
 }

@@ -11,10 +11,10 @@ class TaggedBaseTest extends BaseTestCase
         Tagged::unguard();
 
         $tagged = new Tagged([
-            'taggable_id'=>'123',
-            'tag_slug'=> 'foo',
-            'tag_name'=>'Foo',
-            'taggable_type'=>'bar',
+            'taggable_id' => '123',
+            'tag_slug' => 'foo',
+            'tag_name' => 'Foo',
+            'taggable_type' => 'bar',
         ]);
 
         $tagged->save();
@@ -25,7 +25,7 @@ class TaggedBaseTest extends BaseTestCase
         Tagged::reguard();
     }
 
-    public function test_withUppercaseTag()
+    public function test_with_uppercase_tag()
     {
         config(['tagging.normalizer' => 'strtoupper']);
 

@@ -58,7 +58,7 @@ class TagGroupBaseTest extends BaseTestCase
         $this->assertFalse($tag->isInGroup('MyTagGroup'));
     }
 
-    public function test_removeGroup_with_no_group()
+    public function test_remove_group_with_no_group()
     {
         $tag = $this->createTag();
 
@@ -89,20 +89,20 @@ class TagGroupBaseTest extends BaseTestCase
 
     private function createTagGroup($name = null): TagGroup
     {
-        if(is_null($name)) {
+        if (is_null($name)) {
             $name = $this->faker->name;
         }
 
         $model = TaggingUtility::tagGroupModelString();
 
         return $model::create([
-            'name' => $name
+            'name' => $name,
         ]);
     }
 
     private function createTag($name = 'Test Tag'): Tag
     {
-        $tag = new Tag();
+        $tag = new Tag;
         $tag->name = $name;
         $tag->save();
 

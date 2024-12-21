@@ -10,7 +10,7 @@ class TagRemoved
 {
     use SerializesModels;
 
-    /** @var Taggable|Model **/
+    /** @var Taggable|Model * */
     public $model;
 
     /*** @var string */
@@ -19,8 +19,7 @@ class TagRemoved
     /**
      * Create a new event instance.
      *
-     * @param Taggable|Model $model
-     * @param string $tagSlug
+     * @param  Taggable|Model  $model
      */
     public function __construct($model, string $tagSlug)
     {

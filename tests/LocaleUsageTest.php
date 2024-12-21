@@ -4,17 +4,18 @@ namespace Conner\Tests\Tagging;
 
 use Illuminate\Support\Collection;
 
-class CommonUsageBaseTest extends BaseTestCase
+class LocaleUsageTest extends BaseTestCase
 {
-    public function test_tag_call()
+    public function test_tag_withLocale()
     {
         $stub = $this->book();
 
-        $stub->tag('test123');
-        $stub->tag('456');
-        $stub->tag('third');
+        $stub->tag('test123', 'fr');
+        $stub->tag('456', 'fr');
 
-        $this->assertSame(['Test123', '456', 'Third'], $stub->tagNames());
+        $stub->retag(['test123', '456', 'Third']);
+
+        $this->assertArraysEqual(['Test123', '456', 'Third'], $stub->tagNames());
     }
 
     public function test_untag_call()
