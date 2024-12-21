@@ -19,7 +19,7 @@
   },
   "require-dev": {
     "orchestra/testbench": "^9.8.0",
-    "phpunit/phpunit": "11.5.2",
+    "phpunit/phpunit": "10.5.39",
     "mockery/mockery": "1.*",
     "laravel/pint": "^1.18"
   },
