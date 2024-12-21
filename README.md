@@ -83,4 +83,3 @@ Article::existingTags(); // return collection of all existing tags on any articl
 
 #### Further Reading
  - [Laravel News article on tagging with this library](https://laravel-news.com/how-to-add-tagging-to-your-laravel-app)
- - [3rd Party Posting on installation with Twitter Bootstrap 2.3](http://blog.stickyrice.net/archives/2015/laravel-tagging-bootstrap-tags-input-rtconner)

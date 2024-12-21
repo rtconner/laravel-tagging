@@ -1,0 +1,19 @@
+build:
+  nodes:
+    analysis:
+      environment:
+        php:
+          version: 8.0
+      project_setup:
+        override:
+          - 'true'
+      tests:
+        override:
+          - php-scrutinizer-run
+filter:
+  excluded_paths:
+    - 'tests/*'
+checks:
+  php: true
+coding_style:
+  php: {  }
