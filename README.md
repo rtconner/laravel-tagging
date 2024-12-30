@@ -76,9 +76,7 @@ Article::existingTags(); // return collection of all existing tags on any articl
 
 [Documentation: Lumen](docs/lumen.md)
 
-#### Credits
+#### Developer
 
- - Robert Conner - http://smartersoftware.net
-
-#### Further Reading
- - [Laravel News article on tagging with this library](https://laravel-news.com/how-to-add-tagging-to-your-laravel-app)
+ - Robert Conner - http://dealerzone.com
+ - BlueSky - https://bsky.app/profile/robertconner.com
