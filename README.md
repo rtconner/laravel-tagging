@@ -1,6 +1,7 @@
 Laravel Taggable Trait
 ============
 
+[![Tests](https://github.com/rtconner/laravel-tagging/actions/workflows/tests.yml/badge.svg)](https://github.com/rtconner/laravel-tagging/actions/workflows/tests.yml)
 [![Latest Stable Version](https://poser.pugx.org/rtconner/laravel-tagging/v/stable.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
 [![Total Downloads](https://poser.pugx.org/rtconner/laravel-tagging/downloads.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
 [![License](https://poser.pugx.org/rtconner/laravel-tagging/license.svg)](https://packagist.org/packages/rtconner/laravel-tagging)
