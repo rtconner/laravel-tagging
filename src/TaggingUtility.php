@@ -200,7 +200,7 @@ class TaggingUtility
      * @param  string  $tagSlug
      * @param  int  $count
      */
-    public static function incrementCount($tagString, $tagSlug, $count, $locale = null)
+    public static function incrementCount($tagString, $tagSlug, $count, $locale = null, $group = null)
     {
         if ($count <= 0) {
             return;
@@ -225,6 +225,10 @@ class TaggingUtility
 
         $tag->count = $tag->count + $count;
         $tag->save();
+
+        if ($group) {
+            $tag->setGroup($group);
+        }
     }
 
     /**

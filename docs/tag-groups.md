@@ -7,7 +7,14 @@ TagGroups are a simple feature that let you group a set of tags together
 php artisan tagging:create-group MyTagGroup
 ```
 
-Set the tag group for a tag
+Assign a group when tagging a model
+
+```php
+$article->tag('Gardening', group: 'MyTagGroup');
+$article->tag(['Gardening', 'Floral'], group: 'MyTagGroup');
+```
+
+Or set the tag group directly on a tag
 
 ```php
 $tag->setGroup('MyTagGroup');

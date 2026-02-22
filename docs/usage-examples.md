@@ -15,6 +15,8 @@ foreach($article->tags as $tag) {
 $article->tag('Gardening'); // attach the tag
 $article->tag('Gardening, Floral'); // attach the tag
 $article->tag(['Gardening', 'Floral']); // attach the tag
+$article->tag('Gardening', group: 'MyTagGroup'); // attach the tag and assign to a group
+$article->tag('Gardening', locale: 'fr'); // attach the tag with a locale
 
 $article->untag('Cooking'); // remove Cooking tag
 $article->untag(); // remove all tags

@@ -97,12 +97,12 @@ trait Taggable
      * @param  string|array  $tagNames
      * @return void
      */
-    public function addTags($tagNames, $locale = null)
+    public function addTags($tagNames, $locale = null, $group = null)
     {
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
         foreach ($tagNames as $tagName) {
-            $this->addSingleTag($tagName, $locale);
+            $this->addSingleTag($tagName, $locale, $group);
         }
     }
 
@@ -112,9 +112,9 @@ trait Taggable
      * @param  string|array  $tagNames
      * @return void
      */
-    public function tag($tagNames, $locale = null)
+    public function tag($tagNames, $locale = null, $group = null)
     {
-        $this->addTags($tagNames, $locale);
+        $this->addTags($tagNames, $locale, $group);
     }
 
     /**
@@ -242,7 +242,7 @@ trait Taggable
      *
      * @param  string  $tagName
      */
-    private function addSingleTag($tagName, $locale = null)
+    private function addSingleTag($tagName, $locale = null, $group = null)
     {
         $tagName = trim($tagName);
 
@@ -266,7 +266,7 @@ trait Taggable
 
         $this->tagged()->save($tagged);
 
-        TaggingUtility::incrementCount($tagName, $tagSlug, 1, $locale);
+        TaggingUtility::incrementCount($tagName, $tagSlug, 1, $locale, $group);
 
         unset($this->relations['tagged']);
 
