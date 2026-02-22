@@ -42,3 +42,16 @@ Conner\Tagging\Model\Tag::where('count', '>', 2)->get(); // return all tags used
 
 Article::existingTags(); // return collection of all existing tags on any articles
 ```
+
+#### Updating and Deleting Tags
+
+When a tag is updated or deleted, the associated pivot records in `tagging_tagged` are automatically kept in sync.
+
+```php
+$tag = Conner\Tagging\Model\Tag::where('slug', 'gardening')->first();
+
+$tag->name = 'Horticulture'; // renaming a tag cascades to all tagged models
+$tag->save();
+
+$tag->delete(); // deleting a tag removes all associated tagged pivot records
+```
