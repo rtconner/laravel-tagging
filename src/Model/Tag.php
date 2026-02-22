@@ -39,6 +39,27 @@ class Tag extends Model
         $this->connection = config('tagging.connection');
     }
 
+    protected static function booted()
+    {
+        static::updating(function (Tag $tag) {
+            $oldSlug = $tag->getOriginal('slug');
+            $newSlug = TaggingUtility::normalize($tag->name);
+
+            if ($oldSlug && $oldSlug !== $newSlug) {
+                $taggedModel = TaggingUtility::taggedModelString();
+                $taggedModel::where('tag_slug', $oldSlug)->update([
+                    'tag_slug' => $newSlug,
+                    'tag_name' => TaggingUtility::displayize($tag->name),
+                ]);
+            }
+        });
+
+        static::deleting(function (Tag $tag) {
+            $taggedModel = TaggingUtility::taggedModelString();
+            $taggedModel::where('tag_slug', $tag->slug)->delete();
+        });
+    }
+
     /**
      * {@inheritDoc}
      */
