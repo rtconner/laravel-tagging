@@ -5,7 +5,7 @@ namespace Conner\Tests\Tagging;
 use Conner\Tagging\Events\TagAdded;
 use Conner\Tagging\Events\TagRemoved;
 
-class EventTests extends BaseTestCase
+class EventTest extends BaseTestCase
 {
     public function test_tag_added()
     {
