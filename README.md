@@ -73,10 +73,6 @@ Article::existingTags(); // return collection of all existing tags on any articl
 
 [See config/tagging.php](config/tagging.php) for configuration options.
 
-###### Lumen Installation
-
-[Documentation: Lumen](docs/lumen.md)
-
 #### Developer
 
  - Robert Conner - http://dealerzone.com
