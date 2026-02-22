@@ -200,7 +200,7 @@ class TaggingUtility
      * @param  string  $tagSlug
      * @param  int  $count
      */
-    public static function incrementCount($tagString, $tagSlug, $count, $locale)
+    public static function incrementCount($tagString, $tagSlug, $count, $locale = null)
     {
         if ($count <= 0) {
             return;
@@ -215,7 +215,11 @@ class TaggingUtility
             $tag->name = $tagString;
             $tag->slug = $tagSlug;
             $tag->suggest = false;
-            $tag->locale = $locale;
+
+            if ($locale) {
+                $tag->locale = $locale;
+            }
+
             $tag->save();
         }
 

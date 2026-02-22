@@ -97,7 +97,7 @@ trait Taggable
      * @param  string|array  $tagNames
      * @return void
      */
-    public function addTags($tagNames, $locale)
+    public function addTags($tagNames, $locale = null)
     {
         $tagNames = TaggingUtility::makeTagArray($tagNames);
 
@@ -112,7 +112,7 @@ trait Taggable
      * @param  string|array  $tagNames
      * @return void
      */
-    public function tag($tagNames, $locale = 'en')
+    public function tag($tagNames, $locale = null)
     {
         $this->addTags($tagNames, $locale);
     }
@@ -242,7 +242,7 @@ trait Taggable
      *
      * @param  string  $tagName
      */
-    private function addSingleTag($tagName, $locale = 'en')
+    private function addSingleTag($tagName, $locale = null)
     {
         $tagName = trim($tagName);
 
@@ -262,7 +262,6 @@ trait Taggable
         $tagged = new $model([
             'tag_name' => TaggingUtility::displayize($tagName),
             'tag_slug' => $tagSlug,
-            'locale' => $locale,
         ]);
 
         $this->tagged()->save($tagged);
